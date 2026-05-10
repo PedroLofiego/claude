@@ -1,7 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// Em produção (build no GitHub Actions) servimos o app sob /claude/ (Pages do repo).
+// No dev local, base = "/" para HMR funcionar normalmente.
+const base = process.env.GITHUB_ACTIONS ? "/claude/" : "/";
+
 export default defineConfig({
+  base,
   plugins: [react()],
   server: {
     host: true,
