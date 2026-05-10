@@ -20,7 +20,7 @@ export const ORIGIN_CITIES = [
   { code: "POA", label: "Porto Alegre (POA)" },
   { code: "REC", label: "Recife (REC)" },
   { code: "FOR", label: "Fortaleza (FOR)" },
-  { code: "SSA", label: "Salvador (SSA)" },
+  { code: "SSA", label: "Salvador — Aeroporto Internacional (SSA)" },
   { code: "CWB", label: "Curitiba (CWB)" },
 ];
 
