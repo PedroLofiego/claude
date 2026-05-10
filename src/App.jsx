@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plane } from "lucide-react";
+import { Plane, Snowflake } from "lucide-react";
 import InputForm from "./components/InputForm.jsx";
 import DestinationGrid from "./components/DestinationGrid.jsx";
 import DestinationDetail from "./components/DestinationDetail.jsx";
-import { DESTINATIONS, ORIGIN_CITIES } from "./data/destinations.js";
+import { DESTINATIONS, ORIGIN_CITIES, TRIP_WINDOW } from "./data/destinations.js";
 import { buildRecommendationLine, evaluateAll } from "./lib/calc.js";
 import { buildReportText } from "./lib/report.js";
 
@@ -11,17 +11,18 @@ const DEFAULT_ORIGIN_CODE = "SSA";
 const DEFAULT_ORIGIN =
   ORIGIN_CITIES.find((c) => c.code === DEFAULT_ORIGIN_CODE) ?? ORIGIN_CITIES[0];
 
+// Default refletindo a viagem de Dez/Jan (22-25 dez → 6-9 jan): 16 dias, dupla.
 const DEFAULT_PARAMS = {
   origin: DEFAULT_ORIGIN.code,
   originLabel: DEFAULT_ORIGIN.label,
   budget: 30000,
-  days: 10,
+  days: 16,
   people: 2,
 };
 
 function loadParams() {
   try {
-    const raw = localStorage.getItem("voaja:params:v2");
+    const raw = localStorage.getItem("voaja:params:v3");
     if (!raw) return DEFAULT_PARAMS;
     const parsed = JSON.parse(raw);
     return { ...DEFAULT_PARAMS, ...parsed };
@@ -37,7 +38,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem("voaja:params:v2", JSON.stringify(params));
+      localStorage.setItem("voaja:params:v3", JSON.stringify(params));
     } catch {
       /* ignore */
     }
@@ -84,6 +85,7 @@ export default function App() {
       <Header />
 
       <main className="mt-6 space-y-6">
+        <TripWindowBanner />
         <InputForm params={params} onChange={setParams} />
         <Summary evaluations={evaluations} params={params} />
         <DestinationGrid
@@ -109,6 +111,29 @@ export default function App() {
   );
 }
 
+function TripWindowBanner() {
+  return (
+    <div className="card flex flex-wrap items-center justify-between gap-3 border-cyan-400/20 bg-gradient-to-r from-indigo-500/15 to-cyan-500/15 p-4">
+      <div className="flex items-center gap-3">
+        <div className="grid h-9 w-9 place-items-center rounded-lg bg-cyan-500/20 text-cyan-200">
+          <Snowflake size={16} />
+        </div>
+        <div>
+          <div className="text-[11px] uppercase tracking-wider text-cyan-200/80">
+            Janela de viagem
+          </div>
+          <div className="text-sm font-semibold text-white">
+            {TRIP_WINDOW.label}
+          </div>
+        </div>
+      </div>
+      <div className="text-xs text-cyan-100/90 sm:max-w-md sm:text-right">
+        {TRIP_WINDOW.season}
+      </div>
+    </div>
+  );
+}
+
 function Header() {
   return (
     <header className="flex flex-wrap items-center justify-between gap-3">
@@ -125,7 +150,7 @@ function Header() {
           </p>
         </div>
       </div>
-      <span className="chip">v0.1 · MVP funcional</span>
+      <span className="chip">v0.2 · 14 destinos · Réveillon edition</span>
     </header>
   );
 }
