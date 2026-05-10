@@ -1,4 +1,4 @@
-import { Clock, Globe2, Plane, ShieldCheck } from "lucide-react";
+import { Clock, Globe2, Plane, ShieldCheck, Snowflake } from "lucide-react";
 import BudgetBreakdown from "./BudgetBreakdown.jsx";
 import Itinerary from "./Itinerary.jsx";
 import Recommendation from "./Recommendation.jsx";
@@ -39,6 +39,11 @@ export default function DestinationDetail({
               <span className="chip">
                 <Plane size={12} /> {d.flightHours}h de voo
               </span>
+              {d.tempC && (
+                <span className="chip">
+                  <Snowflake size={12} /> {d.tempC.low}° a {d.tempC.high}°C (Dez/Jan)
+                </span>
+              )}
               <span className="chip">
                 <Clock size={12} /> Melhor época: {d.bestMonths.join(" · ")}
               </span>
@@ -53,6 +58,12 @@ export default function DestinationDetail({
             </div>
           </div>
         </div>
+        {d.winterNote && (
+          <div className="border-t border-white/10 bg-cyan-500/5 px-5 py-3 text-sm text-cyan-100">
+            <Snowflake size={14} className="mr-1.5 inline -mt-0.5" />
+            <span className="font-semibold">Inverno aqui:</span> {d.winterNote}
+          </div>
+        )}
         <div className="p-5">
           <ul className="grid grid-cols-1 gap-2 text-sm text-slate-200 sm:grid-cols-2">
             {d.highlights.map((h, i) => (

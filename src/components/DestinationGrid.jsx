@@ -1,4 +1,4 @@
-import { Check, Plane, Shield, X } from "lucide-react";
+import { Check, Plane, Shield, Snowflake, X } from "lucide-react";
 import { TIERS } from "../data/destinations.js";
 import { formatBRL, formatBRLCompact } from "../lib/calc.js";
 
@@ -119,11 +119,16 @@ export default function DestinationGrid({ evaluations, params, selectedId, onSel
                   <span className="chip">
                     <Plane size={12} /> {formatBRL(ev.recommended.flight.perPerson)}/pax
                   </span>
+                  {d.tempC && (
+                    <span className="chip" title="Mín / Máx média no período da viagem">
+                      <Snowflake size={12} /> {d.tempC.low}° / {d.tempC.high}°C
+                    </span>
+                  )}
                   <span className="chip">
-                    <Shield size={12} /> Segurança {d.safetyScore.toFixed(1)}
+                    <Shield size={12} /> {d.safetyScore.toFixed(1)}
                   </span>
-                  <span className="chip">{d.flightHours}h de voo</span>
-                  <span className="chip">{d.visaRequired ? "Visto exigido" : "Sem visto"}</span>
+                  <span className="chip">{d.flightHours}h voo</span>
+                  <span className="chip">{d.visaRequired ? "Visto" : "Sem visto"}</span>
                 </div>
                 <TierMatrix
                   scenarios={ev.scenarios}
