@@ -7,9 +7,13 @@ import { DESTINATIONS, ORIGIN_CITIES } from "./data/destinations.js";
 import { buildRecommendationLine, evaluateAll } from "./lib/calc.js";
 import { buildReportText } from "./lib/report.js";
 
+const DEFAULT_ORIGIN_CODE = "SSA";
+const DEFAULT_ORIGIN =
+  ORIGIN_CITIES.find((c) => c.code === DEFAULT_ORIGIN_CODE) ?? ORIGIN_CITIES[0];
+
 const DEFAULT_PARAMS = {
-  origin: "GRU",
-  originLabel: ORIGIN_CITIES[0].label,
+  origin: DEFAULT_ORIGIN.code,
+  originLabel: DEFAULT_ORIGIN.label,
   budget: 30000,
   days: 10,
   people: 2,
@@ -17,7 +21,7 @@ const DEFAULT_PARAMS = {
 
 function loadParams() {
   try {
-    const raw = localStorage.getItem("voaja:params");
+    const raw = localStorage.getItem("voaja:params:v2");
     if (!raw) return DEFAULT_PARAMS;
     const parsed = JSON.parse(raw);
     return { ...DEFAULT_PARAMS, ...parsed };
@@ -33,7 +37,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem("voaja:params", JSON.stringify(params));
+      localStorage.setItem("voaja:params:v2", JSON.stringify(params));
     } catch {
       /* ignore */
     }
