@@ -1,0 +1,166 @@
+import { useEffect, useMemo, useState } from "react";
+import { Plane } from "lucide-react";
+import InputForm from "./components/InputForm.jsx";
+import DestinationGrid from "./components/DestinationGrid.jsx";
+import DestinationDetail from "./components/DestinationDetail.jsx";
+import { DESTINATIONS, ORIGIN_CITIES } from "./data/destinations.js";
+import { buildRecommendationLine, evaluateAll } from "./lib/calc.js";
+import { buildReportText } from "./lib/report.js";
+
+const DEFAULT_PARAMS = {
+  origin: "GRU",
+  originLabel: ORIGIN_CITIES[0].label,
+  budget: 30000,
+  days: 10,
+  people: 2,
+};
+
+function loadParams() {
+  try {
+    const raw = localStorage.getItem("voaja:params");
+    if (!raw) return DEFAULT_PARAMS;
+    const parsed = JSON.parse(raw);
+    return { ...DEFAULT_PARAMS, ...parsed };
+  } catch {
+    return DEFAULT_PARAMS;
+  }
+}
+
+export default function App() {
+  const [params, setParams] = useState(loadParams);
+  const [selectedId, setSelectedId] = useState(null);
+  const [selectedTier, setSelectedTier] = useState(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("voaja:params", JSON.stringify(params));
+    } catch {
+      /* ignore */
+    }
+  }, [params]);
+
+  const evaluations = useMemo(
+    () => evaluateAll(DESTINATIONS, params),
+    [params]
+  );
+
+  // Garante que sempre exista um destino selecionado (o melhor ranqueado).
+  const activeId = selectedId ?? evaluations[0]?.destination.id;
+  const activeEval = useMemo(
+    () => evaluations.find((e) => e.destination.id === activeId) ?? evaluations[0],
+    [evaluations, activeId]
+  );
+
+  // Tier selecionado segue o recomendado quando o usuário não escolheu manualmente
+  // ou quando muda de destino.
+  const tierToShow = selectedTier ?? activeEval?.bestTier ?? "comfortable";
+
+  useEffect(() => {
+    setSelectedTier(null);
+  }, [activeId]);
+
+  const recommendationLine = useMemo(() => {
+    if (!activeEval) return "";
+    // Quando o usuário escolhe um tier diferente do recomendado, ainda usamos
+    // o melhor tier para a frase principal — o cenário escolhido aparece nos cards.
+    return buildRecommendationLine(activeEval, params);
+  }, [activeEval, params]);
+
+  const report = useMemo(() => {
+    if (!activeEval) return "";
+    return buildReportText(
+      { ...activeEval, bestTier: tierToShow },
+      params,
+      recommendationLine
+    );
+  }, [activeEval, params, recommendationLine, tierToShow]);
+
+  return (
+    <div className="mx-auto min-h-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
+      <Header />
+
+      <main className="mt-6 space-y-6">
+        <InputForm params={params} onChange={setParams} />
+        <Summary evaluations={evaluations} params={params} />
+        <DestinationGrid
+          evaluations={evaluations}
+          params={params}
+          selectedId={activeId}
+          onSelect={setSelectedId}
+        />
+        {activeEval && (
+          <DestinationDetail
+            evaluation={activeEval}
+            params={params}
+            selectedTier={tierToShow}
+            onSelectTier={setSelectedTier}
+            recommendationLine={recommendationLine}
+            report={report}
+          />
+        )}
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <header className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white shadow-soft">
+          <Plane size={18} />
+        </div>
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
+            VoaJá · Planejador de Orçamento
+          </h1>
+          <p className="text-xs text-slate-400 sm:text-sm">
+            Compare destinos internacionais, simule cenários e descubra se a viagem cabe no bolso.
+          </p>
+        </div>
+      </div>
+      <span className="chip">v0.1 · MVP funcional</span>
+    </header>
+  );
+}
+
+function Summary({ evaluations, params }) {
+  const total = evaluations.length;
+  const fitting = evaluations.filter((e) => e.fits).length;
+  const premiumFits = evaluations.filter((e) => e.tierFits.premium).length;
+  const comfortFits = evaluations.filter((e) => e.tierFits.comfortable).length;
+
+  return (
+    <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <SummaryCard label="Destinos analisados" value={total} />
+      <SummaryCard label="Cabem no orçamento" value={`${fitting}/${total}`} highlight />
+      <SummaryCard label="Comportam Confortável" value={comfortFits} />
+      <SummaryCard label="Comportam Premium" value={premiumFits} />
+    </section>
+  );
+}
+
+function SummaryCard({ label, value, highlight }) {
+  return (
+    <div
+      className={`card p-4 ${
+        highlight ? "ring-1 ring-inset ring-emerald-400/30" : ""
+      }`}
+    >
+      <div className="text-[11px] uppercase tracking-wider text-slate-400">{label}</div>
+      <div className="mt-1 text-2xl font-bold text-white">{value}</div>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="mt-10 border-t border-white/10 pt-5 text-xs text-slate-400">
+      Dados de custo, voos e itinerários são estimativas (mock) baseadas em médias de mercado.
+      Antes de comprar, confirme tarifas em buscadores como Skyscanner/Kiwi e diárias em Booking/Airbnb.
+      Substitua os mocks em <code className="rounded bg-white/10 px-1">src/data</code> por integrações reais quando disponíveis.
+    </footer>
+  );
+}
