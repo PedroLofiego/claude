@@ -4,7 +4,7 @@ import { buildItinerary } from "../data/itineraries.js";
 
 export function buildReportText(evalResult, params, recommendationLine) {
   const { destination, scenarios, bestTier } = evalResult;
-  const itinerary = buildItinerary(destination.id, params.days);
+  const itinerary = buildItinerary(destination.id, params.days, params.startDate);
   const lines = [];
 
   lines.push("RELATÓRIO DE PLANEJAMENTO DE VIAGEM");
@@ -12,7 +12,10 @@ export function buildReportText(evalResult, params, recommendationLine) {
   lines.push("");
   lines.push(`Destino: ${destination.city} — ${destination.country}`);
   lines.push(`Origem:  ${params.originLabel}`);
-  lines.push(`Período: ${params.days} dias`);
+  lines.push(`Partida: ${params.startDate ?? "—"}  •  Duração: ${params.days} dias`);
+  if (destination.tempC) {
+    lines.push(`Clima esperado (Dez/Jan): ${destination.tempC.low}° a ${destination.tempC.high}°C`);
+  }
   lines.push(`Viajantes: ${params.people}`);
   lines.push(`Orçamento informado: ${formatBRL(params.budget)}`);
   lines.push("");
@@ -53,10 +56,17 @@ export function buildReportText(evalResult, params, recommendationLine) {
   lines.push(`Reserva de imprevistos (8%): ${formatBRL(rec.contingency)}`);
   lines.push(`TOTAL: ${formatBRL(rec.total)}`);
   lines.push("");
-  lines.push("ROTEIRO SUGERIDO");
+  lines.push("ROTEIRO SUGERIDO (com âncoras de Natal e Réveillon)");
   lines.push("--------------------------------------");
   itinerary.forEach((d) => {
-    lines.push(`Dia ${d.day} — ${d.theme}`);
+    const kindMark =
+      d.kind === "xmasEve" || d.kind === "xmasDay"
+        ? " 🎄"
+        : d.kind === "nyeEve" || d.kind === "nyeDay"
+        ? " 🎆"
+        : "";
+    const dateLabel = d.dateLabel ? ` (${d.dateLabel})` : "";
+    lines.push(`Dia ${d.day}${dateLabel}${kindMark} — ${d.theme}`);
     d.items.forEach((it) => lines.push(`  • ${it}`));
   });
   lines.push("");

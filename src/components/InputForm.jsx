@@ -9,6 +9,7 @@ export default function InputForm({ params, onChange }) {
     budget: useId(),
     days: useId(),
     people: useId(),
+    startDate: useId(),
   };
 
   const set = (patch) => onChange({ ...params, ...patch });
@@ -27,7 +28,7 @@ export default function InputForm({ params, onChange }) {
         </span>
       </header>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         <div>
           <label htmlFor={ids.origin} className="label">
             <span className="inline-flex items-center gap-1.5">
@@ -114,6 +115,42 @@ export default function InputForm({ params, onChange }) {
                 {d}d
               </button>
             ))}
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor={ids.startDate} className="label">
+            <span className="inline-flex items-center gap-1.5">
+              <Calendar size={14} /> Data de partida
+            </span>
+          </label>
+          <input
+            id={ids.startDate}
+            type="date"
+            min="2026-12-20"
+            max="2027-01-05"
+            className="input"
+            value={params.startDate ?? "2026-12-23"}
+            onChange={(e) => set({ startDate: e.target.value })}
+          />
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {["2026-12-22", "2026-12-23", "2026-12-24", "2026-12-25"].map((d) => {
+              const label = d.slice(-2) + "/dez";
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => set({ startDate: d })}
+                  className={`rounded-lg border px-2.5 py-1 text-xs ${
+                    params.startDate === d
+                      ? "border-indigo-400/60 bg-indigo-500/20 text-indigo-100"
+                      : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
         </div>
 

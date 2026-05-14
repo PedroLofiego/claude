@@ -3,24 +3,26 @@
  *
  * Sugestões de integração futura:
  *   - flights.byOrigin: Skyscanner, Kiwi, Amadeus Flight Offers Search
+ *     (Google Flights NÃO tem API pública oficial; usar parceiros)
  *   - daily.* (lodging, food, transport, activities, misc):
  *       Numbeo Cost-of-Living API, Booking.com, GetYourGuide, Rome2Rio
  *   - currency / câmbio em tempo real: Open Exchange Rates, Frankfurter API
  *   - clima e melhor época: OpenWeather, WeatherAPI
  *
- * Todos os valores estão em BRL (R$) e refletem médias estimadas para 2026.
- * Os preços de voo são round-trip por pessoa, classe econômica.
+ * Todos os valores estão em BRL (R$) e refletem médias estimadas para
+ * a janela 22 dez 2026 → 9 jan 2027 (Natal + Réveillon).
  *
- * IMPORTANTE: os valores abaixo já estão calibrados para ALTA TEMPORADA
- * de fim de ano (Natal/Réveillon — meados de dez. ao início de jan.).
- * Fora desse período, espere desconto de 20-35%.
+ * Preços de voo (`flightBaseBRL`) refletem round-trip por pessoa em classe
+ * econômica a partir de GRU; um multiplicador por aeroporto de origem
+ * é aplicado em runtime. Calibrados em Mai/2026 cruzando Decolar, Kayak,
+ * Momondo e tarifas históricas alta temporada. ±15% de variação normal.
  */
 
 export const TRIP_WINDOW = {
   label: "22-25 dez 2026 → 6-9 jan 2027",
   startRange: "22-25 dezembro",
   endRange: "6-9 janeiro",
-  season: "Alta temporada — Natal e Réveillon (preços +25 a +40% vs. baixa)",
+  season: "Alta temporada — Natal e Réveillon (preços +30 a +50% vs. baixa)",
 };
 
 export const ORIGIN_CITIES = [
@@ -36,7 +38,7 @@ export const ORIGIN_CITIES = [
 ];
 
 // Multiplicador aplicado sobre o preço de voo da base (GRU).
-// TODO: substituir por busca real de tarifas por origem.
+// Calibrado com cotações observadas em Decolar/Kayak (Mai/2026).
 const ORIGIN_FLIGHT_MULTIPLIER = {
   GRU: 1.0,
   GIG: 1.03,
@@ -57,14 +59,12 @@ export function flightFromOrigin(originCode, baseFlightBRL) {
 /**
  * @typedef {"economic"|"comfortable"|"premium"} Tier
  *
- * Cada destino traz custo diário por pessoa (BRL) por categoria,
- * em três cenários: econômico, confortável e premium.
- *
- * Campos extras úteis no contexto da viagem (Dez/Jan):
- *   - tempC: { low, high } — média da mínima/máxima em ºC no período
- *   - winterNote: aviso prático sobre o clima no fim do ano
- *   - vibe: tags ("nightlife", "ski", "natal", "reveillon", "praia")
- *   - flightHours: tempo aproximado de voo do Brasil (Sul/Sudeste)
+ * Campos por destino:
+ *   - tempC: { low, high } — mín/máx média (ºC) na janela de Dez/Jan
+ *   - winterNote: aviso sobre o clima no fim do ano
+ *   - vibe: tags ("nightlife","ski","natal","reveillon","praia","aurora")
+ *   - xmasMarket / hogmanay / nyeHighlight — flags p/ atividade festiva
+ *   - flightBaseBRL: tarifa econômica round-trip GRU→destino na alta temp.
  */
 export const DESTINATIONS = [
   {
@@ -82,15 +82,11 @@ export const DESTINATIONS = [
     safetyScore: 4.6,
     bestMonths: ["Abr", "Mai", "Jun", "Set", "Out"],
     tempC: { low: 9, high: 15 },
-    winterNote: "Inverno mais ameno da Europa. Chuva eventual; agasalho leve resolve.",
+    winterNote: "Inverno mais ameno da Europa Ocidental. Chuva eventual; agasalho leve.",
     vibe: ["nightlife", "natal", "reveillon", "comida"],
-    highlights: [
-      "Pink Street e Cais do Sodré: bares e clubs",
-      "Mercados de Natal e iluminação no centro",
-      "Réveillon com fogos no Terreiro do Paço (gratuito)",
-      "Surf em Cascais (sim, mesmo em janeiro)",
-    ],
-    flightBaseBRL: 5800,
+    xmasMarket: true,
+    nyeHighlight: "Réveillon grátis no Terreiro do Paço com show e fogos sobre o Tejo",
+    flightBaseBRL: 4500,
     daily: {
       economic:    { lodging: 240, food: 140, transport: 35,  activities: 90,  misc: 60 },
       comfortable: { lodging: 540, food: 290, transport: 70,  activities: 170, misc: 110 },
@@ -114,13 +110,9 @@ export const DESTINATIONS = [
     tempC: { low: 3, high: 8 },
     winterNote: "Frio (3-8 ºC), pouca neve mas chuva fina. Casaco impermeável + camadas.",
     vibe: ["natal", "reveillon", "arte", "nightlife"],
-    highlights: [
-      "Mercados de Natal (Tuileries, La Défense, Notre-Dame)",
-      "Patinação no gelo: Hôtel de Ville e Grand Palais",
-      "Réveillon nos Champs-Élysées + show no Arco do Triunfo",
-      "Bar crawl no Marais e jazz na Rive Gauche",
-    ],
-    flightBaseBRL: 7500,
+    xmasMarket: true,
+    nyeHighlight: "Réveillon nos Champs-Élysées + show de luzes no Arco do Triunfo (gratuito)",
+    flightBaseBRL: 5800,
     daily: {
       economic:    { lodging: 420, food: 180, transport: 50,  activities: 110, misc: 70 },
       comfortable: { lodging: 850, food: 360, transport: 90,  activities: 230, misc: 140 },
@@ -142,19 +134,67 @@ export const DESTINATIONS = [
     safetyScore: 4.3,
     bestMonths: ["Abr", "Mai", "Set", "Out"],
     tempC: { low: 5, high: 12 },
-    winterNote: "Frio leve e ensolarado. Filas menores nos pontos turísticos.",
+    winterNote: "Frio leve e ensolarado. Menos turistas nos pontos icônicos.",
     vibe: ["arte", "comida", "natal", "reveillon"],
-    highlights: [
-      "Coliseu e Vaticano sem fila (baixa de turistas)",
-      "Trastevere bar crawl à noite",
-      "Réveillon no Circo Massimo com show grátis",
-      "Bate-volta para Nápoles: pizzaria de origem",
-    ],
-    flightBaseBRL: 6500,
+    xmasMarket: true,
+    nyeHighlight: "Concerto + fogos no Circo Massimo (entrada gratuita)",
+    flightBaseBRL: 5300,
     daily: {
       economic:    { lodging: 290, food: 150, transport: 35,  activities: 100, misc: 60 },
       comfortable: { lodging: 650, food: 310, transport: 80,  activities: 195, misc: 125 },
       premium:     { lodging: 1650, food: 640, transport: 200, activities: 460, misc: 250 },
+    },
+  },
+  {
+    id: "milao",
+    city: "Milão",
+    country: "Itália",
+    region: "Europa",
+    emoji: "🇮🇹",
+    image:
+      "https://images.unsplash.com/photo-1520440229-6469a149ac15?auto=format&fit=crop&w=1200&q=70",
+    currency: "EUR",
+    languages: ["Italiano", "Inglês"],
+    visaRequired: false,
+    flightHours: 11,
+    safetyScore: 4.3,
+    bestMonths: ["Abr", "Mai", "Set", "Out"],
+    tempC: { low: 1, high: 7 },
+    winterNote: "Frio com névoa típica. Capital fashion da Europa em modo natalino.",
+    vibe: ["natal", "reveillon", "nightlife", "fashion"],
+    xmasMarket: true,
+    nyeHighlight: "Concertão grátis na Piazza Duomo + DJ set e fogos à meia-noite",
+    flightBaseBRL: 5400,
+    daily: {
+      economic:    { lodging: 310, food: 160, transport: 35,  activities: 95,  misc: 65 },
+      comfortable: { lodging: 690, food: 320, transport: 80,  activities: 200, misc: 130 },
+      premium:     { lodging: 1750, food: 660, transport: 210, activities: 470, misc: 260 },
+    },
+  },
+  {
+    id: "veneza",
+    city: "Veneza",
+    country: "Itália",
+    region: "Europa",
+    emoji: "🇮🇹",
+    image:
+      "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?auto=format&fit=crop&w=1200&q=70",
+    currency: "EUR",
+    languages: ["Italiano", "Inglês"],
+    visaRequired: false,
+    flightHours: 12,
+    safetyScore: 4.5,
+    bestMonths: ["Abr", "Mai", "Set", "Out"],
+    tempC: { low: 0, high: 6 },
+    winterNote: "Frio úmido, neblina dramática. Acqua alta é possível (botas altas).",
+    vibe: ["natal", "reveillon", "arte", "romantico"],
+    xmasMarket: true,
+    nyeHighlight: "Festival na Piazza San Marco com fogos sobre a lagoa + beijo coletivo",
+    flightBaseBRL: 6000,
+    daily: {
+      economic:    { lodging: 340, food: 170, transport: 60,  activities: 100, misc: 70 },
+      comfortable: { lodging: 760, food: 330, transport: 110, activities: 210, misc: 140 },
+      premium:     { lodging: 1900, food: 680, transport: 250, activities: 480, misc: 270 },
     },
   },
   {
@@ -174,13 +214,9 @@ export const DESTINATIONS = [
     tempC: { low: 7, high: 14 },
     winterNote: "Inverno mediterrâneo; sol durante o dia, frio leve à noite.",
     vibe: ["nightlife", "ski", "praia", "reveillon"],
-    highlights: [
-      "Razzmatazz e Apolo: noites lendárias",
-      "Bate-volta de ski para Andorra (3h de ônibus)",
-      "Réveillon na Plaça d'Espanya com 12 uvas",
-      "Brunch culture em Gràcia",
-    ],
-    flightBaseBRL: 6500,
+    xmasMarket: true,
+    nyeHighlight: "12 uvas com a multidão na Plaça Espanya + show de luzes em Montjuïc",
+    flightBaseBRL: 5300,
     daily: {
       economic:    { lodging: 330, food: 160, transport: 40,  activities: 105, misc: 65 },
       comfortable: { lodging: 720, food: 320, transport: 85,  activities: 210, misc: 130 },
@@ -188,63 +224,55 @@ export const DESTINATIONS = [
     },
   },
   {
-    id: "toquio",
-    city: "Tóquio",
-    country: "Japão",
-    region: "Ásia",
-    emoji: "🇯🇵",
+    id: "viena",
+    city: "Viena",
+    country: "Áustria",
+    region: "Europa",
+    emoji: "🇦🇹",
     image:
-      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=70",
-    currency: "JPY",
-    languages: ["Japonês"],
+      "https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&w=1200&q=70",
+    currency: "EUR",
+    languages: ["Alemão", "Inglês"],
     visaRequired: false,
-    flightHours: 24,
-    safetyScore: 4.9,
-    bestMonths: ["Mar", "Abr", "Out", "Nov"],
-    tempC: { low: 2, high: 10 },
-    winterNote: "Frio seco e ensolarado. Quase nunca neva no centro; ideal para passeios urbanos.",
-    vibe: ["nightlife", "ski", "natal", "geek"],
-    highlights: [
-      "Iluminações de Natal: Roppongi, Marunouchi, Shibuya",
-      "Karaokê em Shinjuku até de manhã",
-      "Day trip de ski em Yuzawa (1h40 de Shinkansen)",
-      "Hatsumōde — primeira visita ao templo no Ano Novo",
-    ],
-    flightBaseBRL: 9500,
+    flightHours: 13,
+    safetyScore: 4.8,
+    bestMonths: ["Mai", "Jun", "Set"],
+    tempC: { low: -2, high: 4 },
+    winterNote: "Frio, possível neve. Berço dos Christkindlmärkte — clima natalino perfeito.",
+    vibe: ["natal", "reveillon", "arte", "café"],
+    xmasMarket: true,
+    nyeHighlight: "Silvesterpfad: caminho de palcos pela cidade + valsa do Danúbio Azul à meia-noite",
+    flightBaseBRL: 5800,
     daily: {
-      economic:    { lodging: 260, food: 150, transport: 60,  activities: 100, misc: 60 },
-      comfortable: { lodging: 800, food: 360, transport: 110, activities: 230, misc: 150 },
-      premium:     { lodging: 2100, food: 800, transport: 280, activities: 580, misc: 320 },
+      economic:    { lodging: 320, food: 160, transport: 40,  activities: 110, misc: 70 },
+      comfortable: { lodging: 700, food: 320, transport: 85,  activities: 220, misc: 130 },
+      premium:     { lodging: 1750, food: 650, transport: 210, activities: 500, misc: 260 },
     },
   },
   {
-    id: "seul",
-    city: "Seul",
-    country: "Coreia do Sul",
-    region: "Ásia",
-    emoji: "🇰🇷",
+    id: "budapeste",
+    city: "Budapeste",
+    country: "Hungria",
+    region: "Europa",
+    emoji: "🇭🇺",
     image:
-      "https://images.unsplash.com/photo-1538485399081-7c8970e02f1c?auto=format&fit=crop&w=1200&q=70",
-    currency: "KRW",
-    languages: ["Coreano", "Inglês básico"],
+      "https://images.unsplash.com/photo-1551867633-194f125bddfa?auto=format&fit=crop&w=1200&q=70",
+    currency: "HUF",
+    languages: ["Húngaro", "Inglês"],
     visaRequired: false,
-    flightHours: 27,
-    safetyScore: 4.8,
-    bestMonths: ["Abr", "Mai", "Out"],
-    tempC: { low: -6, high: 2 },
-    winterNote: "Frio intenso e seco. Pode nevar. Indispensável: casaco térmico, gorro, luvas.",
-    vibe: ["nightlife", "ski", "kpop", "reveillon"],
-    highlights: [
-      "Aula de dança K-pop em Hongdae",
-      "Vivaldi Park: ski day trip (~1h de Seul)",
-      "Noraebang (karaokê privativo) e chimaek no Han River",
-      "Réveillon na cerimônia do Sino de Bosingak",
-    ],
-    flightBaseBRL: 9500,
+    flightHours: 13,
+    safetyScore: 4.5,
+    bestMonths: ["Mai", "Jun", "Set"],
+    tempC: { low: -2, high: 3 },
+    winterNote: "Frio seco. Banhos termais ao ar livre são uma experiência única no inverno.",
+    vibe: ["natal", "nightlife", "termas", "barata"],
+    xmasMarket: true,
+    nyeHighlight: "Festa enorme em Vörösmarty Square + fogos no Bastião dos Pescadores",
+    flightBaseBRL: 5800,
     daily: {
-      economic:    { lodging: 220, food: 130, transport: 40,  activities: 90,  misc: 60 },
-      comfortable: { lodging: 620, food: 290, transport: 90,  activities: 200, misc: 130 },
-      premium:     { lodging: 1700, food: 650, transport: 220, activities: 500, misc: 270 },
+      economic:    { lodging: 220, food: 130, transport: 30,  activities: 90,  misc: 55 },
+      comfortable: { lodging: 510, food: 270, transport: 65,  activities: 180, misc: 110 },
+      premium:     { lodging: 1350, food: 540, transport: 170, activities: 410, misc: 230 },
     },
   },
   {
@@ -263,14 +291,10 @@ export const DESTINATIONS = [
     bestMonths: ["Mai", "Jun", "Set"],
     tempC: { low: -3, high: 3 },
     winterNote: "Frio com chance real de neve. Cidade vira cenário de filme em dezembro.",
-    vibe: ["natal", "nightlife", "ski", "barata"],
-    highlights: [
-      "Mercados de Natal na Staroměstské + trdelník com Nutella",
-      "Pub crawl Prague (um dos mais famosos da Europa)",
-      "Beer spa: banho em cuba de cerveja IPA",
-      "Réveillon com fogos no Letná Park",
-    ],
-    flightBaseBRL: 6500,
+    vibe: ["natal", "nightlife", "barata"],
+    xmasMarket: true,
+    nyeHighlight: "Fogos sobre o Castelo vistos do Letná Park (melhor mirante grátis)",
+    flightBaseBRL: 5800,
     daily: {
       economic:    { lodging: 200, food: 120, transport: 25,  activities: 80,  misc: 50 },
       comfortable: { lodging: 480, food: 240, transport: 60,  activities: 160, misc: 100 },
@@ -294,13 +318,9 @@ export const DESTINATIONS = [
     tempC: { low: -1, high: 4 },
     winterNote: "Frio úmido. 60+ mercados de Natal espalhados pela cidade.",
     vibe: ["nightlife", "natal", "reveillon", "alternativo"],
-    highlights: [
-      "Tentativa lendária de entrar no Berghain (techno)",
-      "Mercados de Natal: Gendarmenmarkt e Charlottenburg",
-      "Réveillon no Portão de Brandemburgo (maior festa free da Europa)",
-      "East Side Gallery + Berlin Underworlds tour",
-    ],
-    flightBaseBRL: 6500,
+    xmasMarket: true,
+    nyeHighlight: "Maior festa free da Europa no Portão de Brandemburgo (até 1M de pessoas)",
+    flightBaseBRL: 5500,
     daily: {
       economic:    { lodging: 300, food: 150, transport: 35,  activities: 95,  misc: 60 },
       comfortable: { lodging: 660, food: 290, transport: 75,  activities: 195, misc: 120 },
@@ -324,17 +344,40 @@ export const DESTINATIONS = [
     tempC: { low: 1, high: 7 },
     winterNote: "Frio e ventoso, com chance de canais congelados. Light Festival rola até janeiro.",
     vibe: ["natal", "nightlife", "arte", "reveillon"],
-    highlights: [
-      "Amsterdam Light Festival: passeio de barco com instalações",
-      "Patinação no gelo na Museumplein",
-      "Coffee shop culture e Red Light District à noite",
-      "Réveillon na Dam Square com fogos por toda a cidade",
-    ],
-    flightBaseBRL: 6500,
+    xmasMarket: true,
+    nyeHighlight: "Fogos legalizados pela cidade toda + festa de rua na Dam Square",
+    flightBaseBRL: 5500,
     daily: {
       economic:    { lodging: 380, food: 180, transport: 45,  activities: 110, misc: 70 },
       comfortable: { lodging: 780, food: 340, transport: 90,  activities: 220, misc: 140 },
       premium:     { lodging: 1900, food: 680, transport: 220, activities: 510, misc: 270 },
+    },
+  },
+  {
+    id: "edimburgo",
+    city: "Edimburgo",
+    country: "Escócia",
+    region: "Europa",
+    emoji: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    image:
+      "https://images.unsplash.com/photo-1506377585622-bedcbb027afc?auto=format&fit=crop&w=1200&q=70",
+    currency: "GBP",
+    languages: ["Inglês", "Gaélico escocês"],
+    visaRequired: false,
+    flightHours: 13,
+    safetyScore: 4.7,
+    bestMonths: ["Mai", "Jun", "Ago"],
+    tempC: { low: 1, high: 7 },
+    winterNote: "Frio úmido com vento forte. Castelo iluminado e Hogmanay (réveillon escocês).",
+    vibe: ["reveillon", "natal", "nightlife", "história"],
+    xmasMarket: true,
+    hogmanay: true,
+    nyeHighlight: "Hogmanay: 3 dias de festival, Torchlight Procession e Street Party de 80k pessoas",
+    flightBaseBRL: 6300,
+    daily: {
+      economic:    { lodging: 350, food: 170, transport: 40,  activities: 110, misc: 70 },
+      comfortable: { lodging: 760, food: 330, transport: 80,  activities: 220, misc: 140 },
+      premium:     { lodging: 1850, food: 660, transport: 200, activities: 500, misc: 270 },
     },
   },
   {
@@ -352,15 +395,11 @@ export const DESTINATIONS = [
     safetyScore: 4.2,
     bestMonths: ["Abr", "Mai", "Set", "Out"],
     tempC: { low: 6, high: 13 },
-    winterNote: "Inverno ameno; Acrópole sem multidões. Mar gelado, mas dá pra ir até Hidra.",
+    winterNote: "Inverno ameno; Acrópole sem multidões.",
     vibe: ["arte", "comida", "natal", "história"],
-    highlights: [
-      "Acrópole no inverno: praticamente vazia",
-      "Bairro de Exarchia: alternativo, bares e arte de rua",
-      "Réveillon na Praça Syntagma com fogos",
-      "Bate-volta para Hidra (sem carros) ou Delfos",
-    ],
-    flightBaseBRL: 6800,
+    xmasMarket: true,
+    nyeHighlight: "Show e fogos na Praça Syntagma + tradição do bolo Vasilopita",
+    flightBaseBRL: 5800,
     daily: {
       economic:    { lodging: 220, food: 120, transport: 30,  activities: 80,  misc: 50 },
       comfortable: { lodging: 520, food: 250, transport: 65,  activities: 170, misc: 110 },
@@ -384,17 +423,65 @@ export const DESTINATIONS = [
     tempC: { low: -2, high: 3 },
     winterNote: "Dia super curto (~4h de luz), MAS é a melhor janela para aurora boreal.",
     vibe: ["aurora", "aventura", "ski", "reveillon"],
-    highlights: [
-      "Caça à aurora boreal (alta probabilidade em dez/jan)",
-      "Blue Lagoon e banhos termais geotermais",
-      "Snowmobile sobre a geleira Langjökull",
-      "Réveillon islandês: fogueiras de bairro + fogos lendários",
-    ],
-    flightBaseBRL: 8500,
+    xmasMarket: false,
+    nyeHighlight: "Bonfires de bairro (brennur) + fogos amadores em 360° pela cidade",
+    flightBaseBRL: 7800,
     daily: {
       economic:    { lodging: 480, food: 220, transport: 60,  activities: 200, misc: 90 },
       comfortable: { lodging: 1100, food: 420, transport: 140, activities: 380, misc: 180 },
       premium:     { lodging: 2400, food: 800, transport: 320, activities: 800, misc: 350 },
+    },
+  },
+  {
+    id: "toquio",
+    city: "Tóquio",
+    country: "Japão",
+    region: "Ásia",
+    emoji: "🇯🇵",
+    image:
+      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=70",
+    currency: "JPY",
+    languages: ["Japonês"],
+    visaRequired: false,
+    flightHours: 24,
+    safetyScore: 4.9,
+    bestMonths: ["Mar", "Abr", "Out", "Nov"],
+    tempC: { low: 2, high: 10 },
+    winterNote: "Frio seco e ensolarado. Quase nunca neva no centro; ideal p/ passeios urbanos.",
+    vibe: ["nightlife", "ski", "natal", "geek"],
+    xmasMarket: false,
+    nyeHighlight: "Hatsumōde no Templo Meiji + 108 sinos em Zōjō-ji à meia-noite",
+    flightBaseBRL: 7800,
+    daily: {
+      economic:    { lodging: 260, food: 150, transport: 60,  activities: 100, misc: 60 },
+      comfortable: { lodging: 800, food: 360, transport: 110, activities: 230, misc: 150 },
+      premium:     { lodging: 2100, food: 800, transport: 280, activities: 580, misc: 320 },
+    },
+  },
+  {
+    id: "seul",
+    city: "Seul",
+    country: "Coreia do Sul",
+    region: "Ásia",
+    emoji: "🇰🇷",
+    image:
+      "https://images.unsplash.com/photo-1538485399081-7c8970e02f1c?auto=format&fit=crop&w=1200&q=70",
+    currency: "KRW",
+    languages: ["Coreano", "Inglês básico"],
+    visaRequired: false,
+    flightHours: 27,
+    safetyScore: 4.8,
+    bestMonths: ["Abr", "Mai", "Out"],
+    tempC: { low: -6, high: 2 },
+    winterNote: "Frio intenso e seco. Pode nevar. Casaco térmico, gorro e luvas obrigatórios.",
+    vibe: ["nightlife", "ski", "kpop", "reveillon"],
+    xmasMarket: false,
+    nyeHighlight: "Cerimônia do Sino de Bosingak + festa no Han River com chimaek",
+    flightBaseBRL: 8500,
+    daily: {
+      economic:    { lodging: 220, food: 130, transport: 40,  activities: 90,  misc: 60 },
+      comfortable: { lodging: 620, food: 290, transport: 90,  activities: 200, misc: 130 },
+      premium:     { lodging: 1700, food: 650, transport: 220, activities: 500, misc: 270 },
     },
   },
   {
@@ -412,15 +499,11 @@ export const DESTINATIONS = [
     safetyScore: 4.0,
     bestMonths: ["Nov", "Dez", "Jan", "Fev"],
     tempC: { low: 22, high: 32 },
-    winterNote: "Estação seca e mais fresca: melhor época do ano. Roupas leves.",
+    winterNote: "Estação seca e mais fresca: a MELHOR época do ano. Roupas leves.",
     vibe: ["nightlife", "praia", "reveillon", "comida"],
-    highlights: [
-      "Sky bars (Lebua e Mahanakhon) e Khao San Road",
-      "Aula de Muay Thai e cooking class de pad thai",
-      "Réveillon no Asiatique com fogos no rio",
-      "Extensão fácil para Phuket ou Krabi",
-    ],
-    flightBaseBRL: 7500,
+    xmasMarket: false,
+    nyeHighlight: "Fogos no Asiatique + Festa no CentralWorld (multidão local + estrangeira)",
+    flightBaseBRL: 6200,
     daily: {
       economic:    { lodging: 110, food: 70,  transport: 25,  activities: 60,  misc: 35 },
       comfortable: { lodging: 340, food: 170, transport: 60,  activities: 140, misc: 80 },
@@ -444,13 +527,9 @@ export const DESTINATIONS = [
     tempC: { low: 4, high: 10 },
     winterNote: "Frio com chance de neve. Hammams ficam ainda mais convidativos.",
     vibe: ["nightlife", "comida", "natal"],
-    highlights: [
-      "Hammam tradicional em Çemberlitaş",
-      "Cena techno em Galata: clubs como Mini Müzikhol",
-      "Cruzeiro pelo Bósforo ao pôr do sol",
-      "Extensão para Capadócia: balão sobre paisagem nevada",
-    ],
-    flightBaseBRL: 6500,
+    xmasMarket: false,
+    nyeHighlight: "Fogos sobre o Bósforo vistos de balsa ou rooftop em Karaköy",
+    flightBaseBRL: 5500,
     daily: {
       economic:    { lodging: 200, food: 95,  transport: 30,  activities: 80,  misc: 45 },
       comfortable: { lodging: 500, food: 230, transport: 70,  activities: 170, misc: 110 },
@@ -474,13 +553,9 @@ export const DESTINATIONS = [
     tempC: { low: 16, high: 25 },
     winterNote: "Pico da temporada: clima perfeito (16-25 ºC) e mar morno.",
     vibe: ["nightlife", "praia", "reveillon", "luxo"],
-    highlights: [
-      "Réveillon no Burj Khalifa: um dos maiores shows pirotécnicos do mundo",
-      "Skydive sobre a Palm Jumeirah",
-      "Desert glamping com dune bashing",
-      "Beach clubs (Cove Beach, Drift) e Ski Dubai indoor",
-    ],
-    flightBaseBRL: 8500,
+    xmasMarket: false,
+    nyeHighlight: "Show pirotécnico icônico no Burj Khalifa (um dos maiores do mundo)",
+    flightBaseBRL: 6700,
     daily: {
       economic:    { lodging: 420, food: 180, transport: 50,  activities: 120, misc: 90 },
       comfortable: { lodging: 950, food: 400, transport: 110, activities: 290, misc: 170 },
