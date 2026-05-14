@@ -91,7 +91,7 @@ export default function DestinationDetail({
 
       <BudgetBreakdown scenario={scenario} params={params} />
 
-      <Itinerary destinationId={d.id} days={params.days} />
+      <Itinerary destinationId={d.id} days={params.days} startDate={params.startDate} />
 
       <ReportPanel report={report} destination={d} />
     </section>

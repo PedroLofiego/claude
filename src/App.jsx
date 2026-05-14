@@ -18,11 +18,12 @@ const DEFAULT_PARAMS = {
   budget: 30000,
   days: 16,
   people: 2,
+  startDate: "2026-12-23",
 };
 
 function loadParams() {
   try {
-    const raw = localStorage.getItem("voaja:params:v3");
+    const raw = localStorage.getItem("voaja:params:v4");
     if (!raw) return DEFAULT_PARAMS;
     const parsed = JSON.parse(raw);
     return { ...DEFAULT_PARAMS, ...parsed };
@@ -38,7 +39,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem("voaja:params:v3", JSON.stringify(params));
+      localStorage.setItem("voaja:params:v4", JSON.stringify(params));
     } catch {
       /* ignore */
     }
@@ -150,7 +151,7 @@ function Header() {
           </p>
         </div>
       </div>
-      <span className="chip">v0.2 · 14 destinos · Réveillon edition</span>
+      <span className="chip">v0.3 · 20 destinos · Natal & Réveillon</span>
     </header>
   );
 }
