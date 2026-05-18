@@ -1,9 +1,10 @@
-import { Clock, Globe2, Plane, ShieldCheck, Snowflake } from "lucide-react";
+import { Clock, Globe2, Loader2, Plane, RefreshCw, ShieldCheck, Snowflake, Sparkles } from "lucide-react";
 import BudgetBreakdown from "./BudgetBreakdown.jsx";
 import Itinerary from "./Itinerary.jsx";
 import Recommendation from "./Recommendation.jsx";
 import ScenarioComparison from "./ScenarioComparison.jsx";
 import ReportPanel from "./ReportPanel.jsx";
+import { formatBRL } from "../lib/calc.js";
 
 export default function DestinationDetail({
   evaluation,
@@ -12,9 +13,14 @@ export default function DestinationDetail({
   onSelectTier,
   recommendationLine,
   report,
+  onRefreshFlight,
+  refreshing,
+  hasWorker,
 }) {
   const d = evaluation.destination;
   const scenario = evaluation.scenarios[selectedTier];
+  const flight = scenario?.flight;
+  const liveFlight = flight?.source && flight.source !== "mock";
 
   return (
     <section className="space-y-5">
@@ -64,6 +70,44 @@ export default function DestinationDetail({
             <span className="font-semibold">Inverno aqui:</span> {d.winterNote}
           </div>
         )}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-5 py-3 text-sm">
+          <div className="flex items-center gap-2 text-slate-200">
+            <Plane size={14} className="text-indigo-300" />
+            <span>
+              <span className="text-slate-400">Voo {params.origin}→{d.iata ?? "?"}:</span>{" "}
+              <span className="font-semibold text-white">{formatBRL(flight.perPerson)}</span>
+              <span className="text-slate-400"> / pessoa</span>
+            </span>
+            {liveFlight ? (
+              <span className="badge-ok ml-1" title={`Amadeus · ${flight.fetchedAt ?? ""}`}>
+                <Sparkles size={12} /> Amadeus
+              </span>
+            ) : (
+              <span
+                className="ml-1 inline-flex items-center gap-1 rounded-full bg-slate-500/15 px-2.5 py-1 text-xs font-semibold text-slate-300 ring-1 ring-inset ring-slate-400/30"
+                title="Preço estimado (mock). Configure o worker Amadeus para preços ao vivo."
+              >
+                Mock
+              </span>
+            )}
+          </div>
+          {onRefreshFlight && (
+            <button
+              type="button"
+              className="btn-ghost"
+              onClick={onRefreshFlight}
+              disabled={refreshing}
+              title={hasWorker ? "Buscar voo real na Amadeus" : "Configurar worker Amadeus"}
+            >
+              {refreshing ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <RefreshCw size={14} />
+              )}
+              {hasWorker ? "Atualizar voo real" : "Configurar Amadeus"}
+            </button>
+          )}
+        </div>
         <div className="p-5">
           <ul className="grid grid-cols-1 gap-2 text-sm text-slate-200 sm:grid-cols-2">
             {d.highlights.map((h, i) => (

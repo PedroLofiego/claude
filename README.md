@@ -64,6 +64,25 @@ src/
     └── ReportPanel.jsx         # Copiar / baixar / imprimir relatório
 ```
 
+## Voos reais via Amadeus
+
+O app traz uma integração opcional com a **Amadeus Flight Offers Search**
+(plano Self-Service gratuito) através de um Cloudflare Worker — necessário
+porque a API exige OAuth com secret e bloqueia CORS no browser.
+
+Passos rápidos:
+
+1. Pegue credenciais grátis em [developers.amadeus.com](https://developers.amadeus.com/register).
+2. Deploy o worker em [`/worker`](./worker/) — veja [`worker/README.md`](./worker/README.md).
+   Não precisa CLI: dá pra colar o `index.js` direto no painel da Cloudflare.
+3. No app, clique na ⚙️ engrenagem do header e cole a URL pública do worker.
+4. Clique em **"Buscar voos reais"** (busca em massa) ou no botão de refresh
+   em cada destino.
+
+Resultados ficam em cache no `localStorage` por combinação
+(origem, destino, datas, pessoas). Os preços mostrados ganham um selo
+**Amadeus** ✨; sem worker conectado, ficam com selo **Mock**.
+
 ## Onde substituir mocks por APIs reais
 
 Todos os pontos com dados estimados estão **comentados como `MOCKED`** /

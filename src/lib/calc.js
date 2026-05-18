@@ -31,7 +31,7 @@ export const formatBRLCompact = (value) => {
  * @param {"economic"|"comfortable"|"premium"} tier
  * @param {{ origin: string, days: number, people: number }} params
  */
-export function computeCost(destination, tier, params) {
+export function computeCost(destination, tier, params, flightOverride = null) {
   const { origin, days, people } = params;
   const daily = destination.daily[tier];
 
@@ -55,8 +55,20 @@ export function computeCost(destination, tier, params) {
   const dailyTotal = dailyPerPerson * people;
   const accommodationsAndOnGround = dailyTotal * days;
 
-  const flightPerPerson = flightFromOrigin(origin, destination.flightBaseBRL);
-  const flightTotal = flightPerPerson * people;
+  // Se houver um override (vindo da Amadeus), usa o total real; caso contrário,
+  // calcula a partir do preço base × multiplicador da origem.
+  let flightPerPerson;
+  let flightTotal;
+  let flightSource;
+  if (flightOverride && Number.isFinite(flightOverride.perPersonBRL)) {
+    flightPerPerson = flightOverride.perPersonBRL;
+    flightTotal = (flightOverride.totalBRL ?? flightPerPerson * people);
+    flightSource = flightOverride.source ?? "amadeus";
+  } else {
+    flightPerPerson = flightFromOrigin(origin, destination.flightBaseBRL);
+    flightTotal = flightPerPerson * people;
+    flightSource = "mock";
+  }
 
   const fixedTotal = FIXED_PER_PERSON_BRL * people;
 
@@ -66,7 +78,7 @@ export function computeCost(destination, tier, params) {
 
   return {
     tier,
-    flight: { perPerson: flightPerPerson, total: flightTotal },
+    flight: { perPerson: flightPerPerson, total: flightTotal, source: flightSource, fetchedAt: flightOverride?.fetchedAt ?? null },
     fixed: { perPerson: FIXED_PER_PERSON_BRL, total: fixedTotal },
     daily: {
       perPerson: dailyPerPerson,
@@ -83,9 +95,9 @@ export function computeCost(destination, tier, params) {
 /**
  * Avalia um destino nos três cenários de uma vez e ranqueia por aderência ao orçamento.
  */
-export function evaluateDestination(destination, params) {
+export function evaluateDestination(destination, params, flightOverride = null) {
   const scenarios = TIERS.reduce((acc, t) => {
-    acc[t.id] = computeCost(destination, t.id, params);
+    acc[t.id] = computeCost(destination, t.id, params, flightOverride);
     return acc;
   }, {});
 
@@ -124,8 +136,10 @@ export function evaluateDestination(destination, params) {
  * Avalia todos os destinos e devolve a lista ordenada para a comparação.
  * Critério: 1) cabe no orçamento, 2) maior tier que cabe, 3) menor custo total.
  */
-export function evaluateAll(destinations, params) {
-  const evals = destinations.map((d) => evaluateDestination(d, params));
+export function evaluateAll(destinations, params, flightOverrides = {}) {
+  const evals = destinations.map((d) =>
+    evaluateDestination(d, params, flightOverrides[d.id] ?? null)
+  );
   const tierRank = { premium: 3, comfortable: 2, economic: 1 };
   return evals.sort((a, b) => {
     if (a.fits !== b.fits) return a.fits ? -1 : 1;
