@@ -15,7 +15,9 @@ export default function BudgetBreakdown({ scenario, params }) {
   const rows = [
     {
       key: "flight",
-      label: `Voo (${params.people} pax)`,
+      label: `✈️ Voo (${params.people} pax) ${
+        scenario.flight.source && scenario.flight.source !== "mock" ? "· Amadeus" : "· estimativa"
+      }`,
       value: scenario.flight.total,
       hint: `${formatBRL(scenario.flight.perPerson)}/pessoa`,
     },

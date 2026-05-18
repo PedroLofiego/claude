@@ -72,6 +72,7 @@ export const DESTINATIONS = [
     city: "Lisboa",
     country: "Portugal",
     region: "Europa",
+    iata: "LIS",
     emoji: "🇵🇹",
     image:
       "https://images.unsplash.com/photo-1588535537401-e7f72bd34eed?auto=format&fit=crop&w=1200&q=70",
@@ -98,6 +99,7 @@ export const DESTINATIONS = [
     city: "Paris",
     country: "França",
     region: "Europa",
+    iata: "CDG",
     emoji: "🇫🇷",
     image:
       "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=70",
@@ -124,6 +126,7 @@ export const DESTINATIONS = [
     city: "Roma",
     country: "Itália",
     region: "Europa",
+    iata: "FCO",
     emoji: "🇮🇹",
     image:
       "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=70",
@@ -150,6 +153,7 @@ export const DESTINATIONS = [
     city: "Milão",
     country: "Itália",
     region: "Europa",
+    iata: "MXP",
     emoji: "🇮🇹",
     image:
       "https://images.unsplash.com/photo-1520440229-6469a149ac15?auto=format&fit=crop&w=1200&q=70",
@@ -176,6 +180,7 @@ export const DESTINATIONS = [
     city: "Veneza",
     country: "Itália",
     region: "Europa",
+    iata: "VCE",
     emoji: "🇮🇹",
     image:
       "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?auto=format&fit=crop&w=1200&q=70",
@@ -202,6 +207,7 @@ export const DESTINATIONS = [
     city: "Barcelona",
     country: "Espanha",
     region: "Europa",
+    iata: "BCN",
     emoji: "🇪🇸",
     image:
       "https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=70",
@@ -228,6 +234,7 @@ export const DESTINATIONS = [
     city: "Viena",
     country: "Áustria",
     region: "Europa",
+    iata: "VIE",
     emoji: "🇦🇹",
     image:
       "https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&w=1200&q=70",
@@ -254,6 +261,7 @@ export const DESTINATIONS = [
     city: "Budapeste",
     country: "Hungria",
     region: "Europa",
+    iata: "BUD",
     emoji: "🇭🇺",
     image:
       "https://images.unsplash.com/photo-1551867633-194f125bddfa?auto=format&fit=crop&w=1200&q=70",
@@ -280,6 +288,7 @@ export const DESTINATIONS = [
     city: "Praga",
     country: "República Tcheca",
     region: "Europa",
+    iata: "PRG",
     emoji: "🇨🇿",
     image:
       "https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=1200&q=70",
@@ -306,6 +315,7 @@ export const DESTINATIONS = [
     city: "Berlim",
     country: "Alemanha",
     region: "Europa",
+    iata: "BER",
     emoji: "🇩🇪",
     image:
       "https://images.unsplash.com/photo-1587330979470-3016b6702d89?auto=format&fit=crop&w=1200&q=70",
@@ -332,6 +342,7 @@ export const DESTINATIONS = [
     city: "Amsterdã",
     country: "Holanda",
     region: "Europa",
+    iata: "AMS",
     emoji: "🇳🇱",
     image:
       "https://images.unsplash.com/photo-1534351590666-13e3e96c5017?auto=format&fit=crop&w=1200&q=70",
@@ -358,6 +369,7 @@ export const DESTINATIONS = [
     city: "Edimburgo",
     country: "Escócia",
     region: "Europa",
+    iata: "EDI",
     emoji: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
     image:
       "https://images.unsplash.com/photo-1506377585622-bedcbb027afc?auto=format&fit=crop&w=1200&q=70",
@@ -385,6 +397,7 @@ export const DESTINATIONS = [
     city: "Atenas",
     country: "Grécia",
     region: "Europa",
+    iata: "ATH",
     emoji: "🇬🇷",
     image:
       "https://images.unsplash.com/photo-1503152394-c571994fd383?auto=format&fit=crop&w=1200&q=70",
@@ -411,6 +424,7 @@ export const DESTINATIONS = [
     city: "Reykjavík",
     country: "Islândia",
     region: "Europa",
+    iata: "KEF",
     emoji: "🇮🇸",
     image:
       "https://images.unsplash.com/photo-1504214208698-ea1916a2195a?auto=format&fit=crop&w=1200&q=70",
@@ -437,6 +451,7 @@ export const DESTINATIONS = [
     city: "Tóquio",
     country: "Japão",
     region: "Ásia",
+    iata: "NRT",
     emoji: "🇯🇵",
     image:
       "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=70",
@@ -463,6 +478,7 @@ export const DESTINATIONS = [
     city: "Seul",
     country: "Coreia do Sul",
     region: "Ásia",
+    iata: "ICN",
     emoji: "🇰🇷",
     image:
       "https://images.unsplash.com/photo-1538485399081-7c8970e02f1c?auto=format&fit=crop&w=1200&q=70",
@@ -489,6 +505,7 @@ export const DESTINATIONS = [
     city: "Bangkok",
     country: "Tailândia",
     region: "Ásia",
+    iata: "BKK",
     emoji: "🇹🇭",
     image:
       "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=70",
@@ -515,6 +532,7 @@ export const DESTINATIONS = [
     city: "Istambul",
     country: "Turquia",
     region: "Eurásia",
+    iata: "IST",
     emoji: "🇹🇷",
     image:
       "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1200&q=70",
@@ -541,6 +559,7 @@ export const DESTINATIONS = [
     city: "Dubai",
     country: "Emirados Árabes",
     region: "Ásia",
+    iata: "DXB",
     emoji: "🇦🇪",
     image:
       "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=70",

@@ -37,8 +37,12 @@ export function buildReportText(evalResult, params, recommendationLine) {
   lines.push(`DETALHE — Cenário selecionado: ${TIERS.find((t) => t.id === bestTier).label}`);
   lines.push("--------------------------------------");
   const rec = scenarios[bestTier];
+  const flightTag =
+    rec.flight.source && rec.flight.source !== "mock"
+      ? ` [Amadeus, ${rec.flight.fetchedAt?.slice(0, 10) ?? ""}]`
+      : " [estimativa mock]";
   lines.push(
-    `Voo (${params.people}× ${formatBRL(rec.flight.perPerson)}): ${formatBRL(rec.flight.total)}`
+    `Voo (${params.people}× ${formatBRL(rec.flight.perPerson)}): ${formatBRL(rec.flight.total)}${flightTag}`
   );
   lines.push(
     `Custos fixos (seguro/visto/chip — ${formatBRL(rec.fixed.perPerson)}/pessoa): ${formatBRL(rec.fixed.total)}`
