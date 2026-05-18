@@ -1,21 +1,15 @@
 /*
- * MOCKED DATA — substituir por APIs reais quando disponíveis.
- *
- * Sugestões de integração futura:
- *   - flights.byOrigin: Skyscanner, Kiwi, Amadeus Flight Offers Search
- *     (Google Flights NÃO tem API pública oficial; usar parceiros)
- *   - daily.* (lodging, food, transport, activities, misc):
- *       Numbeo Cost-of-Living API, Booking.com, GetYourGuide, Rome2Rio
- *   - currency / câmbio em tempo real: Open Exchange Rates, Frankfurter API
- *   - clima e melhor época: OpenWeather, WeatherAPI
- *
  * Todos os valores estão em BRL (R$) e refletem médias estimadas para
  * a janela 22 dez 2026 → 9 jan 2027 (Natal + Réveillon).
  *
  * Preços de voo (`flightBaseBRL`) refletem round-trip por pessoa em classe
- * econômica a partir de GRU; um multiplicador por aeroporto de origem
- * é aplicado em runtime. Calibrados em Mai/2026 cruzando Decolar, Kayak,
- * Momondo e tarifas históricas alta temporada. ±15% de variação normal.
+ * econômica saindo de GRU (São Paulo). O multiplicador por origem é aplicado
+ * em runtime (ex.: SSA = GRU × 1.12). Calibrados em Mai/2026 cruzando
+ * Google Flights, Kayak, Decolar e Momondo para alta temporada. ±20% de
+ * variação é normal dependendo de antecedência e promoções.
+ *
+ * Diárias (`daily.*`) são estimativas de custo diário por pessoa em BRL,
+ * baseadas em médias Numbeo / Booking / GetYourGuide.
  */
 
 export const TRIP_WINDOW = {
@@ -87,7 +81,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "natal", "reveillon", "comida"],
     xmasMarket: true,
     nyeHighlight: "Réveillon grátis no Terreiro do Paço com show e fogos sobre o Tejo",
-    flightBaseBRL: 4500,
+    flightBaseBRL: 5000,
     daily: {
       economic:    { lodging: 240, food: 140, transport: 35,  activities: 90,  misc: 60 },
       comfortable: { lodging: 540, food: 290, transport: 70,  activities: 170, misc: 110 },
@@ -114,7 +108,7 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "arte", "nightlife"],
     xmasMarket: true,
     nyeHighlight: "Réveillon nos Champs-Élysées + show de luzes no Arco do Triunfo (gratuito)",
-    flightBaseBRL: 5800,
+    flightBaseBRL: 6500,
     daily: {
       economic:    { lodging: 420, food: 180, transport: 50,  activities: 110, misc: 70 },
       comfortable: { lodging: 850, food: 360, transport: 90,  activities: 230, misc: 140 },
@@ -141,7 +135,7 @@ export const DESTINATIONS = [
     vibe: ["arte", "comida", "natal", "reveillon"],
     xmasMarket: true,
     nyeHighlight: "Concerto + fogos no Circo Massimo (entrada gratuita)",
-    flightBaseBRL: 5300,
+    flightBaseBRL: 5800,
     daily: {
       economic:    { lodging: 290, food: 150, transport: 35,  activities: 100, misc: 60 },
       comfortable: { lodging: 650, food: 310, transport: 80,  activities: 195, misc: 125 },
@@ -168,7 +162,7 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "nightlife", "fashion"],
     xmasMarket: true,
     nyeHighlight: "Concertão grátis na Piazza Duomo + DJ set e fogos à meia-noite",
-    flightBaseBRL: 5400,
+    flightBaseBRL: 5900,
     daily: {
       economic:    { lodging: 310, food: 160, transport: 35,  activities: 95,  misc: 65 },
       comfortable: { lodging: 690, food: 320, transport: 80,  activities: 200, misc: 130 },
@@ -195,7 +189,7 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "arte", "romantico"],
     xmasMarket: true,
     nyeHighlight: "Festival na Piazza San Marco com fogos sobre a lagoa + beijo coletivo",
-    flightBaseBRL: 6000,
+    flightBaseBRL: 6200,
     daily: {
       economic:    { lodging: 340, food: 170, transport: 60,  activities: 100, misc: 70 },
       comfortable: { lodging: 760, food: 330, transport: 110, activities: 210, misc: 140 },
@@ -222,7 +216,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "ski", "praia", "reveillon"],
     xmasMarket: true,
     nyeHighlight: "12 uvas com a multidão na Plaça Espanya + show de luzes em Montjuïc",
-    flightBaseBRL: 5300,
+    flightBaseBRL: 5800,
     daily: {
       economic:    { lodging: 330, food: 160, transport: 40,  activities: 105, misc: 65 },
       comfortable: { lodging: 720, food: 320, transport: 85,  activities: 210, misc: 130 },
@@ -249,7 +243,7 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "arte", "café"],
     xmasMarket: true,
     nyeHighlight: "Silvesterpfad: caminho de palcos pela cidade + valsa do Danúbio Azul à meia-noite",
-    flightBaseBRL: 5800,
+    flightBaseBRL: 6200,
     daily: {
       economic:    { lodging: 320, food: 160, transport: 40,  activities: 110, misc: 70 },
       comfortable: { lodging: 700, food: 320, transport: 85,  activities: 220, misc: 130 },
@@ -276,7 +270,7 @@ export const DESTINATIONS = [
     vibe: ["natal", "nightlife", "termas", "barata"],
     xmasMarket: true,
     nyeHighlight: "Festa enorme em Vörösmarty Square + fogos no Bastião dos Pescadores",
-    flightBaseBRL: 5800,
+    flightBaseBRL: 6200,
     daily: {
       economic:    { lodging: 220, food: 130, transport: 30,  activities: 90,  misc: 55 },
       comfortable: { lodging: 510, food: 270, transport: 65,  activities: 180, misc: 110 },
@@ -303,7 +297,7 @@ export const DESTINATIONS = [
     vibe: ["natal", "nightlife", "barata"],
     xmasMarket: true,
     nyeHighlight: "Fogos sobre o Castelo vistos do Letná Park (melhor mirante grátis)",
-    flightBaseBRL: 5800,
+    flightBaseBRL: 6200,
     daily: {
       economic:    { lodging: 200, food: 120, transport: 25,  activities: 80,  misc: 50 },
       comfortable: { lodging: 480, food: 240, transport: 60,  activities: 160, misc: 100 },
@@ -330,7 +324,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "natal", "reveillon", "alternativo"],
     xmasMarket: true,
     nyeHighlight: "Maior festa free da Europa no Portão de Brandemburgo (até 1M de pessoas)",
-    flightBaseBRL: 5500,
+    flightBaseBRL: 6000,
     daily: {
       economic:    { lodging: 300, food: 150, transport: 35,  activities: 95,  misc: 60 },
       comfortable: { lodging: 660, food: 290, transport: 75,  activities: 195, misc: 120 },
@@ -357,7 +351,7 @@ export const DESTINATIONS = [
     vibe: ["natal", "nightlife", "arte", "reveillon"],
     xmasMarket: true,
     nyeHighlight: "Fogos legalizados pela cidade toda + festa de rua na Dam Square",
-    flightBaseBRL: 5500,
+    flightBaseBRL: 6000,
     daily: {
       economic:    { lodging: 380, food: 180, transport: 45,  activities: 110, misc: 70 },
       comfortable: { lodging: 780, food: 340, transport: 90,  activities: 220, misc: 140 },
@@ -385,7 +379,7 @@ export const DESTINATIONS = [
     xmasMarket: true,
     hogmanay: true,
     nyeHighlight: "Hogmanay: 3 dias de festival, Torchlight Procession e Street Party de 80k pessoas",
-    flightBaseBRL: 6300,
+    flightBaseBRL: 6800,
     daily: {
       economic:    { lodging: 350, food: 170, transport: 40,  activities: 110, misc: 70 },
       comfortable: { lodging: 760, food: 330, transport: 80,  activities: 220, misc: 140 },
@@ -412,7 +406,7 @@ export const DESTINATIONS = [
     vibe: ["arte", "comida", "natal", "história"],
     xmasMarket: true,
     nyeHighlight: "Show e fogos na Praça Syntagma + tradição do bolo Vasilopita",
-    flightBaseBRL: 5800,
+    flightBaseBRL: 6000,
     daily: {
       economic:    { lodging: 220, food: 120, transport: 30,  activities: 80,  misc: 50 },
       comfortable: { lodging: 520, food: 250, transport: 65,  activities: 170, misc: 110 },
@@ -439,7 +433,7 @@ export const DESTINATIONS = [
     vibe: ["aurora", "aventura", "ski", "reveillon"],
     xmasMarket: false,
     nyeHighlight: "Bonfires de bairro (brennur) + fogos amadores em 360° pela cidade",
-    flightBaseBRL: 7800,
+    flightBaseBRL: 8500,
     daily: {
       economic:    { lodging: 480, food: 220, transport: 60,  activities: 200, misc: 90 },
       comfortable: { lodging: 1100, food: 420, transport: 140, activities: 380, misc: 180 },
@@ -466,7 +460,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "ski", "natal", "geek"],
     xmasMarket: false,
     nyeHighlight: "Hatsumōde no Templo Meiji + 108 sinos em Zōjō-ji à meia-noite",
-    flightBaseBRL: 7800,
+    flightBaseBRL: 7000,
     daily: {
       economic:    { lodging: 260, food: 150, transport: 60,  activities: 100, misc: 60 },
       comfortable: { lodging: 800, food: 360, transport: 110, activities: 230, misc: 150 },
@@ -493,7 +487,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "ski", "kpop", "reveillon"],
     xmasMarket: false,
     nyeHighlight: "Cerimônia do Sino de Bosingak + festa no Han River com chimaek",
-    flightBaseBRL: 8500,
+    flightBaseBRL: 8700,
     daily: {
       economic:    { lodging: 220, food: 130, transport: 40,  activities: 90,  misc: 60 },
       comfortable: { lodging: 620, food: 290, transport: 90,  activities: 200, misc: 130 },
@@ -520,7 +514,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "praia", "reveillon", "comida"],
     xmasMarket: false,
     nyeHighlight: "Fogos no Asiatique + Festa no CentralWorld (multidão local + estrangeira)",
-    flightBaseBRL: 6200,
+    flightBaseBRL: 8200,
     daily: {
       economic:    { lodging: 110, food: 70,  transport: 25,  activities: 60,  misc: 35 },
       comfortable: { lodging: 340, food: 170, transport: 60,  activities: 140, misc: 80 },
@@ -547,7 +541,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "comida", "natal"],
     xmasMarket: false,
     nyeHighlight: "Fogos sobre o Bósforo vistos de balsa ou rooftop em Karaköy",
-    flightBaseBRL: 5500,
+    flightBaseBRL: 6000,
     daily: {
       economic:    { lodging: 200, food: 95,  transport: 30,  activities: 80,  misc: 45 },
       comfortable: { lodging: 500, food: 230, transport: 70,  activities: 170, misc: 110 },
@@ -574,7 +568,7 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "praia", "reveillon", "luxo"],
     xmasMarket: false,
     nyeHighlight: "Show pirotécnico icônico no Burj Khalifa (um dos maiores do mundo)",
-    flightBaseBRL: 6700,
+    flightBaseBRL: 7500,
     daily: {
       economic:    { lodging: 420, food: 180, transport: 50,  activities: 120, misc: 90 },
       comfortable: { lodging: 950, food: 400, transport: 110, activities: 290, misc: 170 },

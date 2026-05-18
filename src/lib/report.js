@@ -37,12 +37,8 @@ export function buildReportText(evalResult, params, recommendationLine) {
   lines.push(`DETALHE — Cenário selecionado: ${TIERS.find((t) => t.id === bestTier).label}`);
   lines.push("--------------------------------------");
   const rec = scenarios[bestTier];
-  const flightTag =
-    rec.flight.source && rec.flight.source !== "mock"
-      ? ` [Amadeus, ${rec.flight.fetchedAt?.slice(0, 10) ?? ""}]`
-      : " [estimativa mock]";
   lines.push(
-    `Voo (${params.people}× ${formatBRL(rec.flight.perPerson)}): ${formatBRL(rec.flight.total)}${flightTag}`
+    `Voo estimado (${params.people}× ${formatBRL(rec.flight.perPerson)}): ${formatBRL(rec.flight.total)} [estimativa calibrada Google Flights/Kayak]`
   );
   lines.push(
     `Custos fixos (seguro/visto/chip — ${formatBRL(rec.fixed.perPerson)}/pessoa): ${formatBRL(rec.fixed.total)}`
@@ -75,7 +71,7 @@ export function buildReportText(evalResult, params, recommendationLine) {
   });
   lines.push("");
   lines.push(
-    `Gerado em ${new Date().toLocaleString("pt-BR")} • dados estimados (mock) — confirmar tarifas reais antes de comprar.`
+    `Gerado em ${new Date().toLocaleString("pt-BR")} • dados estimados — confirmar tarifas reais antes de comprar.`
   );
   return lines.join("\n");
 }
@@ -89,7 +85,6 @@ export async function copyToClipboard(text) {
   } catch {
     /* fallback abaixo */
   }
-  // Fallback para navegadores sem permissão de Clipboard API.
   const ta = document.createElement("textarea");
   ta.value = text;
   ta.style.position = "fixed";

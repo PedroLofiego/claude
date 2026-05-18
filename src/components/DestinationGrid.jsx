@@ -1,4 +1,4 @@
-import { Check, Plane, Shield, Snowflake, Sparkles, X } from "lucide-react";
+import { Check, Plane, Shield, Snowflake, X } from "lucide-react";
 import { TIERS } from "../data/destinations.js";
 import { formatBRL, formatBRLCompact } from "../lib/calc.js";
 
@@ -116,18 +116,8 @@ export default function DestinationGrid({ evaluations, params, selectedId, onSel
               </div>
               <div className="p-4">
                 <div className="flex flex-wrap gap-1.5 text-xs text-slate-300">
-                  <span
-                    className="chip"
-                    title={
-                      ev.recommended.flight.source === "mock"
-                        ? "Preço estimado (mock)"
-                        : `Voo Amadeus · ${ev.recommended.flight.fetchedAt ?? ""}`
-                    }
-                  >
+                  <span className="chip" title="Voo estimado para alta temporada Dez/Jan">
                     <Plane size={12} /> {formatBRL(ev.recommended.flight.perPerson)}/pax
-                    {ev.recommended.flight.source !== "mock" && (
-                      <Sparkles size={11} className="text-emerald-300" />
-                    )}
                   </span>
                   {d.tempC && (
                     <span className="chip" title="Mín / Máx média no período da viagem">

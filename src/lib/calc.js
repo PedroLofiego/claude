@@ -4,11 +4,7 @@ import {
   TIERS,
 } from "../data/destinations.js";
 
-// Custos fixos por pessoa (BRL): seguro viagem, chip eSIM, vacinas, bagagem extra etc.
-// TODO: substituir por API real (Coris, Heymondo, Allianz Travel).
 export const FIXED_PER_PERSON_BRL = 500;
-
-// Buffer recomendado de imprevistos (8% do total).
 export const CONTINGENCY_RATE = 0.08;
 
 export const formatBRL = (value) =>
@@ -24,67 +20,33 @@ export const formatBRLCompact = (value) => {
   return formatBRL(v);
 };
 
-/**
- * Calcula o custo total do destino para um cenário e parâmetros do usuário.
- *
- * @param {object} destination
- * @param {"economic"|"comfortable"|"premium"} tier
- * @param {{ origin: string, days: number, people: number }} params
- */
-export function computeCost(destination, tier, params, flightOverride = null) {
+export function computeCost(destination, tier, params) {
   const { origin, days, people } = params;
   const daily = destination.daily[tier];
 
-  // Diárias por categoria (todos os dias × todas as pessoas).
   const categories = CATEGORIES.map((c) => {
     const perPersonPerDay = daily[c.id] ?? 0;
     const total = perPersonPerDay * days * people;
-    return {
-      id: c.id,
-      label: c.label,
-      icon: c.icon,
-      perPersonPerDay,
-      total,
-    };
+    return { id: c.id, label: c.label, icon: c.icon, perPersonPerDay, total };
   });
 
-  const dailyPerPerson = CATEGORIES.reduce(
-    (sum, c) => sum + (daily[c.id] ?? 0),
-    0
-  );
+  const dailyPerPerson = CATEGORIES.reduce((sum, c) => sum + (daily[c.id] ?? 0), 0);
   const dailyTotal = dailyPerPerson * people;
   const accommodationsAndOnGround = dailyTotal * days;
 
-  // Se houver um override (vindo da Amadeus), usa o total real; caso contrário,
-  // calcula a partir do preço base × multiplicador da origem.
-  let flightPerPerson;
-  let flightTotal;
-  let flightSource;
-  if (flightOverride && Number.isFinite(flightOverride.perPersonBRL)) {
-    flightPerPerson = flightOverride.perPersonBRL;
-    flightTotal = (flightOverride.totalBRL ?? flightPerPerson * people);
-    flightSource = flightOverride.source ?? "amadeus";
-  } else {
-    flightPerPerson = flightFromOrigin(origin, destination.flightBaseBRL);
-    flightTotal = flightPerPerson * people;
-    flightSource = "mock";
-  }
+  const flightPerPerson = flightFromOrigin(origin, destination.flightBaseBRL);
+  const flightTotal = flightPerPerson * people;
 
   const fixedTotal = FIXED_PER_PERSON_BRL * people;
-
   const subtotal = flightTotal + accommodationsAndOnGround + fixedTotal;
   const contingency = Math.round(subtotal * CONTINGENCY_RATE);
   const total = subtotal + contingency;
 
   return {
     tier,
-    flight: { perPerson: flightPerPerson, total: flightTotal, source: flightSource, fetchedAt: flightOverride?.fetchedAt ?? null },
+    flight: { perPerson: flightPerPerson, total: flightTotal },
     fixed: { perPerson: FIXED_PER_PERSON_BRL, total: fixedTotal },
-    daily: {
-      perPerson: dailyPerPerson,
-      perDay: dailyTotal,
-      total: accommodationsAndOnGround,
-    },
+    daily: { perPerson: dailyPerPerson, perDay: dailyTotal, total: accommodationsAndOnGround },
     categories,
     subtotal,
     contingency,
@@ -92,12 +54,9 @@ export function computeCost(destination, tier, params, flightOverride = null) {
   };
 }
 
-/**
- * Avalia um destino nos três cenários de uma vez e ranqueia por aderência ao orçamento.
- */
-export function evaluateDestination(destination, params, flightOverride = null) {
+export function evaluateDestination(destination, params) {
   const scenarios = TIERS.reduce((acc, t) => {
-    acc[t.id] = computeCost(destination, t.id, params, flightOverride);
+    acc[t.id] = computeCost(destination, t.id, params);
     return acc;
   }, {});
 
@@ -111,35 +70,18 @@ export function evaluateDestination(destination, params, flightOverride = null) 
     ? "premium"
     : tierFits.comfortable
     ? "comfortable"
-    : tierFits.economic
-    ? "economic"
-    : "economic"; // se nada cabe, mostramos econômico como referência.
+    : "economic";
 
   const recommended = scenarios[bestTier];
   const fits = tierFits[bestTier];
   const overBy = fits ? 0 : recommended.total - params.budget;
   const headroom = fits ? params.budget - recommended.total : 0;
 
-  return {
-    destination,
-    scenarios,
-    tierFits,
-    bestTier,
-    recommended,
-    fits,
-    overBy,
-    headroom,
-  };
+  return { destination, scenarios, tierFits, bestTier, recommended, fits, overBy, headroom };
 }
 
-/**
- * Avalia todos os destinos e devolve a lista ordenada para a comparação.
- * Critério: 1) cabe no orçamento, 2) maior tier que cabe, 3) menor custo total.
- */
-export function evaluateAll(destinations, params, flightOverrides = {}) {
-  const evals = destinations.map((d) =>
-    evaluateDestination(d, params, flightOverrides[d.id] ?? null)
-  );
+export function evaluateAll(destinations, params) {
+  const evals = destinations.map((d) => evaluateDestination(d, params));
   const tierRank = { premium: 3, comfortable: 2, economic: 1 };
   return evals.sort((a, b) => {
     if (a.fits !== b.fits) return a.fits ? -1 : 1;
@@ -148,14 +90,10 @@ export function evaluateAll(destinations, params, flightOverrides = {}) {
       if (tr !== 0) return tr;
       return a.recommended.total - b.recommended.total;
     }
-    // Ambos não cabem: quem ultrapassa menos vem primeiro.
     return a.overBy - b.overBy;
   });
 }
 
-/**
- * Sugere uma recomendação de uma frase para o destino e o tier dado.
- */
 export function buildRecommendationLine(evalResult, params) {
   const { destination, recommended, bestTier, fits } = evalResult;
   const tierLabel = TIERS.find((t) => t.id === bestTier)?.label ?? bestTier;
