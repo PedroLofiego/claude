@@ -15,9 +15,7 @@ export default function BudgetBreakdown({ scenario, params }) {
   const rows = [
     {
       key: "flight",
-      label: `✈️ Voo (${params.people} pax) ${
-        scenario.flight.source && scenario.flight.source !== "mock" ? "· Amadeus" : "· estimativa"
-      }`,
+      label: `✈️ Voo (${params.people} pax) · estimativa`,
       value: scenario.flight.total,
       hint: `${formatBRL(scenario.flight.perPerson)}/pessoa`,
     },
@@ -73,9 +71,7 @@ export default function BudgetBreakdown({ scenario, params }) {
               </div>
               <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-white/5">
                 <div
-                  className={`h-full rounded-full bg-gradient-to-r ${
-                    PALETTE[i % PALETTE.length]
-                  }`}
+                  className={`h-full rounded-full bg-gradient-to-r ${PALETTE[i % PALETTE.length]}`}
                   style={{ width: `${pct}%` }}
                 />
               </div>
