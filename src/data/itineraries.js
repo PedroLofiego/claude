@@ -886,6 +886,972 @@ const POOLS = {
       { theme: "Bate-volta Abu Dhabi", items: ["Mesquita Sheikh Zayed", "Louvre Abu Dhabi", "Ferrari World", "Volta para Dubai"] },
     ],
   },
+
+  madeira: {
+    xmasEve: {
+      theme: "Véspera de Natal em Funchal",
+      items: [
+        "Funchal iluminado: 4 milhões de lâmpadas pelas ruas do centro",
+        "Mercado dos Lavradores decorado + bolo do mel quente",
+        "Jantar típico de bacalhau com batata-doce e milho",
+        "Missa do Galo na Sé do Funchal (meia-noite, com coro)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal na ilha verde",
+      items: [
+        "Teleférico do Monte: subida ao pico ao amanhecer",
+        "Brunch em café do Monte com vinho da Madeira",
+        "Piscinas naturais do Porto Moniz (mar da Madeira no Natal!)",
+        "Poncha com mel e aguardente num bar de aldeia",
+      ],
+    },
+    nyeEve: {
+      theme: "O maior show de fogos do mundo",
+      items: [
+        "Esplanada do Lido: melhor view das 8 barcaças de fogos",
+        "Jantar de marisco com vinho Verdelho na orla",
+        "Contagem regressiva na Avenida do Mar com multidão local",
+        "Show pirotécnico de 8 minutos (recorde Guinness) sobre o oceano",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro na levada",
+      items: [
+        "Levada das 25 Fontes: trilha entre florestas de laurissilva",
+        "Almoço de espada frita com banana (prato típico)",
+        "Miradouro do Cabo Girão: segunda maior falésia do mundo",
+        "Poncha de laranja no fim da tarde em São Vicente",
+      ],
+    },
+    regular: [
+      { theme: "Funchal & Mercado", items: ["Mercado dos Lavradores (frutas exóticas)", "Teleférico do Funchal", "Old Blandy's Wine Lodge (prova de Madeira)", "Jantar em restaurante do porto"] },
+      { theme: "Levada & natureza", items: ["Levada do Caldeirão Verde (4h)", "Floresta laurissilva UNESCO", "Piscina natural de São Vicente", "Dinner com vista da costa norte"] },
+      { theme: "Costa sul e praias", items: ["Cabo Girão Glass Floor", "Piscinas do Porto Moniz", "Miradouro do Pico do Arieiro", "Poncha no pôr do sol"] },
+      { theme: "Day trip Porto Santo", items: ["Ferry ou avião para Porto Santo (9km de praia dourada)", "Almoço de grelhados à beira-mar", "Snorkeling", "Volta ao entardecer"] },
+      { theme: "Trilha & adrenalina", items: ["Canyoning em Ribeira do Cidrão", "Jeep tour ao Pico Ruivo", "Arvorismo em Ribeiro Frio", "Jantar de carne de vinha d'alhos"] },
+    ],
+  },
+
+  tenerife: {
+    xmasEve: {
+      theme: "Nochebuena canária",
+      items: [
+        "Mercado de Natal em La Laguna (cidade UNESCO)",
+        "Jantar de rancho canario e papas arrugadas com mojo",
+        "Santa Cruz de Tenerife: ruas iluminadas e música ao vivo",
+        "Missa do Galo na Catedral de La Laguna",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal vulcânico",
+      items: [
+        "Teide ao amanhecer: vulcão com neve e céu cor-de-laranja",
+        "Brunch no Parador Nacional (dentro do parque do Teide)",
+        "Praia Las Teresitas com 20°C e pouquíssima gente",
+        "Vinho local Tacoronte-Acentejo ao pôr do sol",
+      ],
+    },
+    nyeEve: {
+      theme: "Año Nuevo na Avenida Anaga",
+      items: [
+        "Jantar de lapas grelhadas e camarão en gabardina",
+        "Santa Cruz de Tenerife: show principal na Avenida Anaga",
+        "12 uvas + fogos sobre a baía à meia-noite",
+        "Festa até amanhecer em Monkey Beach Club",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro no Teide",
+      items: [
+        "Subida ao Teide de teleférico (reservar)",
+        "Vista do mar de nuvens abaixo dos seus pés",
+        "Almoço em restaurante com vista panorâmica",
+        "Stargazing noturno (ITV Teide — melhor céu da Europa)",
+      ],
+    },
+    regular: [
+      { theme: "Praia & Siam Park", items: ["Siam Park (melhor parque aquático do mundo)", "Praia Las Teresitas", "Almoço de frutos do mar em Los Abrigos", "Drinks em rooftop em Santa Cruz"] },
+      { theme: "Teide & natureza", items: ["Parque Nacional do Teide", "Rota das Tajinastes", "Las Cañadas del Teide", "Jantar de gofio e mojo no pueblo"] },
+      { theme: "La Laguna & cultura", items: ["Old Town de La Laguna (UNESCO)", "Mercado de El Agricultor", "Loro Parque em Puerto de la Cruz", "Café de especialidade em Santa Cruz"] },
+      { theme: "Stargazing night", items: ["Tour de observação astronômica no Teide (19h)", "Telescópio + laser guide", "Cocido canario no jantar de volta", "Vinhos locais no apartamento"] },
+      { theme: "Day trip La Gomera", items: ["Ferry 40min para La Gomera", "Parque Nacional Garajonay (névoa mágica)", "Almoço de mojo rojo em San Sebastián", "Volta de tarde"] },
+    ],
+  },
+
+  malta: {
+    xmasEve: {
+      theme: "Il-Milied f'Malta",
+      items: [
+        "Valeta iluminada: Republic Street com luzes de Natal",
+        "Missa do Galo na Co-Catedral de São João (meia-noite, imperdível)",
+        "Jantar de lampuki (peixe típico maltês) em restaurante do porto",
+        "Pastizzi quentes da noite: massa folhada com ricota ou ervilha",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal na cidade mais antiga da UE",
+      items: [
+        "Valeta de manhã: ruas desertas com luz de inverno épica",
+        "Grand Harbour panorama do Upper Barrakka Gardens",
+        "Brunch no Café Cordina (o mais antigo de Malta)",
+        "Mdina ao entardecer: cidade medieval em silêncio",
+      ],
+    },
+    nyeEve: {
+      theme: "Grand Harbour em chamas",
+      items: [
+        "Jantar na orla de Sliema com vista para Valeta",
+        "Festa de réveillon em Paceville (bairro de clubs de Malta)",
+        "Fogos sobre o Grand Harbour à meia-noite",
+        "After em Hugo's Lounge ou Gianpula Village",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro arqueológico",
+      items: [
+        "Templos de Ħaġar Qim: mais antigos que Stonehenge e as pirâmides",
+        "Almoço de ftira (pão maltês) com tuna em barraca local",
+        "Blue Grotto de barco (água turquesa mesmo no inverno)",
+        "Mergulho no naufrágio do Tug 2 (para certificados)",
+      ],
+    },
+    regular: [
+      { theme: "Valeta Barroca", items: ["Co-Catedral de São João (Caravaggio)", "Museu de Arqueologia", "Upper Barrakka + Saluting Battery", "Jantar maltês no Rubino"] },
+      { theme: "Mdina & Rabat", items: ["Mdina: cidade silenciosa medieval", "Catacumbas de São Paulo em Rabat", "Almoço de fenek (coelho maltês)", "Pôr do sol sobre a ilha"] },
+      { theme: "Gozo & Blue Lagoon", items: ["Ferry para Gozo", "Azure Window site + Dwejra", "Blue Lagoon em Comino (mesmo no inverno!)", "Almoço de ftira em Victoria"] },
+      { theme: "Mergulho & snorkel", items: ["Dive site: MS Karwela wreck", "Snorkel em St. Peter's Pool", "Almoço em Marsaxlokk (porto de pescadores)", "Sunset em Dingli Cliffs"] },
+      { theme: "Nightlife Paceville", items: ["Happy hour em Sliema", "Bares de Paceville (St. Julian's)", "Hugo's Lounge rooftop", "Late-night kebab maltês"] },
+    ],
+  },
+
+  dubrovnik: {
+    xmasEve: {
+      theme: "Božić em Dubrovnik",
+      items: [
+        "Muralhas de Dubrovnik ao entardecer: vista do Adriático em ouro",
+        "Mercado de Natal no Stradun com vin brulet (vinho quente)",
+        "Jantar de brodet (ensopado de peixe dálmata) em konoba",
+        "Missa de Natal na Catedral de Dubrovnik",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal medieval",
+      items: [
+        "Stradun vazio ao amanhecer: cenário de Game of Thrones real",
+        "Teleférico para o Monte Srd: vista do Adriático 360°",
+        "Almoço de peka (borrego assado em tacho) em konoba",
+        "Kayak ao redor das muralhas com água cristalina",
+      ],
+    },
+    nyeEve: {
+      theme: "Fogos sobre o Adriático",
+      items: [
+        "Jantar de polvo na brasa com vinho Pošip branco",
+        "Baile no Stradun iluminado com música ao vivo",
+        "Fogos sobre o Adriático vistos das Muralhas à meia-noite",
+        "After em Cave Bar More (bar dentro de uma caverna)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro na ilha Lokrum",
+      items: [
+        "Barco para a Ilha Lokrum (jardins medievais e pavões)",
+        "Snorkel nas piscinas naturais de Lokrum",
+        "Almoço de grelhados na marina de Gruž",
+        "Pôr do sol do Miradouro Srđ com uma taça de Plavac Mali",
+      ],
+    },
+    regular: [
+      { theme: "Muralhas & Old Town", items: ["Percurso completo das Muralhas (2km)", "Stradun", "Bica em Café Festival", "Jantar em konoba Dalmatino"] },
+      { theme: "Game of Thrones tour", items: ["Tour GoT oficial pela cidade velha", "Escada da Vergonha", "Clube Revelin (forte medieval)", "Barco para os Elafiti"] },
+      { theme: "Kayak & praias", items: ["Sea kayak ao redor das muralhas", "Praia Banje", "Almoço de prstaci (mariscos)", "Pôr do sol da Fortaleza Lovrijenac"] },
+      { theme: "Day trip Montenegro", items: ["Transfer para Kotor (1h30)", "Muralhas de Kotor", "Baía de Kotor de barco", "Volta para Dubrovnik"] },
+      { theme: "Vinhos & gastronomia", items: ["Degustação de Pošip e Plavac Mali", "Trufas da Ístria", "Konoba em Cavtat (vila vizinha)", "Porto de Gruž ao pôr do sol"] },
+    ],
+  },
+
+  nice: {
+    xmasEve: {
+      theme: "Noël niçois",
+      items: [
+        "Marché de Noël na Place Masséna com iluminações",
+        "Socca quentinha em barraca do Cours Saleya",
+        "Jantar de daube niçoise (ensopado provençal) em bistrô",
+        "Missa do Galo na Catedral de Santa Reparata",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal na Riviera",
+      items: [
+        "Promenade des Anglais ao amanhecer sem turistas",
+        "Brunch tardio em Le Café de Turin (mariscos desde 1908)",
+        "Colina do Castelo: panorama de Nice do alto",
+        "Pôr do sol com rosé de Provence em Vieux-Nice",
+      ],
+    },
+    nyeEve: {
+      theme: "Réveillon na Promenade",
+      items: [
+        "Jantar de bouillabaisse e pissaladière em Vieux-Nice",
+        "Festa pública na Place Masséna com DJ e show",
+        "Fogos sobre o Mediterrâneo à meia-noite",
+        "After em Le Smalls ou Shapko (jazz e cocktails)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Mônaco",
+      items: [
+        "Trem 30min para Mônaco (sem precisar de carro)",
+        "Casino de Monte Carlo (só para foto, ou jogue 20€)",
+        "Almoço de Barba Juana (culinária monegasca)",
+        "Jardim Exótico de Mônaco ao pôr do sol",
+      ],
+    },
+    regular: [
+      { theme: "Riviera essencial", items: ["Promenade des Anglais", "Vieux-Nice: socca e mercado", "Musée Matisse", "Jantar em Le Comptoir du Marché"] },
+      { theme: "Day trip Mônaco", items: ["Trem para Mônaco", "Casino Monte Carlo", "Museu Oceanográfico", "Volta com pôr do sol"] },
+      { theme: "Day trip Eze & Antibes", items: ["Eze: vila medieval na rocha (vistas incríveis)", "Antibes: Musée Picasso", "Mercado provençal", "Volta para Nice"] },
+      { theme: "Arte & gastronomia", items: ["MAMAC (arte contemporânea)", "Mercado Cours Saleya manhã", "Aula de culinária niçoise", "Degustação de vinhos de Bellet"] },
+      { theme: "Colinas & perfume", items: ["Grasse: capital do perfume (1h)", "Destilaria de perfume + workshop", "Almoço em village provençal", "Pôr do sol no Parc de la Colline du Château"] },
+    ],
+  },
+
+  telaviv: {
+    xmasEve: {
+      theme: "Véspera em Tel Aviv",
+      items: [
+        "Jaffa ao pôr do sol: cidade mais antiga do mundo",
+        "Mercado HaCarmel: hummus, sabich e especiarias",
+        "Jantar de shakshuka e pita em Dr. Shakshuka (clássico)",
+        "Bar de vinho natural em Florentin (bairro artsy)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal secular em Tel Aviv",
+      items: [
+        "Praia de Tel Aviv: 18°C, surf leve, quase vazio",
+        "Brunch de mezze em Rothschild Boulevard",
+        "Museu de Arte de Tel Aviv (coleção impressionante)",
+        "Bares de Dizengoff Square ao entardecer",
+      ],
+    },
+    nyeEve: {
+      theme: "NYE na Rothschild",
+      items: [
+        "Jantar de degustação em restaurante israelense moderno",
+        "Festa de rua na Rothschild Boulevard + praia de Tel Aviv",
+        "Show de fogos sobre o Mar Mediterrâneo à meia-noite",
+        "After no The Block ou Clara (techno levantino até o sol nascer)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Jerusalém",
+      items: [
+        "Ônibus 1h para Jerusalém (funciona!)",
+        "Cidade Velha: Muro das Lamentações + Via Dolorosa + Santo Sepulcro",
+        "Almoço de hummus Abu Shukri em East Jerusalem",
+        "Pôr do sol do Monte das Oliveiras sobre a cidade dourada",
+      ],
+    },
+    regular: [
+      { theme: "Tel Aviv beach life", items: ["Promenade de Gordon Beach a Jaffa (4km a pé)", "Almoço no mercado de Jaffa", "Bairro Neve Tzedek (mais antigo de Tel Aviv)", "Drinks em rooftop na Rothschild"] },
+      { theme: "Day trip Jerusalém", items: ["Ônibus para Jerusalém", "Cidade Velha e seus 4 bairros", "Museu Israel + Dead Sea Scrolls", "Volta de tarde"] },
+      { theme: "Florentin & nightlife", items: ["Street art em Florentin", "Mercado Levinsky (especiarias etíopes)", "Bar crawl em Ben Yehuda e Lilienblum", "The Block (techno de madrugada)"] },
+      { theme: "Day trip Dead Sea", items: ["Tour para o Mar Morto (1h30)", "Flutuar sem afundar", "Lama mineral", "Volta ao pôr do sol"] },
+      { theme: "Bauhaus & café", items: ["White City: arquitetura Bauhaus UNESCO", "Tour a pé pela Rothschild", "Café de especialidade em Sarona Market", "Jantar de fine dining israelense"] },
+    ],
+  },
+
+  singapura: {
+    xmasEve: {
+      theme: "Christmas Eve em Singapura",
+      items: [
+        "Orchard Road: a rua mais decorada do mundo no Natal",
+        "Jantar de chili crab no East Coast Seafood Centre",
+        "Marina Bay Sands light show de Natal",
+        "Bar rooftop do Marq pela One-Altitude (57° andar)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal tropical",
+      items: [
+        "Gardens by the Bay: Supertrees de dia + Cloud Forest",
+        "Brunch no Botanist (dentro dos jardins)",
+        "Sentosa Island: Universal Studios com decoração natalina",
+        "Jantar de laksa e nasi lemak num hawker center histórico",
+      ],
+    },
+    nyeEve: {
+      theme: "Marina Bay NYE",
+      items: [
+        "Jantar em restaurante com vista para Marina Bay",
+        "Marina Bay Sands: melhor spot de fogos do mundo",
+        "Show de laser + fogos + drones às meia-noite",
+        "After-party na rooftop pool do MBS ou ZoukOut na Sentosa",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Little India",
+      items: [
+        "Brunch de roti canai + teh tarik em Little India",
+        "Chinatown: templos e mercado de madrugada",
+        "National Museum of Singapore",
+        "Jantar de dim sum em Maxwell Food Centre",
+      ],
+    },
+    regular: [
+      { theme: "Marina Bay & Supertrees", items: ["Gardens by the Bay (noite — OCBC Garden Rhapsody)", "Marina Bay Sands skypark", "Merlion", "Jantar no Lau Pa Sat hawker"] },
+      { theme: "Hawker culture", items: ["Tiong Bahru Market (café da manhã)", "Maxwell Food Centre (almoço)", "Chinatown Complex (jantar)", "Tong Ah Coffee Room (late night kaya toast)"] },
+      { theme: "Sentosa & praia", items: ["Universal Studios Singapore", "Palawan Beach", "S.E.A. Aquarium", "Drinks em Tanjong Beach Club"] },
+      { theme: "Cultural districts", items: ["Little India: Sri Veeramakaliamman", "Arab Street + Haji Lane", "Baba House em Chinatown", "Jantar de peranakan"] },
+      { theme: "Nightlife em Clarke Quay", items: ["Boat Quay sunset drinks", "Clarke Quay: Zouk, Marquee", "ZoukOut festival (dezembro)", "Madrugada com prawn noodles"] },
+    ],
+  },
+
+  bali: {
+    xmasEve: {
+      theme: "Véspera tropical em Bali",
+      items: [
+        "Templo Tanah Lot ao pôr do sol (às 17h o sol afunda no mar)",
+        "Jantar de bebek betutu (pato defumado em folhas de banana)",
+        "Seminyak: rua de restaurantes e beach clubs decorados",
+        "Ku De Ta beach club: festa de véspera com DJ internacional",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal balinês",
+      items: [
+        "Amanhecer em Tegallalang: terraços de arroz dourados ao sol",
+        "Ubud Monkey Forest + mercado artesanal",
+        "Brunch saudável no Locavore Nusantara (top restaurante da Ásia)",
+        "Kecak Fire Dance no Templo Uluwatu ao pôr do sol",
+      ],
+    },
+    nyeEve: {
+      theme: "Réveillon na praia de Canggu",
+      items: [
+        "Jantar de satay e nasi goreng em warung chique",
+        "Finns Beach Club: festa NYE com 50k pessoas e headliners",
+        "Fogos na praia à meia-noite + banho de mar",
+        "After em La Brisa ou Old Man's até amanhecer",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em modo ioga",
+      items: [
+        "Ioga ao amanhecer com vista para o oceano em Canggu",
+        "Superfood bowl + smoothie de pitaya em café orgânico",
+        "Spa de massagem balinesa 2h",
+        "Sunset de coco verde na piscina do villa",
+      ],
+    },
+    regular: [
+      { theme: "Ubud espiritual", items: ["Tegallalang ao amanhecer", "Ubud Monkey Forest", "Tirta Empul (banho purificador)", "Jantar de Nasi Campur em warung"] },
+      { theme: "Surf & Uluwatu", items: ["Aula de surf em Uluwatu (todos os níveis)", "Piscinas de rocha de Padang Padang", "Almoço de ikan bakar", "Kecak Fire Dance ao pôr do sol"] },
+      { theme: "Beach clubs & Seminyak", items: ["Potato Head Beach Club", "Praia de Seminyak", "Jl. Petitenget para jantar", "Revolver Espresso"] },
+      { theme: "Canggu vibes", items: ["Brunch em Crate Café", "Surf em Echo Beach", "Batu Bolong tarde", "La Brisa rooftop ao pôr do sol"] },
+      { theme: "Munduk & cachoeiras", items: ["Cachoeira Munduk (norte)", "Trekking entre cachoeiras", "Almoço em restaurante com vista das montanhas", "Volta ao pôr do sol"] },
+    ],
+  },
+
+  hongkong: {
+    xmasEve: {
+      theme: "Christmas Eve em Hong Kong",
+      items: [
+        "Avenue of Stars: decoração natalina com vista para o skyline",
+        "Harbour City: shopping mall com maior árvore de Natal da cidade",
+        "Jantar de dim sum em Tim Ho Wan (Michelin mais barato do mundo)",
+        "A Symphony of Lights show às 20h sobre Victoria Harbour",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal com o melhor skyline do mundo",
+      items: [
+        "Victoria Peak ao amanhecer: Hong Kong aos seus pés",
+        "Brunch de yum cha em Maxim's City Hall",
+        "Lantau Island: Tian Tan Buddha + vila de Tai O",
+        "Temple Street Night Market com oysters e dim sum",
+      ],
+    },
+    nyeEve: {
+      theme: "Victoria Harbour em chamas",
+      items: [
+        "Jantar de Cantonese fine dining com vista para a baía",
+        "Star Ferry ao entardecer: a travessia mais cinematográfica do mundo",
+        "Show de fogos simultâneos do Victoria Harbour à meia-noite",
+        "After em Lan Kwai Fong (o maior bar crawl da Ásia)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Kowloon",
+      items: [
+        "Dim sum brunch em Spring Moon (Peninsula Hotel)",
+        "Wong Tai Sin Temple: fortuna para o ano novo",
+        "Mercado de jade em Jade Market",
+        "Sunset do Tsim Sha Tsui Promenade sobre a ilha",
+      ],
+    },
+    regular: [
+      { theme: "Victoria Peak & Central", items: ["Peak Tram ao amanhecer", "Peak Lookout brunch", "Central: PMQ (design local)", "Lan Kwai Fong à noite"] },
+      { theme: "Street food & mercados", items: ["Temple Street Night Market", "Sham Shui Po: tecidos e eletrônicos", "Yuen Long: dim sum autêntico", "Late-night wonton noodles em dai pai dong"] },
+      { theme: "Lantau Island", items: ["MTR para Tung Chung", "Cable car para Ngong Ping", "Tian Tan Buddha", "Village de Tai O (casas sobre a água)"] },
+      { theme: "Macau day trip", items: ["Ferry 1h para Macau", "Ruínas de São Paulo", "Casinos + comer pork chop bun", "Pôr do sol de Torre de Macau"] },
+      { theme: "Nightlife Wan Chai", items: ["Felix bar no 28º andar do Peninsula", "Wan Chai bar crawl", "Club Volar ou Levels", "Madrugada em cha chaan teng"] },
+    ],
+  },
+
+  taipei: {
+    xmasEve: {
+      theme: "Véspera de Natal em Taipei",
+      items: [
+        "Taipei 101 iluminado ao entardecer: foto obrigatória",
+        "Shilin Night Market: oyster vermicelli e stinky tofu",
+        "Bares de Xinyi District (bairro mais moderno da cidade)",
+        "Show de luzes em Ximending (Harajuku de Taipei)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal em Jiufen",
+      items: [
+        "Jiufen: a cidade de O Espírito das Coisas (névoa + lanternas)",
+        "Chá de bubble tea na casa de chá histórica A-Mei",
+        "Almoço de taro ball soup com vista para o oceano",
+        "Volta ao pôr do sol com o trem panorâmico",
+      ],
+    },
+    nyeEve: {
+      theme: "Taipei 101: 600 fogos em 60 segundos",
+      items: [
+        "Jantar de Taiwanese hot pot com vista para o 101",
+        "Show transmitido globalmente: fogos saem do Taipei 101",
+        "Taipei Music Center: festa de réveillon local",
+        "Night market de Raohe às 3h da manhã",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Taroko",
+      items: [
+        "Ônibus/trem para Hualien (2h) — Taroko Gorge",
+        "Cânion de mármore com rio turquesa: trilha Shakadang",
+        "Almoço de amido de batata-doce em Tianxiang",
+        "Trem panorâmico de volta ao pôr do sol",
+      ],
+    },
+    regular: [
+      { theme: "Night markets", items: ["Shilin Night Market", "Raohe Street Night Market", "Ningxia Night Market (mais autêntico)", "Night market de Huaxi (cobra)"] },
+      { theme: "Jiufen & Costa", items: ["Jiufen na neblina", "Jinguashi (minas de ouro)", "Praia de Fulong", "Volta com vista de cliff"] },
+      { theme: "Taipei culture", items: ["Museu do Palácio Nacional (jade!)", "Chiang Kai-shek Memorial Hall", "Bopiliao Historic Block", "Ximending para compras"] },
+      { theme: "Day trip Taroko", items: ["Trem para Hualien", "Taroko Gorge: cânion de mármore", "Eternal Spring Shrine", "Volta ao pôr do sol"] },
+      { theme: "Geek & café", items: ["Akihabara de Taipei em Guanghua", "Retro gaming bar em Da'an", "Café de especialidade em Zhongzheng", "Bares de Yongkang Street"] },
+    ],
+  },
+
+  kualalumpur: {
+    xmasEve: {
+      theme: "Christmas Eve em KL",
+      items: [
+        "KLCC Park: Torres Petronas iluminadas + decoração natalina",
+        "Jantar de bak kut teh (sopa de porco com ervas) em Petaling Street",
+        "Pavilion KL: maior decoração natalina de shopping da Ásia",
+        "Rooftop bar Heli Lounge Bar com vista para as Petronas",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal multicultural",
+      items: [
+        "Batu Caves ao amanhecer: templo hindu numa caverna",
+        "Brunch de nasi lemak no Village Park (fila, mas vale cada minuto)",
+        "Museu Nacional de Malaysia",
+        "Jalan Alor: rua de comida de rua aberta o dia todo",
+      ],
+    },
+    nyeEve: {
+      theme: "Torres Petronas em festa",
+      items: [
+        "Jantar de babi guling ou rendang em restaurante do centro",
+        "KLCC Park: melhor spot para ver os fogos",
+        "Fogos + show de lasers nas Torres Petronas à meia-noite",
+        "After em Zouk KL ou Marini's on 57 (rooftop com vista 360°)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Chinatown",
+      items: [
+        "Petaling Street: dim sum e compras",
+        "Masjid Jamek: mesquita mais antiga de KL",
+        "Briyani de cabra em Restoran Nasi Kandar Pelita",
+        "Pôr do sol da Torre KL (menakjubkan!)",
+      ],
+    },
+    regular: [
+      { theme: "Petronas & cultura", items: ["Torres Petronas skybridge", "KLCC Park pôr do sol", "Aquaria KLCC", "Jantar de satay em Jalan Alor"] },
+      { theme: "Batu Caves & Little India", items: ["Batu Caves ao amanhecer", "Brickfields (Little India)", "Masala dosa + teh tarik", "Mercado de flores de Masjid India"] },
+      { theme: "Street food tour", items: ["Jalan Alor de madrugada", "Gurney Drive hawker", "Char kway teow + Hokkien mee", "Cendol gelado de sobremesa"] },
+      { theme: "Day trip Genting Highlands", items: ["Ônibus 1h para Genting", "First World Indoor Theme Park", "Casinos + hotels futuristas na nuvem", "Volta ao entardecer"] },
+      { theme: "Shopping & Bukit Bintang", items: ["Pavilion KL", "Low Yat Plaza (tecnologia)", "Changkat Bukit Bintang à noite", "Speakeasy bar The Deceased"] },
+    ],
+  },
+
+  hochiminh: {
+    xmasEve: {
+      theme: "Véspera de Natal em Saigon",
+      items: [
+        "Catedral de Notre-Dame de Saigon iluminada com multidão",
+        "Ben Thanh Night Market: banh mi e pho especial de Natal",
+        "Bui Vien Walking Street: bar crawl com turistas do mundo",
+        "Rooftop bar EON Heli Bar (52º andar com vista 360°)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal histórico em Saigon",
+      items: [
+        "Cu Chi Tunnels ao amanhecer (mais fresco, antes do calor)",
+        "Almoço de com tam (arroz com costeleta) em lanchonete local",
+        "Palácio da Reunificação (pré-1975)",
+        "Bia hoi (cerveja gelada) na calçada de Pham Ngu Lao",
+      ],
+    },
+    nyeEve: {
+      theme: "1 milhão de pessoas na Nguyen Hue",
+      items: [
+        "Jantar de lau (hot pot vietnamita) antes da festa",
+        "Nguyen Hue Walking Street: show ao vivo + pré-fogos",
+        "Contagem regressiva com fogos sobre o Rio Saigon",
+        "After em Lush Bar ou Broma Not a Bar até amanhecer",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro no Mekong",
+      items: [
+        "Day trip ao Delta do Mekong de barco",
+        "Mercado flutuante de Cai Rang",
+        "Almoço de camarão grelhado em palafita",
+        "Volta ao fim de tarde — banh mi e bia hoi na calçada",
+      ],
+    },
+    regular: [
+      { theme: "História & túneis", items: ["Cu Chi Tunnels", "Museu da Guerra", "Palácio da Reunificação", "Pho 24 para jantar"] },
+      { theme: "Bui Vien nightlife", items: ["Ben Thanh Market de tarde", "Bui Vien Walking Street à noite", "Club Chill Saigon", "Madrugada em Apocalypse Now"] },
+      { theme: "Comida de rua", items: ["Com tam café da manhã", "Banh mi Huynh Hoa (melhor de SG)", "Bun bo Hue no almoço", "Pho bo especial no jantar"] },
+      { theme: "Day trip Mekong", items: ["Ferry para Ben Tre", "Barco pelos canais de coco", "Almoço de peixe elefante em palafita", "Volta ao pôr do sol"] },
+      { theme: "Distrito 1 a pé", items: ["Gia Long Palace", "Fine Arts Museum", "Ben Thanh Market", "Saigon Skydeck ao entardecer"] },
+    ],
+  },
+
+  phuket: {
+    xmasEve: {
+      theme: "Christmas Eve na praia",
+      items: [
+        "Kata Beach ao pôr do sol: bar de praia com fogos de artifício",
+        "Jantar de frutos do mar na areia (fresh catch do dia)",
+        "Bangla Road: a rua mais louca do Sudeste Asiático",
+        "Rooftop party em Baba Nest (melhor pôr do sol de Phuket)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal nas ilhas Phi Phi",
+      items: [
+        "Speedboat para as Ilhas Phi Phi ao amanhecer",
+        "Snorkeling em Maya Bay (praia do filme A Praia)",
+        "Almoço de grelhados em restaurante da praia em Phi Phi Don",
+        "Volta ao pôr do sol — coco verde e massagem tailandesa",
+      ],
+    },
+    nyeEve: {
+      theme: "Fogos direto na areia",
+      items: [
+        "Jantar de langostins ao vivo no seafood market",
+        "Patong Beach: festa 24h com fogos na praia",
+        "Bangla Road: contagem regressiva + clubs em 3 andares",
+        "After-party em Illuzion Nightclub (capacidade: 5.000)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro no Similan",
+      items: [
+        "Day trip ao Parque Nacional das Similan Islands",
+        "Snorkeling entre corais e tartarugas marinhas",
+        "Almoço de massaman curry a bordo",
+        "Yoga ou meditação à tardinha em Kata",
+      ],
+    },
+    regular: [
+      { theme: "Praias & beach clubs", items: ["Kata Beach manhã", "Karon Beach tarde", "Surin Beach sunset", "Beach party em Catch Beach Club"] },
+      { theme: "Phi Phi Islands", items: ["Speedboat para Phi Phi", "Maya Bay + snorkeling", "Almoço em restaurante da praia", "Bar Ibiza em Phi Phi Don ao pôr do sol"] },
+      { theme: "Bangla Road nightlife", items: ["Muay Thai show em Bangla Boxing Stadium", "Bar crawl em Bangla Road", "Illuzion Nightclub", "Madrugada em Tiger Disco"] },
+      { theme: "Norte de Phuket", items: ["Templo Chalong", "Big Buddha (45m)", "Patong Beach", "Cocktail em rooftop"] },
+      { theme: "Koh Phangan Full Moon", items: ["Ferry de Phuket para Koh Phangan", "Full Moon Party (beach rave de 30k pessoas)", "Snorkeling no dia seguinte", "Volta de ferry"] },
+    ],
+  },
+
+  chiangmai: {
+    xmasEve: {
+      theme: "Yi Peng de Natal",
+      items: [
+        "Mercado de Natal de Chiang Mai em Nimman Road",
+        "Khao soi: curry com macarrão — o melhor prato do norte tailandês",
+        "Mae Jo: lançamento de lanternas do Yi Peng (verificar data exata)",
+        "Café + live music em Bar Roots (jardim com lanternas)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal no topo da Tailândia",
+      items: [
+        "Doi Inthanon: pico mais alto da Tailândia (2.565m, faz frio!)",
+        "Cachoeiras Wachirathan ao amanhecer",
+        "Almoço de arroz no temple hill restaurant",
+        "Wat Doi Suthep ao pôr do sol com névoa dourada",
+      ],
+    },
+    nyeEve: {
+      theme: "10.000 lanternas ao céu",
+      items: [
+        "Jantar de set menu tailandês em Baan Tong Luang",
+        "Yi Peng: lançamento coletivo de lanternas ao amanhecer do Rio Ping",
+        "Contagem regressiva + fogos em Nimmanhaemin Road",
+        "After em Bar Zoe ou North Gate Jazz Club",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro com elefantes",
+      items: [
+        "Santuário ético de elefantes: banho e alimentação dos animais",
+        "Almoço de pad see ew perto do santuário",
+        "Masagem tailandesa 2h no Oasis Spa",
+        "Night Bazaar ao entardecer: artesanato local e street food",
+      ],
+    },
+    regular: [
+      { theme: "Templos & Old City", items: ["Wat Chedi Luang (ruínas 14c)", "Wat Phra Singh", "Old City a pé", "Dinner no Sunday Walking Street"] },
+      { theme: "Yi Peng & lanternas", items: ["Tour de lanternas Mae Jo", "Floating lanterns no rio", "Khao soi em Khao Soi Khun Yai", "Fogo de artifício no centro"] },
+      { theme: "Elefantes & natureza", items: ["Elephant Nature Park (ético)", "Zip-line em Jungle Flight", "Trekking em Doi Inthanon", "Almoço em hilltribe village"] },
+      { theme: "Culinária tailandesa", items: ["Aula de culinária Thai Farm (3h)", "Mercado de manhã cedo", "Dim Dim Sum para brunch", "Jantar de sai ua (salsicha do norte)"] },
+      { theme: "Nimman & café", items: ["Nimman Road: cafés e boutiques", "Maya Mall para se refrescar", "TCDC library design", "North Gate Jazz Co. live music"] },
+    ],
+  },
+
+  osaka: {
+    xmasEve: {
+      theme: "Kurisumasu Ibu em Osaka",
+      items: [
+        "Dōtonbori iluminado: Christmas lights no canal",
+        "USJ (Universal Studios Japan): decoração natalina de inverno",
+        "Jantar de kaiseki em restaurante Minami",
+        "Glico Man e Namba de noite: foto natalina clássica",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal em Kyoto",
+      items: [
+        "Shinkansen 15min para Kyoto: Fushimi Inari ao amanhecer",
+        "Bambuzal de Arashiyama com geada dourada",
+        "Almoço de tofu kaiseki em Nanzen-ji",
+        "Volta à noite — izakaya de kushikatsu em Shinsekai",
+      ],
+    },
+    nyeEve: {
+      theme: "Ōmisoka em Dōtonbori",
+      items: [
+        "Toshikoshi soba de macarrão no Ano Novo (tradição)",
+        "Contagem regressiva em Dōtonbori com os osakenses",
+        "Hatsumōde em Sumiyoshi Taisha (120k pessoas!)",
+        "After em Shinsaibashi-suji (aberto a noite toda)",
+      ],
+    },
+    nyeDay: {
+      theme: "Hatsumōde em Namba",
+      items: [
+        "Hatsumōde matinal no Osaka Tenmangu Shrine",
+        "Otoshidama e Omikuji (fortuna do ano)",
+        "Brunch de tamagoyaki e dashi em Kuromon Market",
+        "Castelo de Osaka nevado com bandeiras de Ano Novo",
+      ],
+    },
+    regular: [
+      { theme: "Dōtonbori & Namba", items: ["Dōtonbori canal walk", "Takoyaki em Wanaka", "Kushikatsu em Shinsekai", "Club Bar Drops em Shinsaibashi"] },
+      { theme: "Kyoto Express", items: ["Shinkansen 15min para Kyoto", "Fushimi Inari", "Arashiyama", "Gion ao pôr do sol"] },
+      { theme: "USJ & pop culture", items: ["Universal Studios Japan", "Harry Potter world", "Street food em Dotonbori de volta", "Animate em Den Den Town"] },
+      { theme: "Osaka Castle & Umeda", items: ["Castelo de Osaka iluminado", "HEP Five (roda-gigante)", "Rooftop do Umeda Sky Building", "Okonomiyaki em Dotonbori"] },
+      { theme: "Nara day trip", items: ["Trem 40min para Nara", "Cervo solto na cidade", "Tōdai-ji (Buda gigante)", "Volta com taiyaki"] },
+    ],
+  },
+
+  maldivas: {
+    xmasEve: {
+      theme: "Véspera de Natal nos atolos",
+      items: [
+        "Snorkeling no Coral Garden do resort ao pôr do sol",
+        "Jantar de pés na areia com iluminação de tochas",
+        "Show privativo de fogos sobre o oceano",
+        "Champanhe olhando as estrelas (zero poluição luminosa)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal no bungalô sobre a água",
+      items: [
+        "Café da manhã no deck privativo: polvo do Índico vivo",
+        "Mergulho com tubarão-baleia (verificar temporada)",
+        "Spa com massagem balinesa sobre o oceano",
+        "Jantar fine dining com pés na areia + iluminação de tochas",
+      ],
+    },
+    nyeEve: {
+      theme: "NYE mais íntimo do planeta",
+      items: [
+        "Jantar de degustação na areia para dois",
+        "Show de fogos privativo sobre o atol",
+        "Champanhe na piscina infinita ao luar",
+        "Mergulho noturno com manta rays (biofluorescência)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro no índico",
+      items: [
+        "Sunrise em caiaque nas águas de cristal",
+        "Breakfast em flutuante no oceano",
+        "Snorkel com tartarugas ao amanhecer",
+        "Day trip para ilha local de pescadores + pesca de atum",
+      ],
+    },
+    regular: [
+      { theme: "Mergulho premium", items: ["Dive site com tubarão-baleia", "Manta ray point", "Naufrágio SS Victory", "Debriefing com cerveja de coco"] },
+      { theme: "Praias & água", items: ["Sandbank privativo ao pôr do sol", "Kayak + paddleboard", "Sunset cruise de dhow", "Jantar de lagosta fresca"] },
+      { theme: "Ilha local", items: ["Day trip a Maafushi (ilha habitada)", "Mercado de peixe", "Almoço de mas riha (curry de atum)", "Snorkel na casa de reef"] },
+      { theme: "Spa & relaxo", items: ["Massagem de pedras quentes", "Banho de flores", "Ioga ao amanhecer sobre o oceano", "Spa de lama vulcânica"] },
+      { theme: "Adrenalina aquática", items: ["Jet ski", "Flyboard", "Parasailing sobre os atolos", "Pesca noturna de lula"] },
+    ],
+  },
+
+  srilanka: {
+    xmasEve: {
+      theme: "Véspera de Natal em Colombo",
+      items: [
+        "Galle Face Green: passseio beira-mar com vista do oceano",
+        "Jantar de cari de frutos do mar em Ministry of Crab (top da Ásia)",
+        "Bairro de Colombo Fort iluminado",
+        "Missa de Natal em St. Lucia's Cathedral (maioria cristã em dez.)",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal em Galle Fort",
+      items: [
+        "Galle Fort: muralhas holandesas do século XVII à beira-mar",
+        "Brunch de hopper (crepe de coco) com ovo em café local",
+        "Lion Stout gelado em bar da muralha ao pôr do sol",
+        "Jantar de cari de frango no airbnb com vista para o oceano",
+      ],
+    },
+    nyeEve: {
+      theme: "Colombo Galle Face",
+      items: [
+        "Jantar de rice and curry na varanda de Galle Face Hotel",
+        "Galle Face Green: festival de comidas e artistas locais",
+        "Fogos sobre o oceano Índico à meia-noite",
+        "After em Colombo social scene: Hatch, Ministry, Sky Lounge",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro nas baleias",
+      items: [
+        "Mirissa: tour de avistamento de baleias azuis ao amanhecer",
+        "Almoço de grelhados de camarão na praia",
+        "Snorkel em Pigeon Island",
+        "Sunset em Weligama com cerveja Lion",
+      ],
+    },
+    regular: [
+      { theme: "Sigiriya & safari", items: ["Sigiriya: Rocha do Leão (1.200 degraus)", "Safari em Minneriya (elefantes)", "Polonnaruwa (ruínas antigas)", "Jantar de kiri hodhi"] },
+      { theme: "Trem panorâmico Ella", items: ["Kandy: Templo do Dente de Buda", "Trem Kandy–Ella (6h — plantações de chá)", "Nine Arch Bridge", "Jantar em Ella"] },
+      { theme: "Praia sul", items: ["Mirissa: praia com tartarugas", "Unawatuna: reef de snorkel", "Almoço de peixe em Koggala", "Galle Fort ao pôr do sol"] },
+      { theme: "Colombo urbano", items: ["Pettah Market (caos colorido)", "Gangaramaya Temple", "Barefoot Garden Café", "Nightlife em Colombo 7"] },
+      { theme: "Baleias & Yala", items: ["Safari Yala: leopardos", "Mirissa: baleias azuis ao amanhecer", "Almoço em Tangalle", "Pôr do sol na praia deserta"] },
+    ],
+  },
+
+  doha: {
+    xmasEve: {
+      theme: "Véspera de Natal no Qatar",
+      items: [
+        "Souq Waqif ao entardecer: sombras longas e incenso de oud",
+        "Jantar de machbous (arroz com cordeiro) em restaurante tradicional",
+        "The Pearl: ilha artificial com iate e restaurantes",
+        "Shisha em bar de rooftop com vista para o Golfo Pérsico",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal no Museu Islâmico",
+      items: [
+        "Museu de Arte Islâmica: coleção de 1.400 anos de arte do mundo islâmico",
+        "Brunch de mezze libanês em Nobu Doha",
+        "Corniche de Doha: skyline futurista de Lusail ao fundo",
+        "Camel racing ao entardecer (espetáculo único)",
+      ],
+    },
+    nyeEve: {
+      theme: "Fogos sobre o Golfo Pérsico",
+      items: [
+        "Jantar de degustação em Idam (restaurante de Alain Ducasse no Qatar)",
+        "Corniche de Doha: melhor view para os fogos + multidão festiva",
+        "Fogos sobre o Golfo com o skyline de Lusail como pano de fundo",
+        "After em rooftop do Mondrian Hotel ou W Doha",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Lusail",
+      items: [
+        "Lusail City: a cidade do Mundial 2022 e o Estádio Lusail",
+        "Almoço de harees (trigo com frango) no Katara Cultural Village",
+        "Katara Amphitheatre: shows gratuitos de Ano Novo",
+        "Sunset no cais de Katara com dhow de pesca ao fundo",
+      ],
+    },
+    regular: [
+      { theme: "Arte & museus", items: ["Museu de Arte Islâmica (IM Pei)", "Mathaf: Arab Museum of Modern Art", "Almoço em Café Arabesque", "Pôr do sol na Corniche"] },
+      { theme: "Souq & tradição", items: ["Souq Waqif: falcões e artesanato", "Shisha + gahwa (café árabe)", "Galeria de falcões ao vivo", "Jantar de mansaf em Al Wathba"] },
+      { theme: "Desert dunes", items: ["Safari 4x4 nas dunas de Khor al-Adaid", "Sand dune boarding", "Jantar beduíno em acampamento", "Stargazing no deserto"] },
+      { theme: "Lusail & modernidade", items: ["Lusail: passeio no stadium do Mundial", "The Pearl: iates e restaurantes", "Villaggio Mall (gondola indoor!)", "Rooftop do Marriott ao pôr do sol"] },
+      { theme: "Cruzeiro & mar", items: ["Cruzeiro de dhow pelo Golfo ao pôr do sol", "Al Wakrah: cidade histórica de pesca", "Snorkel em Al Wakrah beach", "Mariscos no mercado de peixe de Al Wakrah"] },
+    ],
+  },
+
+  abudhabi: {
+    xmasEve: {
+      theme: "Véspera de Natal em Abu Dhabi",
+      items: [
+        "Mesquita Sheikh Zayed iluminada ao pôr do sol: dourada e branca",
+        "Yas Marina: bares e restaurantes na beira d'água",
+        "Jantar de degustação em Li Beirut (Jumeirah Etihad Towers)",
+        "Yas Island: show de Natal no Yas Beach",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal no Louvre",
+      items: [
+        "Louvre Abu Dhabi: o mais fotogênico dos Louvres (dome de aço + luz)",
+        "Brunch de pratos mundiais no restaurante do Louvre",
+        "Corniche: passeio à beira-mar de 8km",
+        "Ferrari World para adrenalina (montanha-russa mais rápida do mundo)",
+      ],
+    },
+    nyeEve: {
+      theme: "Yas Island NYE",
+      items: [
+        "Jantar em Coya Abu Dhabi (Peruvian fine dining no Yas Bay)",
+        "Concert principal no Etihad Arena (headliner internacional)",
+        "Fogos sobre a marina de Yas Bay à meia-noite",
+        "After em Warehouse Abu Dhabi ou IRIS Abu Dhabi (rooftop)",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro no deserto",
+      items: [
+        "Safari de 4x4 nas dunas douradas de Liwa",
+        "Nascer do sol sobre o Empty Quarter (maior deserto do mundo)",
+        "Almoço de shuwa (cordeiro assado em buraco de terra) em Al Ain",
+        "Pôr do sol de dhow pela Corniche de Abu Dhabi",
+      ],
+    },
+    regular: [
+      { theme: "Sheikh Zayed & Louvre", items: ["Mesquita Sheikh Zayed ao amanhecer", "Louvre Abu Dhabi", "Almoço em Mina Port", "Corniche sunset walk"] },
+      { theme: "Yas Island adrenalina", items: ["Ferrari World (240km/h de montanha-russa!)", "Yas Waterworld", "Warner Bros. World", "Jantar em Yas Marina"] },
+      { theme: "Deserto Liwa", items: ["Safari 4x4 em Liwa Oasis", "Dunas mais altas do mundo", "Stargazing no deserto", "Acampamento glamping"] },
+      { theme: "Al Ain City", items: ["Al Ain Zoo", "Jebel Hafeet (pico mais alto dos EAU)", "Mercado de camelos de Al Ain", "Jantar de shawarma em Al Ain"] },
+      { theme: "Bate-volta Dubai", items: ["Abu Dhabi–Dubai em 1h de carro", "Burj Khalifa At The Top", "Dubai Frame", "Volta para Abu Dhabi"] },
+    ],
+  },
+
+  muscat: {
+    xmasEve: {
+      theme: "Véspera de Natal em Muscat",
+      items: [
+        "Royal Opera House Muscat: concerto de Natal (confirmar programa)",
+        "Muttrah Corniche ao pôr do sol: promenade do século XIX",
+        "Jantar de shuwa (cordeiro assado 24h) em restaurante omanense",
+        "Muttrah Souq à noite: frankincense e prata sob luzes douradas",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal no sultanato mais hospitaleiro do mundo",
+      items: [
+        "Grande Mesquita Sultan Qaboos: majestosa, aberta a turistas",
+        "Brunch em hotel de luxo com vista para a Baía de Muscat",
+        "Muscat Festival de artes e cultura (verifique datas)",
+        "Passeio de dhow pela Baía de Muscat ao pôr do sol",
+      ],
+    },
+    nyeEve: {
+      theme: "Fogos sobre a Baía de Muscat",
+      items: [
+        "Jantar de crevettes no Al Bandar Hotel (Marina)",
+        "Royal Opera House: gala de Réveillon",
+        "Fogos sobre a baía de Muscat à meia-noite",
+        "After em Aqua Bar do W Muscat ou Trader Vic's",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro em Wadi Shab",
+      items: [
+        "Wadi Shab: trekking 2h até piscinas de esmeralda escondidas",
+        "Nadar dentro de caverna com cascata",
+        "Almoço de grelhados em barraca de estrada omanense",
+        "Wahiba Sands: sunset nas dunas de areia vermelha",
+      ],
+    },
+    regular: [
+      { theme: "Muscat clássico", items: ["Palácio Al Alam + fortalezas Jalali e Mirani", "Grande Mesquita Sultan Qaboos", "Muttrah Souq", "Jantar de harees e shuwa"] },
+      { theme: "Wadi adventures", items: ["Wadi Shab: piscinas esmeralda", "Wadi Bani Khalid", "Nadar em cachoeira escondida", "Volta ao pôr do sol"] },
+      { theme: "Wahiba Sands", items: ["Safari 4x4 nas dunas vermelho-alaranjadas", "Quad bike nas dunas", "Pernoite em acampamento beduíno", "Sunrise nas dunas (inesquecível)"] },
+      { theme: "Opera & arte", items: ["Royal Opera House Muscat (mais bonito da Arábia)", "Bait Al Zubair Museum", "Almoço em Al Angham (culinária omanense)", "Corniche de tarde"] },
+      { theme: "Day trip Nizwa", items: ["Nizwa Fort (século XVII)", "Mercado de cabras de sexta-feira", "Artesanato de prata", "Jebel Shams: Grand Canyon do Omã"] },
+    ],
+  },
+
+  hoian: {
+    xmasEve: {
+      theme: "Véspera de Natal à luz de lanternas",
+      items: [
+        "Old Town de Hoi An ao entardecer: 400 casas iluminadas por lanternas",
+        "Lançamento de lanternas no Rio Thu Bon ao pôr do sol",
+        "Jantar de cao lau (macarrão exclusivo de Hoi An)",
+        "Live music em Bar Bros na margem do rio",
+      ],
+    },
+    xmasDay: {
+      theme: "Natal em My Son",
+      items: [
+        "My Son: templos Cham do século IV (Patrimônio UNESCO)",
+        "Almoço de banh xeo (crepe crocante) em restaurante local",
+        "An Bang Beach: praia a 5km com beach bars quase vazios",
+        "Roupa sob medida pronta: buscar em Taylor Shop!",
+      ],
+    },
+    nyeEve: {
+      theme: "Lanternas no Rio + fogos",
+      items: [
+        "Jantar de white rose dumplings e com ga Hoi An",
+        "Lançamento coletivo de lanternas ao Rio Thu Bon",
+        "Fogos em frente à Old Town à meia-noite",
+        "After em The Deck Bar com drinques de lychee e ginger",
+      ],
+    },
+    nyeDay: {
+      theme: "1º de janeiro de bicicleta",
+      items: [
+        "Bike pelos arrozais ao amanhecer com névoa matinal",
+        "Café da manhã de banh mi na barraca mais famosa da cidade",
+        "Aula de culinária no campo: pho, banh xeo, mango salad",
+        "Fim de tarde de sampan no Rio Thu Bon",
+      ],
+    },
+    regular: [
+      { theme: "Old Town & lanternas", items: ["Old Town ao pôr do sol (sem carros!)", "Lançamento de lanterna no rio", "Jantar de cao lau", "Bar da margem com música ao vivo"] },
+      { theme: "My Son & história Cham", items: ["Templos My Son ao amanhecer", "Museu de Escultura Cham em Da Nang", "Banh mi Ba Mien para almoço", "Pôr do sol em An Bang Beach"] },
+      { theme: "Praia & beach bars", items: ["An Bang Beach de manhã", "Almoço de seafood na areia", "Paddleboard no Rio Thu Bon", "Sunset drinks em The Field"] },
+      { theme: "Culinária vietnamita", items: ["Aula de culinária no campo", "Mercado central de Hoi An", "Banh xeo + white rose dumplings", "Bia hoi ao entardecer"] },
+      { theme: "Day trip Da Nang", items: ["Golden Bridge (mãos gigantes)", "Marble Mountains", "My Khe Beach em Da Nang", "Almoço de mi quang (macarrão amarelo)"] },
+    ],
+  },
 };
 
 /**
