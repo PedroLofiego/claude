@@ -3,8 +3,15 @@ import { Plane, Snowflake } from "lucide-react";
 import InputForm from "./components/InputForm.jsx";
 import DestinationGrid from "./components/DestinationGrid.jsx";
 import DestinationDetail from "./components/DestinationDetail.jsx";
+import MultiTripBuilder from "./components/MultiTripBuilder.jsx";
+import MultiTripView from "./components/MultiTripView.jsx";
 import { DESTINATIONS, ORIGIN_CITIES, TRIP_WINDOW } from "./data/destinations.js";
-import { buildRecommendationLine, evaluateAll } from "./lib/calc.js";
+import {
+  buildComboRecommendationLine,
+  buildRecommendationLine,
+  evaluateAll,
+  evaluateCombo,
+} from "./lib/calc.js";
 import { buildReportText } from "./lib/report.js";
 
 const DEFAULT_ORIGIN_CODE = "SSA";
@@ -18,11 +25,13 @@ const DEFAULT_PARAMS = {
   days: 16,
   people: 2,
   startDate: "2026-12-23",
+  mode: "single",
+  legs: [],
 };
 
 function loadParams() {
   try {
-    const raw = localStorage.getItem("voaja:params:v5");
+    const raw = localStorage.getItem("voaja:params:v6");
     if (!raw) return DEFAULT_PARAMS;
     return { ...DEFAULT_PARAMS, ...JSON.parse(raw) };
   } catch {
@@ -34,23 +43,28 @@ export default function App() {
   const [params, setParams] = useState(loadParams);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedTier, setSelectedTier] = useState(null);
+  const [selectedComboTier, setSelectedComboTier] = useState(null);
 
   useEffect(() => {
     try {
-      localStorage.setItem("voaja:params:v5", JSON.stringify(params));
+      localStorage.setItem("voaja:params:v6", JSON.stringify(params));
     } catch {
       /* ignore */
     }
   }, [params]);
 
-  const evaluations = useMemo(() => evaluateAll(DESTINATIONS, params), [params]);
+  const isCombo = params.mode === "combo";
 
+  // ===== Modo único =====
+  const evaluations = useMemo(
+    () => (isCombo ? [] : evaluateAll(DESTINATIONS, params)),
+    [params, isCombo]
+  );
   const activeId = selectedId ?? evaluations[0]?.destination.id;
   const activeEval = useMemo(
     () => evaluations.find((e) => e.destination.id === activeId) ?? evaluations[0],
     [evaluations, activeId]
   );
-
   const tierToShow = selectedTier ?? activeEval?.bestTier ?? "comfortable";
 
   useEffect(() => {
@@ -58,18 +72,52 @@ export default function App() {
   }, [activeId]);
 
   const recommendationLine = useMemo(() => {
-    if (!activeEval) return "";
+    if (isCombo || !activeEval) return "";
     return buildRecommendationLine(activeEval, params);
-  }, [activeEval, params]);
+  }, [activeEval, params, isCombo]);
 
   const report = useMemo(() => {
-    if (!activeEval) return "";
+    if (isCombo || !activeEval) return "";
     return buildReportText(
       { ...activeEval, bestTier: tierToShow },
       params,
       recommendationLine
     );
-  }, [activeEval, params, recommendationLine, tierToShow]);
+  }, [activeEval, params, recommendationLine, tierToShow, isCombo]);
+
+  // ===== Modo combo =====
+  const legs = useMemo(
+    () =>
+      (params.legs ?? [])
+        .map((l) => ({
+          destinationId: l.destinationId,
+          days: l.days,
+          destination: DESTINATIONS.find((d) => d.id === l.destinationId),
+        }))
+        .filter((l) => l.destination),
+    [params.legs]
+  );
+
+  const totalLegDays = legs.reduce((s, l) => s + l.days, 0);
+
+  // Sincroniza params.days no modo combo (soma dos dias por destino)
+  useEffect(() => {
+    if (isCombo && totalLegDays !== params.days) {
+      setParams((p) => ({ ...p, days: totalLegDays || 1 }));
+    }
+  }, [isCombo, totalLegDays, params.days]);
+
+  const comboEval = useMemo(() => {
+    if (!isCombo) return null;
+    return evaluateCombo(legs, params);
+  }, [isCombo, legs, params]);
+
+  const comboTier = selectedComboTier ?? comboEval?.bestTier ?? "comfortable";
+
+  const comboRecLine = useMemo(() => {
+    if (!comboEval || legs.length === 0) return "";
+    return buildComboRecommendationLine(comboEval, params);
+  }, [comboEval, legs.length, params]);
 
   return (
     <div className="mx-auto min-h-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:py-10">
@@ -79,24 +127,44 @@ export default function App() {
         <TripWindowBanner />
         <InputForm params={params} onChange={setParams} />
 
-        <Summary evaluations={evaluations} />
+        {!isCombo && (
+          <>
+            <Summary evaluations={evaluations} />
+            <DestinationGrid
+              evaluations={evaluations}
+              params={params}
+              selectedId={activeId}
+              onSelect={setSelectedId}
+            />
+            {activeEval && (
+              <DestinationDetail
+                evaluation={activeEval}
+                params={params}
+                selectedTier={tierToShow}
+                onSelectTier={setSelectedTier}
+                recommendationLine={recommendationLine}
+                report={report}
+              />
+            )}
+          </>
+        )}
 
-        <DestinationGrid
-          evaluations={evaluations}
-          params={params}
-          selectedId={activeId}
-          onSelect={setSelectedId}
-        />
-
-        {activeEval && (
-          <DestinationDetail
-            evaluation={activeEval}
-            params={params}
-            selectedTier={tierToShow}
-            onSelectTier={setSelectedTier}
-            recommendationLine={recommendationLine}
-            report={report}
-          />
+        {isCombo && (
+          <>
+            <MultiTripBuilder
+              legs={params.legs ?? []}
+              onChange={(newLegs) => setParams({ ...params, legs: newLegs })}
+              totalDays={totalLegDays}
+              targetDays={params.days}
+            />
+            <MultiTripView
+              comboEval={comboEval}
+              params={params}
+              selectedTier={comboTier}
+              onSelectTier={setSelectedComboTier}
+              recommendationLine={comboRecLine}
+            />
+          </>
         )}
       </main>
 
@@ -138,11 +206,11 @@ function Header() {
             VoaJá · Planejador de Orçamento
           </h1>
           <p className="text-xs text-slate-400 sm:text-sm">
-            Compare destinos internacionais, simule cenários e descubra se a viagem cabe no bolso.
+            Compare destinos internacionais, monte combos de várias cidades e simule cenários.
           </p>
         </div>
       </div>
-      <span className="chip">v0.5 · 20 destinos</span>
+      <span className="chip">v0.8 · 40 destinos · combo trips</span>
     </header>
   );
 }
@@ -176,9 +244,9 @@ function Footer() {
   return (
     <footer className="mt-10 border-t border-white/10 pt-5 text-xs text-slate-400">
       Dados de custo e itinerários são estimativas calibradas com base em pesquisas no Google
-      Flights, Kayak, Decolar e Momondo para a janela Dez/Jan. Preços de voos refletem economia
-      para alta temporada (Natal/Réveillon). Sempre confirme tarifas reais em Skyscanner/Kiwi e
-      diárias em Booking/Airbnb antes de comprar.
+      Flights, Kayak, Decolar, Numbeo e blogs/YouTube de viajantes brasileiros (Mai/2026).
+      Modo combo soma destinos com voo open-jaw (multi-trecho) + transporte regional estimado.
+      Sempre confirme tarifas em Skyscanner/Kiwi e diárias em Booking/Airbnb antes de comprar.
     </footer>
   );
 }
