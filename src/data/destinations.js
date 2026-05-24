@@ -4,9 +4,9 @@
  *
  * Preços de voo (`flightBaseBRL`) refletem round-trip por pessoa em classe
  * econômica saindo de GRU (São Paulo). O multiplicador por origem é aplicado
- * em runtime (ex.: SSA = GRU × 1.12). Calibrados em Mai/2026 cruzando
- * Google Flights, Kayak, Decolar e Momondo para alta temporada. ±20% de
- * variação é normal dependendo de antecedência e promoções.
+ * em runtime (ex.: SSA = GRU × 1.12). Calibrado em Mai/2026 cruzando Google
+ * Flights, Decolar, Kayak + dados reais de blogs/YouTube/TikTok de viajantes
+ * brasileiros.
  *
  * Diárias (`daily.*`) são estimativas de custo diário por pessoa em BRL,
  * baseadas em médias Numbeo / Booking / GetYourGuide.
@@ -81,11 +81,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "natal", "reveillon", "comida"],
     xmasMarket: true,
     nyeHighlight: "Réveillon grátis no Terreiro do Paço com show e fogos sobre o Tejo",
-    flightBaseBRL: 5000,
+    flightBaseBRL: 4800,
     daily: {
-      economic:    { lodging: 240, food: 140, transport: 35,  activities: 90,  misc: 60 },
-      comfortable: { lodging: 540, food: 290, transport: 70,  activities: 170, misc: 110 },
-      premium:     { lodging: 1400, food: 580, transport: 170, activities: 380, misc: 220 },
+      economic:    { lodging: 200, food: 110, transport: 30, activities: 75, misc: 50 },
+      comfortable: { lodging: 480, food: 250, transport: 65, activities: 150, misc: 100 },
+      premium:     { lodging: 1300, food: 540, transport: 160, activities: 360, misc: 210 },
     },
   },
   {
@@ -108,11 +108,11 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "arte", "nightlife"],
     xmasMarket: true,
     nyeHighlight: "Réveillon nos Champs-Élysées + show de luzes no Arco do Triunfo (gratuito)",
-    flightBaseBRL: 6500,
+    flightBaseBRL: 6300,
     daily: {
-      economic:    { lodging: 420, food: 180, transport: 50,  activities: 110, misc: 70 },
-      comfortable: { lodging: 850, food: 360, transport: 90,  activities: 230, misc: 140 },
-      premium:     { lodging: 2200, food: 720, transport: 220, activities: 560, misc: 290 },
+      economic:    { lodging: 380, food: 160, transport: 45, activities: 100, misc: 65 },
+      comfortable: { lodging: 800, food: 340, transport: 85, activities: 220, misc: 135 },
+      premium:     { lodging: 2100, food: 700, transport: 215, activities: 540, misc: 285 },
     },
   },
   {
@@ -135,11 +135,11 @@ export const DESTINATIONS = [
     vibe: ["arte", "comida", "natal", "reveillon"],
     xmasMarket: true,
     nyeHighlight: "Concerto + fogos no Circo Massimo (entrada gratuita)",
-    flightBaseBRL: 5800,
+    flightBaseBRL: 5500,
     daily: {
-      economic:    { lodging: 290, food: 150, transport: 35,  activities: 100, misc: 60 },
-      comfortable: { lodging: 650, food: 310, transport: 80,  activities: 195, misc: 125 },
-      premium:     { lodging: 1650, food: 640, transport: 200, activities: 460, misc: 250 },
+      economic:    { lodging: 250, food: 130, transport: 32, activities: 90, misc: 55 },
+      comfortable: { lodging: 580, food: 290, transport: 75, activities: 180, misc: 115 },
+      premium:     { lodging: 1550, food: 600, transport: 195, activities: 440, misc: 240 },
     },
   },
   {
@@ -162,11 +162,11 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "nightlife", "fashion"],
     xmasMarket: true,
     nyeHighlight: "Concertão grátis na Piazza Duomo + DJ set e fogos à meia-noite",
-    flightBaseBRL: 5900,
+    flightBaseBRL: 5600,
     daily: {
-      economic:    { lodging: 310, food: 160, transport: 35,  activities: 95,  misc: 65 },
-      comfortable: { lodging: 690, food: 320, transport: 80,  activities: 200, misc: 130 },
-      premium:     { lodging: 1750, food: 660, transport: 210, activities: 470, misc: 260 },
+      economic:    { lodging: 270, food: 140, transport: 32, activities: 85, misc: 60 },
+      comfortable: { lodging: 620, food: 300, transport: 75, activities: 185, misc: 120 },
+      premium:     { lodging: 1650, food: 620, transport: 200, activities: 450, misc: 250 },
     },
   },
   {
@@ -189,11 +189,11 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "arte", "romantico"],
     xmasMarket: true,
     nyeHighlight: "Festival na Piazza San Marco com fogos sobre a lagoa + beijo coletivo",
-    flightBaseBRL: 6200,
+    flightBaseBRL: 5900,
     daily: {
-      economic:    { lodging: 340, food: 170, transport: 60,  activities: 100, misc: 70 },
-      comfortable: { lodging: 760, food: 330, transport: 110, activities: 210, misc: 140 },
-      premium:     { lodging: 1900, food: 680, transport: 250, activities: 480, misc: 270 },
+      economic:    { lodging: 300, food: 150, transport: 55, activities: 90, misc: 65 },
+      comfortable: { lodging: 690, food: 310, transport: 105, activities: 195, misc: 130 },
+      premium:     { lodging: 1800, food: 640, transport: 240, activities: 460, misc: 260 },
     },
   },
   {
@@ -216,11 +216,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "ski", "praia", "reveillon"],
     xmasMarket: true,
     nyeHighlight: "12 uvas com a multidão na Plaça Espanya + show de luzes em Montjuïc",
-    flightBaseBRL: 5800,
+    flightBaseBRL: 5500,
     daily: {
-      economic:    { lodging: 330, food: 160, transport: 40,  activities: 105, misc: 65 },
-      comfortable: { lodging: 720, food: 320, transport: 85,  activities: 210, misc: 130 },
-      premium:     { lodging: 1750, food: 660, transport: 200, activities: 480, misc: 260 },
+      economic:    { lodging: 290, food: 140, transport: 35, activities: 95, misc: 60 },
+      comfortable: { lodging: 650, food: 300, transport: 80, activities: 195, misc: 120 },
+      premium:     { lodging: 1650, food: 620, transport: 195, activities: 460, misc: 250 },
     },
   },
   {
@@ -243,11 +243,11 @@ export const DESTINATIONS = [
     vibe: ["natal", "reveillon", "arte", "café"],
     xmasMarket: true,
     nyeHighlight: "Silvesterpfad: caminho de palcos pela cidade + valsa do Danúbio Azul à meia-noite",
-    flightBaseBRL: 6200,
+    flightBaseBRL: 6000,
     daily: {
-      economic:    { lodging: 320, food: 160, transport: 40,  activities: 110, misc: 70 },
-      comfortable: { lodging: 700, food: 320, transport: 85,  activities: 220, misc: 130 },
-      premium:     { lodging: 1750, food: 650, transport: 210, activities: 500, misc: 260 },
+      economic:    { lodging: 280, food: 140, transport: 35, activities: 100, misc: 65 },
+      comfortable: { lodging: 620, food: 290, transport: 80, activities: 200, misc: 120 },
+      premium:     { lodging: 1650, food: 600, transport: 200, activities: 470, misc: 250 },
     },
   },
   {
@@ -270,11 +270,11 @@ export const DESTINATIONS = [
     vibe: ["natal", "nightlife", "termas", "barata"],
     xmasMarket: true,
     nyeHighlight: "Festa enorme em Vörösmarty Square + fogos no Bastião dos Pescadores",
-    flightBaseBRL: 6200,
+    flightBaseBRL: 6000,
     daily: {
-      economic:    { lodging: 220, food: 130, transport: 30,  activities: 90,  misc: 55 },
-      comfortable: { lodging: 510, food: 270, transport: 65,  activities: 180, misc: 110 },
-      premium:     { lodging: 1350, food: 540, transport: 170, activities: 410, misc: 230 },
+      economic:    { lodging: 170, food: 95, transport: 25, activities: 70, misc: 40 },
+      comfortable: { lodging: 410, food: 220, transport: 60, activities: 165, misc: 95 },
+      premium:     { lodging: 1200, food: 480, transport: 160, activities: 380, misc: 210 },
     },
   },
   {
@@ -297,11 +297,11 @@ export const DESTINATIONS = [
     vibe: ["natal", "nightlife", "barata"],
     xmasMarket: true,
     nyeHighlight: "Fogos sobre o Castelo vistos do Letná Park (melhor mirante grátis)",
-    flightBaseBRL: 6200,
+    flightBaseBRL: 6000,
     daily: {
-      economic:    { lodging: 200, food: 120, transport: 25,  activities: 80,  misc: 50 },
-      comfortable: { lodging: 480, food: 240, transport: 60,  activities: 160, misc: 100 },
-      premium:     { lodging: 1300, food: 520, transport: 160, activities: 380, misc: 210 },
+      economic:    { lodging: 160, food: 90, transport: 22, activities: 65, misc: 38 },
+      comfortable: { lodging: 400, food: 210, transport: 55, activities: 150, misc: 90 },
+      premium:     { lodging: 1200, food: 480, transport: 150, activities: 360, misc: 200 },
     },
   },
   {
@@ -324,11 +324,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "natal", "reveillon", "alternativo"],
     xmasMarket: true,
     nyeHighlight: "Maior festa free da Europa no Portão de Brandemburgo (até 1M de pessoas)",
-    flightBaseBRL: 6000,
+    flightBaseBRL: 5800,
     daily: {
-      economic:    { lodging: 300, food: 150, transport: 35,  activities: 95,  misc: 60 },
-      comfortable: { lodging: 660, food: 290, transport: 75,  activities: 195, misc: 120 },
-      premium:     { lodging: 1700, food: 600, transport: 190, activities: 460, misc: 240 },
+      economic:    { lodging: 250, food: 130, transport: 32, activities: 85, misc: 55 },
+      comfortable: { lodging: 580, food: 270, transport: 70, activities: 180, misc: 110 },
+      premium:     { lodging: 1600, food: 580, transport: 185, activities: 440, misc: 230 },
     },
   },
   {
@@ -351,11 +351,11 @@ export const DESTINATIONS = [
     vibe: ["natal", "nightlife", "arte", "reveillon"],
     xmasMarket: true,
     nyeHighlight: "Fogos legalizados pela cidade toda + festa de rua na Dam Square",
-    flightBaseBRL: 6000,
+    flightBaseBRL: 5800,
     daily: {
-      economic:    { lodging: 380, food: 180, transport: 45,  activities: 110, misc: 70 },
-      comfortable: { lodging: 780, food: 340, transport: 90,  activities: 220, misc: 140 },
-      premium:     { lodging: 1900, food: 680, transport: 220, activities: 510, misc: 270 },
+      economic:    { lodging: 320, food: 160, transport: 40, activities: 100, misc: 65 },
+      comfortable: { lodging: 720, food: 320, transport: 85, activities: 210, misc: 130 },
+      premium:     { lodging: 1850, food: 660, transport: 215, activities: 490, misc: 260 },
     },
   },
   {
@@ -379,11 +379,11 @@ export const DESTINATIONS = [
     xmasMarket: true,
     hogmanay: true,
     nyeHighlight: "Hogmanay: 3 dias de festival, Torchlight Procession e Street Party de 80k pessoas",
-    flightBaseBRL: 6800,
+    flightBaseBRL: 6500,
     daily: {
-      economic:    { lodging: 350, food: 170, transport: 40,  activities: 110, misc: 70 },
-      comfortable: { lodging: 760, food: 330, transport: 80,  activities: 220, misc: 140 },
-      premium:     { lodging: 1850, food: 660, transport: 200, activities: 500, misc: 270 },
+      economic:    { lodging: 300, food: 150, transport: 35, activities: 100, misc: 65 },
+      comfortable: { lodging: 700, food: 310, transport: 75, activities: 210, misc: 130 },
+      premium:     { lodging: 1800, food: 640, transport: 195, activities: 480, misc: 260 },
     },
   },
   {
@@ -406,11 +406,11 @@ export const DESTINATIONS = [
     vibe: ["arte", "comida", "natal", "história"],
     xmasMarket: true,
     nyeHighlight: "Show e fogos na Praça Syntagma + tradição do bolo Vasilopita",
-    flightBaseBRL: 6000,
+    flightBaseBRL: 5800,
     daily: {
-      economic:    { lodging: 220, food: 120, transport: 30,  activities: 80,  misc: 50 },
-      comfortable: { lodging: 520, food: 250, transport: 65,  activities: 170, misc: 110 },
-      premium:     { lodging: 1400, food: 520, transport: 170, activities: 400, misc: 230 },
+      economic:    { lodging: 160, food: 95, transport: 25, activities: 70, misc: 40 },
+      comfortable: { lodging: 430, food: 220, transport: 60, activities: 160, misc: 95 },
+      premium:     { lodging: 1300, food: 490, transport: 160, activities: 380, misc: 215 },
     },
   },
   {
@@ -433,11 +433,11 @@ export const DESTINATIONS = [
     vibe: ["aurora", "aventura", "ski", "reveillon"],
     xmasMarket: false,
     nyeHighlight: "Bonfires de bairro (brennur) + fogos amadores em 360° pela cidade",
-    flightBaseBRL: 8500,
+    flightBaseBRL: 8000,
     daily: {
-      economic:    { lodging: 480, food: 220, transport: 60,  activities: 200, misc: 90 },
-      comfortable: { lodging: 1100, food: 420, transport: 140, activities: 380, misc: 180 },
-      premium:     { lodging: 2400, food: 800, transport: 320, activities: 800, misc: 350 },
+      economic:    { lodging: 420, food: 200, transport: 55, activities: 180, misc: 80 },
+      comfortable: { lodging: 1000, food: 380, transport: 130, activities: 360, misc: 170 },
+      premium:     { lodging: 2300, food: 760, transport: 310, activities: 780, misc: 340 },
     },
   },
   {
@@ -460,11 +460,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "ski", "natal", "geek"],
     xmasMarket: false,
     nyeHighlight: "Hatsumōde no Templo Meiji + 108 sinos em Zōjō-ji à meia-noite",
-    flightBaseBRL: 7000,
+    flightBaseBRL: 6500,
     daily: {
-      economic:    { lodging: 260, food: 150, transport: 60,  activities: 100, misc: 60 },
-      comfortable: { lodging: 800, food: 360, transport: 110, activities: 230, misc: 150 },
-      premium:     { lodging: 2100, food: 800, transport: 280, activities: 580, misc: 320 },
+      economic:    { lodging: 180, food: 100, transport: 50, activities: 80, misc: 50 },
+      comfortable: { lodging: 620, food: 290, transport: 100, activities: 210, misc: 130 },
+      premium:     { lodging: 1850, food: 720, transport: 270, activities: 550, misc: 300 },
     },
   },
   {
@@ -487,11 +487,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "ski", "kpop", "reveillon"],
     xmasMarket: false,
     nyeHighlight: "Cerimônia do Sino de Bosingak + festa no Han River com chimaek",
-    flightBaseBRL: 8700,
+    flightBaseBRL: 7800,
     daily: {
-      economic:    { lodging: 220, food: 130, transport: 40,  activities: 90,  misc: 60 },
-      comfortable: { lodging: 620, food: 290, transport: 90,  activities: 200, misc: 130 },
-      premium:     { lodging: 1700, food: 650, transport: 220, activities: 500, misc: 270 },
+      economic:    { lodging: 170, food: 100, transport: 32, activities: 75, misc: 50 },
+      comfortable: { lodging: 540, food: 260, transport: 80, activities: 180, misc: 115 },
+      premium:     { lodging: 1550, food: 600, transport: 210, activities: 470, misc: 250 },
     },
   },
   {
@@ -514,11 +514,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "praia", "reveillon", "comida"],
     xmasMarket: false,
     nyeHighlight: "Fogos no Asiatique + Festa no CentralWorld (multidão local + estrangeira)",
-    flightBaseBRL: 8200,
+    flightBaseBRL: 7500,
     daily: {
-      economic:    { lodging: 110, food: 70,  transport: 25,  activities: 60,  misc: 35 },
-      comfortable: { lodging: 340, food: 170, transport: 60,  activities: 140, misc: 80 },
-      premium:     { lodging: 1000, food: 400, transport: 170, activities: 340, misc: 200 },
+      economic:    { lodging: 80, food: 50, transport: 20, activities: 50, misc: 30 },
+      comfortable: { lodging: 280, food: 150, transport: 55, activities: 130, misc: 75 },
+      premium:     { lodging: 950, food: 380, transport: 165, activities: 330, misc: 195 },
     },
   },
   {
@@ -541,11 +541,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "comida", "natal"],
     xmasMarket: false,
     nyeHighlight: "Fogos sobre o Bósforo vistos de balsa ou rooftop em Karaköy",
-    flightBaseBRL: 6000,
+    flightBaseBRL: 5500,
     daily: {
-      economic:    { lodging: 200, food: 95,  transport: 30,  activities: 80,  misc: 45 },
-      comfortable: { lodging: 500, food: 230, transport: 70,  activities: 170, misc: 110 },
-      premium:     { lodging: 1350, food: 510, transport: 170, activities: 400, misc: 220 },
+      economic:    { lodging: 130, food: 70, transport: 22, activities: 60, misc: 35 },
+      comfortable: { lodging: 380, food: 200, transport: 60, activities: 150, misc: 90 },
+      premium:     { lodging: 1200, food: 480, transport: 160, activities: 380, misc: 210 },
     },
   },
   {
@@ -568,11 +568,11 @@ export const DESTINATIONS = [
     vibe: ["nightlife", "praia", "reveillon", "luxo"],
     xmasMarket: false,
     nyeHighlight: "Show pirotécnico icônico no Burj Khalifa (um dos maiores do mundo)",
-    flightBaseBRL: 7500,
+    flightBaseBRL: 6500,
     daily: {
-      economic:    { lodging: 420, food: 180, transport: 50,  activities: 120, misc: 90 },
-      comfortable: { lodging: 950, food: 400, transport: 110, activities: 290, misc: 170 },
-      premium:     { lodging: 2600, food: 900, transport: 280, activities: 680, misc: 340 },
+      economic:    { lodging: 290, food: 140, transport: 40, activities: 100, misc: 70 },
+      comfortable: { lodging: 800, food: 360, transport: 100, activities: 270, misc: 155 },
+      premium:     { lodging: 2400, food: 850, transport: 270, activities: 660, misc: 320 },
     },
   },
   {
@@ -602,11 +602,11 @@ export const DESTINATIONS = [
       "Bolo do mel e poncha (drink típico)",
       "Piscinas naturais do Porto Moniz",
     ],
-    flightBaseBRL: 5500,
+    flightBaseBRL: 4800,
     daily: {
-      economic:    { lodging: 200, food: 120, transport: 35,  activities: 80,  misc: 50 },
-      comfortable: { lodging: 480, food: 250, transport: 70,  activities: 165, misc: 100 },
-      premium:     { lodging: 1300, food: 500, transport: 170, activities: 370, misc: 210 },
+      economic:    { lodging: 160, food: 95, transport: 30, activities: 70, misc: 40 },
+      comfortable: { lodging: 410, food: 220, transport: 65, activities: 150, misc: 90 },
+      premium:     { lodging: 1200, food: 480, transport: 160, activities: 360, misc: 200 },
     },
   },
   {
