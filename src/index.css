@@ -80,11 +80,39 @@ body {
 }
 
 @media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+  html,
   body {
     background: #fff !important;
     color: #0b1020 !important;
   }
+  body * {
+    background: transparent !important;
+    color: #0b1020 !important;
+    box-shadow: none !important;
+  }
+  .card,
+  .badge-ok,
+  .badge-warn,
+  .badge-bad,
+  .chip {
+    border: 1px solid #cbd5e1 !important;
+    background: #fff !important;
+  }
   .no-print {
     display: none !important;
+  }
+  img {
+    max-height: 200px;
+    object-fit: cover;
+  }
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+  ul, ol, li, .card {
+    page-break-inside: avoid;
   }
 }

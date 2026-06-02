@@ -22,11 +22,13 @@ const DEFAULT_PARAMS = {
   origin: DEFAULT_ORIGIN.code,
   originLabel: DEFAULT_ORIGIN.label,
   budget: 30000,
-  days: 16,
+  days: 17,
   people: 2,
   startDate: "2026-12-23",
+  returnDate: "2027-01-08",
   mode: "single",
   legs: [],
+  hasItalianPassport: true,
 };
 
 function loadParams() {

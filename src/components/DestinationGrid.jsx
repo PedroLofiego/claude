@@ -129,6 +129,14 @@ export default function DestinationGrid({ evaluations, params, selectedId, onSel
                   </span>
                   <span className="chip">{d.flightHours}h voo</span>
                   <span className="chip">{d.visaRequired ? "Visto" : "Sem visto"}</span>
+                  {d.euSchengen && (
+                    <span
+                      className="chip border-green-400/30 bg-green-500/10 text-green-100"
+                      title="Cidadania italiana = entrada/saída livre + sem limite de 90 dias"
+                    >
+                      🇮🇹 UE/Schengen
+                    </span>
+                  )}
                 </div>
                 <TierMatrix
                   scenarios={ev.scenarios}

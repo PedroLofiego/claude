@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowRight, Plane, Route, Sparkles, Train } from "lucide-react";
+import { AlertTriangle, ArrowRight, FileDown, Plane, Printer, Route, Sparkles, Train } from "lucide-react";
 import { TIERS } from "../data/destinations.js";
 import { formatBRL, formatBRLCompact } from "../lib/calc.js";
 
@@ -22,6 +22,17 @@ export default function MultiTripView({
   const fits = scenario.total <= params.budget;
   const diff = scenario.total - params.budget;
 
+  const hasEuLegs = scenario.legs.some((l) => l.destination.euSchengen);
+  const euLegs = scenario.legs.filter((l) => l.destination.euSchengen);
+
+  const onPdf = () => {
+    const originalTitle = document.title;
+    const cities = scenario.legs.map((l) => l.destination.city.toLowerCase().replace(/\s/g, "-")).join("-");
+    document.title = `voaja-combo-${cities}`;
+    window.print();
+    setTimeout(() => { document.title = originalTitle; }, 1000);
+  };
+
   return (
     <section className="space-y-5">
       <RecommendationHeader
@@ -29,6 +40,23 @@ export default function MultiTripView({
         params={params}
         recommendationLine={recommendationLine}
       />
+
+      {params?.hasItalianPassport && hasEuLegs && (
+        <div className="card overflow-hidden ring-1 ring-inset ring-green-500/30">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-green-500/20 via-white/5 to-rose-500/20 px-5 py-3">
+            <span className="text-2xl">🇮🇹</span>
+            <div className="flex-1">
+              <div className="text-sm font-semibold text-white">
+                {euLegs.length} destino(s) UE/Schengen — circulação livre
+              </div>
+              <div className="text-xs text-slate-300">
+                {euLegs.map((l) => l.destination.city).join(" · ")} — fila UE no aeroporto,
+                sem 90/180 dias e trens internos sem visto. Pode estender a viagem se quiser.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ScenarioPicker
         scenarios={comboEval.scenarios}
@@ -41,6 +69,23 @@ export default function MultiTripView({
       <RouteCard scenario={scenario} params={params} fits={fits} diff={diff} />
 
       <CostBreakdown scenario={scenario} params={params} />
+
+      <div className="card flex flex-wrap items-center justify-between gap-3 p-5 no-print">
+        <div>
+          <h3 className="text-base font-semibold text-white">Exportar este combo</h3>
+          <p className="text-xs text-slate-400">
+            Gere um PDF com tudo: roteiro, custos e atrações para mandar pra família.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <button type="button" className="btn-ghost" onClick={onPdf}>
+            <Printer size={14} /> Imprimir
+          </button>
+          <button type="button" className="btn-primary" onClick={onPdf}>
+            <FileDown size={14} /> Exportar PDF
+          </button>
+        </div>
+      </div>
     </section>
   );
 }

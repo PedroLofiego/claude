@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ClipboardCopy, Download, FileText, Printer } from "lucide-react";
+import { ClipboardCopy, Download, FileDown, FileText, Printer } from "lucide-react";
 import { copyToClipboard, downloadTextFile } from "../lib/report.js";
 
 function slugify(name) {
@@ -26,6 +26,15 @@ export default function ReportPanel({ report, destination }) {
   };
 
   const onPrint = () => window.print();
+  const onPdf = () => {
+    // Browser print dialog → "Salvar como PDF". CSS @media print já formata.
+    const originalTitle = document.title;
+    document.title = `voaja-${slugify(destination?.city)}-relatorio`;
+    window.print();
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 1000);
+  };
 
   return (
     <div className="card p-5">
@@ -44,7 +53,10 @@ export default function ReportPanel({ report, destination }) {
           <button type="button" className="btn-ghost" onClick={onDownload}>
             <Download size={14} /> .txt
           </button>
-          <button type="button" className="btn-primary" onClick={onCopy}>
+          <button type="button" className="btn-primary" onClick={onPdf}>
+            <FileDown size={14} /> Exportar PDF
+          </button>
+          <button type="button" className="btn-ghost" onClick={onCopy}>
             <ClipboardCopy size={14} />
             {copied ? "Copiado!" : "Copiar"}
           </button>

@@ -56,6 +56,33 @@ export function buildReportText(evalResult, params, recommendationLine) {
   lines.push(`Reserva de imprevistos (8%): ${formatBRL(rec.contingency)}`);
   lines.push(`TOTAL: ${formatBRL(rec.total)}`);
   lines.push("");
+  if (destination.attractions && destination.attractions.length) {
+    lines.push("ATRAÇÕES PRINCIPAIS (com custos)");
+    lines.push("--------------------------------------");
+    let attractionsTotal = 0;
+    destination.attractions.forEach((a, i) => {
+      const cost = a.costBRL || 0;
+      attractionsTotal += cost;
+      const costLabel = cost === 0 ? "GRÁTIS" : `${formatBRL(cost)}/pessoa`;
+      const dur = a.duration ? ` (${a.duration})` : "";
+      lines.push(`  ${i + 1}. ${a.name}${dur} — ${costLabel}`);
+      if (a.note) lines.push(`     ${a.note}`);
+    });
+    lines.push(`  → Tudo: ${formatBRL(attractionsTotal)}/pessoa · ${formatBRL(attractionsTotal * params.people)} grupo`);
+    lines.push("");
+  }
+
+  if (params.hasItalianPassport && destination.euSchengen) {
+    lines.push("CIDADANIA ITALIANA — VANTAGENS AQUI");
+    lines.push("--------------------------------------");
+    lines.push("  • Entrada pela fila UE/EEE (rápida)");
+    lines.push("  • Sem limite de 90 dias — pode estender estadia");
+    lines.push("  • Cartão Europeu de Saúde (TEAM/EHIC) válido");
+    lines.push("  • Pode trabalhar legalmente sem visto");
+    lines.push("  • Aluguel residencial sem comprovante consular");
+    lines.push("");
+  }
+
   lines.push("ROTEIRO SUGERIDO (com âncoras de Natal e Réveillon)");
   lines.push("--------------------------------------");
   itinerary.forEach((d) => {
