@@ -3,6 +3,21 @@ import { Calendar, Coins, MapPin, Route, Users } from "lucide-react";
 import { ORIGIN_CITIES } from "../data/destinations.js";
 import { formatBRL } from "../lib/calc.js";
 
+const DEPARTURE_PRESETS = ["2026-12-20", "2026-12-22", "2026-12-23", "2026-12-25", "2026-12-27"];
+const RETURN_PRESETS = ["2027-01-04", "2027-01-06", "2027-01-08", "2027-01-10", "2027-01-12"];
+
+function daysBetween(start, end) {
+  if (!start || !end) return 0;
+  const ms = new Date(end).getTime() - new Date(start).getTime();
+  return Math.max(1, Math.round(ms / 86400000) + 1);
+}
+
+function fmtDateBR(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso + "T12:00:00");
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+}
+
 export default function InputForm({ params, onChange }) {
   const ids = {
     origin: useId(),
@@ -10,10 +25,16 @@ export default function InputForm({ params, onChange }) {
     days: useId(),
     people: useId(),
     startDate: useId(),
+    returnDate: useId(),
   };
 
   const set = (patch) => onChange({ ...params, ...patch });
   const isCombo = params.mode === "combo";
+
+  const setDates = (startDate, returnDate) => {
+    const days = daysBetween(startDate, returnDate);
+    set({ startDate, returnDate, days: isCombo ? params.days : days });
+  };
 
   return (
     <section className="card p-5 sm:p-6">
@@ -155,36 +176,66 @@ export default function InputForm({ params, onChange }) {
         <div>
           <label htmlFor={ids.startDate} className="label">
             <span className="inline-flex items-center gap-1.5">
-              <Calendar size={14} /> Data de partida
+              <Calendar size={14} /> Partida → Volta
             </span>
           </label>
-          <input
-            id={ids.startDate}
-            type="date"
-            min="2026-12-20"
-            max="2027-01-05"
-            className="input"
-            value={params.startDate ?? "2026-12-23"}
-            onChange={(e) => set({ startDate: e.target.value })}
-          />
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {["2026-12-22", "2026-12-23", "2026-12-24", "2026-12-25"].map((d) => {
-              const label = d.slice(-2) + "/dez";
-              return (
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              id={ids.startDate}
+              type="date"
+              min="2026-12-15"
+              max="2027-01-15"
+              className="input"
+              value={params.startDate ?? "2026-12-23"}
+              onChange={(e) => setDates(e.target.value, params.returnDate)}
+              aria-label="Data de partida"
+            />
+            <input
+              id={ids.returnDate}
+              type="date"
+              min="2026-12-20"
+              max="2027-01-31"
+              className="input"
+              value={params.returnDate ?? "2027-01-08"}
+              onChange={(e) => setDates(params.startDate, e.target.value)}
+              aria-label="Data de volta"
+            />
+          </div>
+          <div className="mt-2 text-[11px] text-slate-400">
+            <span className="text-slate-300">Partida:</span>
+            <div className="mt-1 flex flex-wrap gap-1">
+              {DEPARTURE_PRESETS.map((d) => (
                 <button
                   key={d}
                   type="button"
-                  onClick={() => set({ startDate: d })}
-                  className={`rounded-lg border px-2.5 py-1 text-xs ${
+                  onClick={() => setDates(d, params.returnDate)}
+                  className={`rounded-md border px-2 py-0.5 ${
                     params.startDate === d
                       ? "border-indigo-400/60 bg-indigo-500/20 text-indigo-100"
                       : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
                   }`}
                 >
-                  {label}
+                  {fmtDateBR(d)}
                 </button>
-              );
-            })}
+              ))}
+            </div>
+            <span className="mt-2 inline-block text-slate-300">Volta:</span>
+            <div className="mt-1 flex flex-wrap gap-1">
+              {RETURN_PRESETS.map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setDates(params.startDate, d)}
+                  className={`rounded-md border px-2 py-0.5 ${
+                    params.returnDate === d
+                      ? "border-fuchsia-400/60 bg-fuchsia-500/20 text-fuchsia-100"
+                      : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                  }`}
+                >
+                  {fmtDateBR(d)}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

@@ -1,5 +1,7 @@
 import { Clock, Globe2, Plane, ShieldCheck, Snowflake } from "lucide-react";
+import AttractionsList from "./AttractionsList.jsx";
 import BudgetBreakdown from "./BudgetBreakdown.jsx";
+import ItalianPassportBanner from "./ItalianPassportBanner.jsx";
 import Itinerary from "./Itinerary.jsx";
 import Recommendation from "./Recommendation.jsx";
 import ScenarioComparison from "./ScenarioComparison.jsx";
@@ -95,6 +97,8 @@ export default function DestinationDetail({
         </div>
       </div>
 
+      <ItalianPassportBanner destination={d} params={params} />
+
       <Recommendation
         evaluation={evaluation}
         params={params}
@@ -109,6 +113,8 @@ export default function DestinationDetail({
       />
 
       <BudgetBreakdown scenario={scenario} params={params} />
+
+      <AttractionsList destination={d} people={params.people} />
 
       <Itinerary destinationId={d.id} days={params.days} startDate={params.startDate} />
 
