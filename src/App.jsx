@@ -212,7 +212,15 @@ function Header() {
           </p>
         </div>
       </div>
-      <span className="chip">v0.8 · 40 destinos · combo trips</span>
+      <div className="flex items-center gap-2">
+        <a
+          href="#/japao"
+          className="inline-flex items-center gap-2 rounded-xl border border-rose-400/40 bg-gradient-to-r from-rose-500/25 to-red-500/25 px-4 py-2 text-sm font-bold text-rose-50 shadow-soft transition hover:from-rose-500/40 hover:to-red-500/40"
+        >
+          🇯🇵 Viagem escolhida: Japão →
+        </a>
+        <span className="chip">v1.0 · 40 destinos</span>
+      </div>
     </header>
   );
 }
