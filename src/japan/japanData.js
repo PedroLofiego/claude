@@ -275,40 +275,109 @@ export const JAPAN_POIS = [
 ];
 
 /*
+ * Cidades-base disponíveis para dividir a viagem (multi-bases).
+ */
+export const CITIES = [
+  { id: "toquio", label: "Tóquio", emoji: "🗼" },
+  { id: "kyoto", label: "Kyoto", emoji: "🎎" },
+  { id: "osaka", label: "Osaka", emoji: "🐙" },
+  { id: "hakone", label: "Hakone", emoji: "🗻" },
+];
+
+/*
+ * Transporte entre cidades — POR PESSOA, só ida, em BRL.
+ * Shinkansen reservado (preço SmartEX app é ~10% menor).
+ */
+const INTERCITY = {
+  "toquio-kyoto": { costBRL: yen(13320), label: "Shinkansen Hikari/Nozomi · 2h15" },
+  "toquio-osaka": { costBRL: yen(13870), label: "Shinkansen · 2h30" },
+  "toquio-hakone": { costBRL: yen(2470), label: "Odakyu Romancecar · 1h25" },
+  "kyoto-osaka": { costBRL: yen(580), label: "JR local · ~30min" },
+  "kyoto-hakone": { costBRL: yen(11310), label: "Hikari até Odawara + Hakone Tozan" },
+  "osaka-hakone": { costBRL: yen(11870), label: "Shinkansen até Odawara + local" },
+};
+
+export function intercityRoute(cityA, cityB) {
+  if (!cityA || !cityB || cityA === cityB) return null;
+  return INTERCITY[`${cityA}-${cityB}`] ?? INTERCITY[`${cityB}-${cityA}`] ?? null;
+}
+
+/*
  * Bairros para hospedagem — preço por NOITE do QUARTO (casal/twin p/ 2),
  * calibrado p/ janeiro (baixa temporada pós-Ano Novo = mais barato).
  */
 export const LODGING_AREAS = [
-  { id: "asakusa", name: "Asakusa", lat: 35.7130, lng: 139.7940, emoji: "⛩️",
+  { id: "asakusa", city: "toquio", name: "Asakusa", lat: 35.7130, lng: 139.7940, emoji: "⛩️",
     priceNight: { hostel: 260, midrange: 520, upscale: 1100 },
     pros: ["Mais barato de Tóquio", "Charme tradicional, Senso-ji do lado", "Direto do aeroporto Narita (Access Express)"],
     cons: ["Longe de Shibuya/Shinjuku (~30min)", "Bairro dorme cedo"],
     verdict: "Melhor custo-benefício. Ideal se a prioridade é gastar em experiências, não no quarto." },
-  { id: "ueno", name: "Ueno", lat: 35.7115, lng: 139.7770, emoji: "🐼",
+  { id: "ueno", city: "toquio", name: "Ueno", lat: 35.7115, lng: 139.7770, emoji: "🐼",
     priceNight: { hostel: 250, midrange: 500, upscale: 1000 },
     pros: ["Barato", "Skyliner direto do Narita (41min)", "JR Yamanote na porta + parque e museus"],
     cons: ["Menos vida noturna", "Área da estação é feiosa"],
     verdict: "Prático e econômico — ótimo p/ chegada e day trips (Nikko sai perto, de Asakusa)." },
-  { id: "shinjuku", name: "Shinjuku", lat: 35.6900, lng: 139.7000, emoji: "🌃",
+  { id: "shinjuku", city: "toquio", name: "Shinjuku", lat: 35.6900, lng: 139.7000, emoji: "🌃",
     priceNight: { hostel: 320, midrange: 750, upscale: 1500 },
     pros: ["Hub de TUDO (trens, ônibus p/ Fuji/Hakone)", "Vida noturna na porta (Golden Gai, Omoide)", "Nunca fecha"],
     cons: ["Mais caro", "Estação é um labirinto (maior do mundo)"],
     verdict: "A escolha clássica p/ primeira vez, se o orçamento permitir quarto ~R$750/noite." },
-  { id: "shibuya", name: "Shibuya", lat: 35.6590, lng: 139.7010, emoji: "🛍️",
+  { id: "shibuya", city: "toquio", name: "Shibuya", lat: 35.6590, lng: 139.7010, emoji: "🛍️",
     priceNight: { hostel: 330, midrange: 800, upscale: 1600 },
     pros: ["Coração jovem da cidade", "Compras e comida infinitas", "Yamanote + linhas privadas"],
     cons: ["O mais caro junto com Ginza", "Muvuca constante"],
     verdict: "Perfeito p/ o perfil de vocês, mas paga-se prêmio de localização." },
-  { id: "ikebukuro", name: "Ikebukuro", lat: 35.7295, lng: 139.7109, emoji: "🎮",
+  { id: "ikebukuro", city: "toquio", name: "Ikebukuro", lat: 35.7295, lng: 139.7109, emoji: "🎮",
     priceNight: { hostel: 270, midrange: 550, upscale: 1050 },
     pros: ["Custo-benefício + vida noturna própria", "Paraíso geek (Sunshine City, Pokémon Center)", "Yamanote direto"],
     cons: ["Menos 'cartão-postal'", "20min de Shibuya"],
     verdict: "Dark horse: quarto bom por menos, bairro animado, base geek." },
-  { id: "ginza-tokyo", name: "Ginza / Tokyo Station", lat: 35.6750, lng: 139.7650, emoji: "🥂",
+  { id: "ginza-tokyo", city: "toquio", name: "Ginza / Tokyo Station", lat: 35.6750, lng: 139.7650, emoji: "🥂",
     priceNight: { hostel: 350, midrange: 900, upscale: 2100 },
     pros: ["Central e elegante", "Shinkansen na porta (p/ Kyoto)", "Perto de Tsukiji e Palácio"],
     cons: ["Caro", "Morto à noite (comercial)"],
     verdict: "Só se acharem promo de hotel 4★ — a área é linda mas sem vida noturna." },
+
+  // ===== KYOTO =====
+  { id: "kyoto-station", city: "kyoto", name: "Estação Kyoto", lat: 34.9858, lng: 135.7588, emoji: "🚉",
+    priceNight: { hostel: 240, midrange: 480, upscale: 1000 },
+    pros: ["Chega/sai de shinkansen a pé", "Ônibus p/ todos os templos saem daqui", "Hotéis novos e baratos"],
+    cons: ["Zero charme histórico", "15-20min de ônibus até Gion/Higashiyama"],
+    verdict: "A base mais prática e barata de Kyoto — ideal p/ estadias curtas de 2-3 noites." },
+  { id: "gion-higashiyama", city: "kyoto", name: "Gion / Higashiyama", lat: 35.0037, lng: 135.7756, emoji: "🎎",
+    priceNight: { hostel: 280, midrange: 620, upscale: 1500 },
+    pros: ["Dormir no meio do Japão antigo", "Templos a pé (Kiyomizu, Yasaka)", "Machiya (casas tradicionais) p/ alugar"],
+    cons: ["Mais caro", "Restaurantes fecham cedo"],
+    verdict: "A experiência 'Kyoto de filme'. Vale pagar mais se Kyoto for o coração da viagem." },
+  { id: "kawaramachi", city: "kyoto", name: "Centro (Kawaramachi)", lat: 35.0083, lng: 135.7681, emoji: "🏮",
+    priceNight: { hostel: 260, midrange: 550, upscale: 1150 },
+    pros: ["Vida noturna de Kyoto (Pontocho, Kiyamachi)", "Anda-se a pé p/ Gion", "Comércio e restaurantes infinitos"],
+    cons: ["Meio-termo em tudo", "Ruas movimentadas"],
+    verdict: "Equilíbrio ideal: charme + noite + logística. Melhor p/ 3+ noites." },
+
+  // ===== OSAKA =====
+  { id: "namba", city: "osaka", name: "Namba / Dotonbori", lat: 34.6666, lng: 135.5012, emoji: "🐙",
+    priceNight: { hostel: 220, midrange: 460, upscale: 950 },
+    pros: ["Dotonbori na porta (neon + comida)", "A Osaka divertida acontece aqui", "Kuromon Market a pé"],
+    cons: ["Barulhento", "Turístico"],
+    verdict: "A escolha certa p/ sentir Osaka: sai do hotel e cai na farra do Glico Man." },
+  { id: "umeda", city: "osaka", name: "Umeda / Estação Osaka", lat: 34.7025, lng: 135.4959, emoji: "🚄",
+    priceNight: { hostel: 240, midrange: 500, upscale: 1050 },
+    pros: ["Hub de trens (fácil p/ Kyoto/Nara/Kobe)", "Umeda Sky Building", "Shopping gigante"],
+    cons: ["Corporativo, menos vibe", "15min de metrô até Dotonbori"],
+    verdict: "Prático p/ quem vai usar Osaka como base de day trips pelo Kansai." },
+  { id: "shinsekai", city: "osaka", name: "Shinsekai / Tennoji", lat: 34.6524, lng: 135.5063, emoji: "🗼",
+    priceNight: { hostel: 180, midrange: 380, upscale: 800 },
+    pros: ["O mais barato do Japão urbano", "Kushikatsu e Torre Tsutenkaku retrô", "Metrô direto p/ tudo"],
+    cons: ["Área mais 'raiz' à noite", "Menos polido"],
+    verdict: "Orçamento apertado? Aqui o hotel 3★ custa preço de hostel de Tóquio." },
+
+  // ===== HAKONE =====
+  { id: "hakone-onsen", city: "hakone", name: "Hakone (ryokan + onsen)", lat: 35.2323, lng: 139.1069, emoji: "♨️",
+    priceNight: { hostel: 400, midrange: 900, upscale: 2200 },
+    pros: ["Experiência clássica: ryokan, yukata, onsen", "Meio caminho do loop do Fuji", "Jantar kaiseki incluso no upscale"],
+    cons: ["Caro p/ o que oferece em conforto ocidental", "1 noite basta"],
+    verdict: "1 noite de ryokan com onsen = memória de viagem. Meia pensão no tier 4-5★." },
 ];
 
 // Guia de transporte com custos

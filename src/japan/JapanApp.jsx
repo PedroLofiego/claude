@@ -1,17 +1,43 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  ArrowLeft, BedDouble, Calendar, Check, ClipboardCopy, FileDown, FileJson,
-  Map as MapIcon, PackageCheck, Ticket, Train, Wallet,
+  ArrowDown, ArrowLeft, ArrowUp, BedDouble, Calendar, Check, ClipboardCopy,
+  FileDown, FileJson, Map as MapIcon, Minus, PackageCheck, Plus, Ticket,
+  Train, Trash2, Wallet,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import {
-  DAILY_STYLES, JAPAN_ITINERARY, JAPAN_POIS, JAPAN_TRIP,
-  LODGING_AREAS, POI_CATEGORIES, TRANSPORT_GUIDE,
+  CITIES, DAILY_STYLES, intercityRoute, JAPAN_ITINERARY, JAPAN_POIS,
+  JAPAN_TRIP, LODGING_AREAS, POI_CATEGORIES, TRANSPORT_GUIDE,
 } from "./japanData.js";
 import { formatBRL } from "../lib/calc.js";
 import { copyToClipboard, downloadTextFile } from "../lib/report.js";
 
-const STORAGE_KEY = "voaja:japan:v2";
+const STORAGE_KEY = "voaja:japan:v3";
+
+const DEFAULT_STAYS = [{ areaId: "asakusa", tier: "midrange", nights: 15 }];
+
+const STAY_PRESETS = [
+  { label: "Só Tóquio (15n)", stays: [{ areaId: "asakusa", tier: "midrange", nights: 15 }] },
+  { label: "Clássico: Tóquio 10 + Kyoto 3 + Osaka 2", stays: [
+    { areaId: "asakusa", tier: "midrange", nights: 10 },
+    { areaId: "kawaramachi", tier: "midrange", nights: 3 },
+    { areaId: "namba", tier: "midrange", nights: 2 },
+  ]},
+  { label: "Kansai forte: Tóquio 8 + Kyoto 4 + Osaka 3", stays: [
+    { areaId: "asakusa", tier: "midrange", nights: 8 },
+    { areaId: "kawaramachi", tier: "midrange", nights: 4 },
+    { areaId: "namba", tier: "midrange", nights: 3 },
+  ]},
+  { label: "Com ryokan: Tóquio 10 + Hakone 1 + Kyoto 4", stays: [
+    { areaId: "asakusa", tier: "midrange", nights: 10 },
+    { areaId: "hakone-onsen", tier: "midrange", nights: 1 },
+    { areaId: "kawaramachi", tier: "midrange", nights: 4 },
+  ]},
+  { label: "Base dupla: Tóquio 9 + Osaka 6", stays: [
+    { areaId: "asakusa", tier: "midrange", nights: 9 },
+    { areaId: "namba", tier: "midrange", nights: 6 },
+  ]},
+];
 
 function loadState() {
   try {
@@ -25,12 +51,17 @@ function loadState() {
 
 const TABS = [
   { id: "mapa", label: "Mapa", icon: MapIcon },
-  { id: "hospedagem", label: "Hospedagem", icon: BedDouble },
+  { id: "bases", label: "Bases & Hotéis", icon: BedDouble },
   { id: "transporte", label: "Transporte", icon: Train },
   { id: "roteiro", label: "Roteiro", icon: Calendar },
   { id: "orcamento", label: "Orçamento", icon: Wallet },
   { id: "plano", label: "Meu Plano", icon: PackageCheck },
 ];
+
+const areaOf = (id) => LODGING_AREAS.find((a) => a.id === id);
+const cityOf = (id) => CITIES.find((c) => c.id === id);
+const tierLabel = (t) =>
+  t === "hostel" ? "Hostel/cápsula" : t === "midrange" ? "Hotel 3★" : "Hotel 4-5★";
 
 export default function JapanApp() {
   const saved = useMemo(loadState, []);
@@ -38,18 +69,20 @@ export default function JapanApp() {
   const [selectedIds, setSelectedIds] = useState(
     () => new Set(saved?.selected ?? ["shibuya-sky", "teamlab", "sumo", "sensoji", "hakone"])
   );
-  const [lodgingId, setLodgingId] = useState(saved?.lodgingId ?? "asakusa");
-  const [lodgingTier, setLodgingTier] = useState(saved?.lodgingTier ?? "midrange");
+  const [stays, setStays] = useState(() => {
+    const s = saved?.stays;
+    return Array.isArray(s) && s.length > 0 && s.every((x) => areaOf(x.areaId)) ? s : DEFAULT_STAYS;
+  });
   const [dailyStyle, setDailyStyle] = useState(saved?.dailyStyle ?? "comfortable");
 
   useEffect(() => {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ selected: [...selectedIds], lodgingId, lodgingTier, dailyStyle })
+        JSON.stringify({ selected: [...selectedIds], stays, dailyStyle })
       );
     } catch { /* ignore */ }
-  }, [selectedIds, lodgingId, lodgingTier, dailyStyle]);
+  }, [selectedIds, stays, dailyStyle]);
 
   const togglePoi = (id) =>
     setSelectedIds((prev) => {
@@ -60,23 +93,44 @@ export default function JapanApp() {
     });
 
   const selectedPois = JAPAN_POIS.filter((p) => selectedIds.has(p.id));
-  const lodging = LODGING_AREAS.find((a) => a.id === lodgingId);
   const style = DAILY_STYLES.find((s) => s.id === dailyStyle);
 
-  // ==== Orçamento: R$40k total, R$18k já pago em voos → R$22k restantes ====
+  // ==== Orçamento multi-bases ====
   const P = JAPAN_TRIP.people;
-  const N = JAPAN_TRIP.nights;
   const D = JAPAN_TRIP.days;
+  const TARGET_NIGHTS = JAPAN_TRIP.nights;
   const remainingBudget = JAPAN_TRIP.totalBudgetBRL - JAPAN_TRIP.flightsPaidBRL;
 
-  const lodgingNight = lodging?.priceNight[lodgingTier] ?? 0;
-  const lodgingTotal = lodgingNight * N; // quarto para 2
+  const stayRows = stays.map((s) => {
+    const area = areaOf(s.areaId);
+    const night = area?.priceNight[s.tier] ?? 0;
+    return { ...s, area, city: cityOf(area?.city), night, total: night * s.nights };
+  });
+  const totalNights = stayRows.reduce((sum, s) => sum + s.nights, 0);
+  const lodgingTotal = stayRows.reduce((sum, s) => sum + s.total, 0);
+
+  // Trechos entre cidades: aeroporto (Tóquio) → bases → aeroporto (Tóquio)
+  const citySeq = ["toquio", ...stayRows.map((s) => s.area?.city), "toquio"];
+  const legs = [];
+  for (let i = 0; i < citySeq.length - 1; i++) {
+    const route = intercityRoute(citySeq[i], citySeq[i + 1]);
+    if (route) {
+      legs.push({
+        from: cityOf(citySeq[i]),
+        to: cityOf(citySeq[i + 1]),
+        ...route,
+        totalBRL: route.costBRL * P,
+      });
+    }
+  }
+  const intercityTotal = legs.reduce((s, l) => s + l.totalBRL, 0);
+
   const dailyPerPerson = style.foodBRL + style.transportBRL + style.funBRL;
   const dailyTotal = dailyPerPerson * P * D;
   const attractionsEntry = selectedPois.reduce((s, p) => s + p.costBRL, 0) * P;
   const attractionsSpend = selectedPois.reduce((s, p) => s + (p.spendBRL || 0), 0) * P;
   const fixed = 500 * P;
-  const plannedSubtotal = lodgingTotal + dailyTotal + attractionsEntry + fixed;
+  const plannedSubtotal = lodgingTotal + intercityTotal + dailyTotal + attractionsEntry + fixed;
   const contingency = Math.round(plannedSubtotal * 0.08);
   const plannedTotal = plannedSubtotal + contingency;
   const leftover = remainingBudget - plannedTotal;
@@ -84,22 +138,24 @@ export default function JapanApp() {
   const usagePct = Math.min(150, Math.round((plannedTotal / remainingBudget) * 100));
 
   const budget = {
-    remainingBudget, lodgingNight, lodgingTotal, dailyPerPerson, dailyTotal,
+    remainingBudget, lodgingTotal, intercityTotal, dailyPerPerson, dailyTotal,
     attractionsEntry, attractionsSpend, fixed, plannedSubtotal, contingency,
-    plannedTotal, leftover, fits, usagePct, P, N, D,
+    plannedTotal, leftover, fits, usagePct, P, D, totalNights, TARGET_NIGHTS,
   };
 
-  // ==== Export: estrutura JSON completa do plano ====
+  const baseAreas = [...new Map(stayRows.filter((s) => s.area).map((s) => [s.area.id, s.area])).values()];
+
+  // ==== Export ====
   const buildPlanJSON = () => ({
     app: "VoaJá · Modo Japão",
-    schema: "voaja.japan-plan/v1",
+    schema: "voaja.japan-plan/v2",
     generatedAt: new Date().toISOString(),
     trip: {
-      destination: "Tóquio, Japão",
+      destination: "Japão",
       arrive: "2027-01-07",
       depart: "2027-01-22",
       days: D,
-      nights: N,
+      nights: TARGET_NIGHTS,
       people: P,
     },
     budgetBRL: {
@@ -108,6 +164,7 @@ export default function JapanApp() {
       remaining: remainingBudget,
       planned: {
         lodging: lodgingTotal,
+        intercityTransport: intercityTotal,
         dailySpend: dailyTotal,
         attractionTickets: attractionsEntry,
         fixedCosts: fixed,
@@ -117,15 +174,23 @@ export default function JapanApp() {
       leftover,
       informalSpendEstimate: attractionsSpend,
     },
-    lodging: {
-      area: lodging?.name,
-      tier: lodgingTier,
-      pricePerNightBRL: lodgingNight,
-      nights: N,
-      totalBRL: lodgingTotal,
-      coordinates: { lat: lodging?.lat, lng: lodging?.lng },
-      verdict: lodging?.verdict,
-    },
+    stays: stayRows.map((s) => ({
+      city: s.city?.label,
+      area: s.area?.name,
+      tier: s.tier,
+      nights: s.nights,
+      pricePerNightBRL: s.night,
+      totalBRL: s.total,
+      coordinates: { lat: s.area?.lat, lng: s.area?.lng },
+      verdict: s.area?.verdict,
+    })),
+    intercityLegs: legs.map((l) => ({
+      from: l.from?.label,
+      to: l.to?.label,
+      mode: l.label,
+      costPerPersonBRL: l.costBRL,
+      totalBRL: l.totalBRL,
+    })),
     dailyStyle: {
       id: style.id,
       label: style.label,
@@ -153,12 +218,21 @@ export default function JapanApp() {
     L.push("🇯🇵 PLANO DE VIAGEM — JAPÃO");
     L.push(`📅 07 → 22/jan (${D} dias) · ${P} pessoas`);
     L.push("");
-    L.push(`💰 Orçamento total: ${formatBRL(JAPAN_TRIP.totalBudgetBRL)}`);
-    L.push(`✈️ Voos (pagos): ${formatBRL(JAPAN_TRIP.flightsPaidBRL)}`);
-    L.push(`💵 Restante p/ a viagem: ${formatBRL(remainingBudget)}`);
+    L.push(`💰 Orçamento: ${formatBRL(JAPAN_TRIP.totalBudgetBRL)} · voos pagos ${formatBRL(JAPAN_TRIP.flightsPaidBRL)} · restante ${formatBRL(remainingBudget)}`);
     L.push("");
-    L.push(`🏨 Base: ${lodging?.emoji} ${lodging?.name} (${lodgingTier === "hostel" ? "hostel" : lodgingTier === "midrange" ? "hotel 3★" : "hotel 4-5★"})`);
-    L.push(`   ${formatBRL(lodgingNight)}/noite × ${N} noites = ${formatBRL(lodgingTotal)}`);
+    L.push("🏨 BASES:");
+    stayRows.forEach((s, i) => {
+      L.push(`  ${i + 1}. ${s.city?.emoji} ${s.city?.label} — ${s.area?.name} (${tierLabel(s.tier)})`);
+      L.push(`     ${s.nights} noites × ${formatBRL(s.night)} = ${formatBRL(s.total)}`);
+    });
+    if (legs.length) {
+      L.push("");
+      L.push("🚄 DESLOCAMENTOS:");
+      legs.forEach((l) => {
+        L.push(`  • ${l.from?.label} → ${l.to?.label}: ${l.label} — ${formatBRL(l.totalBRL)} (${P}p)`);
+      });
+    }
+    L.push("");
     L.push(`🍜 Estilo diário: ${style.label} (${formatBRL(dailyPerPerson)}/dia/pessoa)`);
     L.push("");
     L.push(`🎟️ LUGARES ESCOLHIDOS (${selectedPois.length}):`);
@@ -168,14 +242,15 @@ export default function JapanApp() {
     L.push("");
     L.push("📊 CONTA FINAL:");
     L.push(`  Hospedagem: ${formatBRL(lodgingTotal)}`);
-    L.push(`  Diárias (comida+metrô+lazer): ${formatBRL(dailyTotal)}`);
+    L.push(`  Trens entre cidades: ${formatBRL(intercityTotal)}`);
+    L.push(`  Diárias: ${formatBRL(dailyTotal)}`);
     L.push(`  Ingressos: ${formatBRL(attractionsEntry)}`);
     L.push(`  Seguro/chip: ${formatBRL(fixed)}`);
     L.push(`  Reserva 8%: ${formatBRL(contingency)}`);
-    L.push(`  TOTAL PLANEJADO: ${formatBRL(plannedTotal)}`);
+    L.push(`  TOTAL: ${formatBRL(plannedTotal)}`);
     L.push(fits
-      ? `  ✅ Cabe! Sobram ${formatBRL(leftover)} do orçamento`
-      : `  ⚠️ Estoura o restante em ${formatBRL(-leftover)}`);
+      ? `  ✅ Cabe! Sobram ${formatBRL(leftover)}`
+      : `  ⚠️ Estoura em ${formatBRL(-leftover)}`);
     L.push("");
     L.push(`Gerado em ${new Date().toLocaleString("pt-BR")} · VoaJá`);
     return L.join("\n");
@@ -201,7 +276,8 @@ export default function JapanApp() {
               <span className="text-white">· Acompanhamento da viagem</span>
             </h1>
             <p className="text-xs text-slate-400 sm:text-sm">
-              {JAPAN_TRIP.arrive} → {JAPAN_TRIP.depart} · {D} dias · {P} pessoas · voos ✅ pagos
+              {JAPAN_TRIP.arrive} → {JAPAN_TRIP.depart} · {D} dias ·{" "}
+              {stayRows.map((s) => `${s.city?.label} ${s.nights}n`).join(" + ")} · voos ✅
             </p>
           </div>
         </div>
@@ -215,7 +291,6 @@ export default function JapanApp() {
         </div>
       </header>
 
-      {/* Painel de orçamento vivo */}
       <div className="anim-stagger mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatusCard label="Restante p/ gastar" value={formatBRL(remainingBudget)} sub={`de ${formatBRL(JAPAN_TRIP.totalBudgetBRL)} (voos pagos)`} />
         <StatusCard label="Planejado até agora" value={formatBRL(plannedTotal)} sub={`${usagePct}% do restante`} />
@@ -226,16 +301,18 @@ export default function JapanApp() {
           highlight
           bad={!fits}
         />
-        <StatusCard label="Lugares no plano" value={selectedIds.size} sub={`${formatBRL(attractionsEntry)} em ingressos`} />
+        <StatusCard
+          label="Noites planejadas"
+          value={`${totalNights}/${TARGET_NIGHTS}`}
+          sub={totalNights === TARGET_NIGHTS ? "bate com a viagem ✅" : "ajuste as noites ⚠️"}
+          bad={totalNights !== TARGET_NIGHTS}
+        />
       </div>
 
-      {/* Barra de progresso do orçamento */}
       <div className="anim-in card mt-3 p-3">
         <div className="flex justify-between text-[11px] text-slate-400">
           <span>Uso do orçamento restante ({formatBRL(remainingBudget)})</span>
-          <span className={fits ? "text-emerald-300" : "text-rose-300"}>
-            {usagePct}%
-          </span>
+          <span className={fits ? "text-emerald-300" : "text-rose-300"}>{usagePct}%</span>
         </div>
         <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-white/5">
           <div
@@ -249,7 +326,6 @@ export default function JapanApp() {
         </div>
       </div>
 
-      {/* Tabs sticky */}
       <nav className="sticky-tabs no-print mt-5">
         <div className="card flex flex-wrap gap-1.5 p-2">
           {TABS.map((t) => {
@@ -272,6 +348,11 @@ export default function JapanApp() {
                     {selectedIds.size}
                   </span>
                 )}
+                {t.id === "bases" && stays.length > 1 && (
+                  <span className="rounded-full bg-rose-500/40 px-1.5 text-[10px] font-bold">
+                    {stays.length}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -280,27 +361,27 @@ export default function JapanApp() {
 
       <main className="anim-in mt-4 space-y-5">
         {tab === "mapa" && (
-          <JapanMap selectedIds={selectedIds} onToggle={togglePoi} lodgingId={lodgingId} />
+          <JapanMap selectedIds={selectedIds} onToggle={togglePoi} bases={baseAreas} />
         )}
 
-        {tab === "hospedagem" && (
-          <LodgingTab
-            lodgingId={lodgingId}
-            setLodgingId={setLodgingId}
-            lodgingTier={lodgingTier}
-            setLodgingTier={setLodgingTier}
-            nights={N}
+        {tab === "bases" && (
+          <StaysTab
+            stays={stays}
+            setStays={setStays}
+            stayRows={stayRows}
+            legs={legs}
+            budget={budget}
           />
         )}
 
-        {tab === "transporte" && <TransportTab />}
+        {tab === "transporte" && <TransportTab legs={legs} budget={budget} />}
 
         {tab === "roteiro" && <ItineraryTab />}
 
         {tab === "orcamento" && (
           <BudgetTab
             budget={budget}
-            lodging={lodging}
+            stayRows={stayRows}
             style={style}
             dailyStyle={dailyStyle}
             setDailyStyle={setDailyStyle}
@@ -311,8 +392,8 @@ export default function JapanApp() {
         {tab === "plano" && (
           <PlanTab
             budget={budget}
-            lodging={lodging}
-            lodgingTier={lodgingTier}
+            stayRows={stayRows}
+            legs={legs}
             style={style}
             selectedPois={selectedPois}
             onToggle={togglePoi}
@@ -324,9 +405,9 @@ export default function JapanApp() {
       </main>
 
       <footer className="mt-10 border-t border-white/10 pt-5 text-xs text-slate-400">
-        Preços em BRL convertidos de ienes (¥100 ≈ R$3,30 · Mai/2026). Janeiro pós-Ano Novo é
-        baixa temporada — hotéis mais baratos e filas curtas. Reserve com antecedência: sumô,
-        teamLab, Shibuya Sky e Ghibli (ingresso de jan abre 10/dez).
+        Preços em BRL (¥100 ≈ R$3,30 · Mai/2026). Hospedagem = quarto p/ 2 em janeiro (baixa
+        temporada). Shinkansen ~10% mais barato no app SmartEX. Reserve com antecedência:
+        sumô, teamLab, Shibuya Sky e Ghibli (10/dez).
       </footer>
     </div>
   );
@@ -352,99 +433,257 @@ function StatusCard({ label, value, sub, highlight, bad }) {
   );
 }
 
-function LodgingTab({ lodgingId, setLodgingId, lodgingTier, setLodgingTier, nights }) {
+// ==== Aba Bases & Hotéis (multi-cidade) ====
+function StaysTab({ stays, setStays, stayRows, legs, budget }) {
+  const b = budget;
   const tiers = [
-    { id: "hostel", label: "Hostel/cápsula" },
-    { id: "midrange", label: "Hotel 3★" },
-    { id: "upscale", label: "Hotel 4-5★" },
+    { id: "hostel", label: "Hostel" },
+    { id: "midrange", label: "3★" },
+    { id: "upscale", label: "4-5★" },
   ];
+
+  const update = (i, patch) =>
+    setStays(stays.map((s, idx) => (idx === i ? { ...s, ...patch } : s)));
+  const remove = (i) => setStays(stays.filter((_, idx) => idx !== i));
+  const move = (i, dir) => {
+    const j = i + dir;
+    if (j < 0 || j >= stays.length) return;
+    const next = [...stays];
+    [next[i], next[j]] = [next[j], next[i]];
+    setStays(next);
+  };
+  const addStay = () => {
+    // sugere Kyoto se ainda não tem, senão Osaka
+    const cities = new Set(stayRows.map((s) => s.area?.city));
+    const areaId = !cities.has("kyoto") ? "kawaramachi" : !cities.has("osaka") ? "namba" : "hakone-onsen";
+    setStays([...stays, { areaId, tier: "midrange", nights: 2 }]);
+  };
+  const setCity = (i, cityId) => {
+    const firstArea = LODGING_AREAS.find((a) => a.city === cityId);
+    if (firstArea) update(i, { areaId: firstArea.id });
+  };
+
   return (
     <section className="space-y-4">
       <div className="card flex flex-wrap items-center justify-between gap-3 p-4">
         <div>
-          <h3 className="text-base font-semibold text-white">Onde ficar — compare os bairros</h3>
+          <h3 className="text-base font-semibold text-white">Divida a viagem em bases</h3>
           <p className="text-xs text-slate-400">
-            Preço por noite do QUARTO p/ 2, janeiro (baixa temporada). A escolha aparece 🏨 no mapa.
+            Ex.: 10 noites Tóquio + 3 Kyoto + 2 Osaka. O shinkansen entre as bases entra na
+            conta sozinho. Total precisa fechar {b.TARGET_NIGHTS} noites.
           </p>
         </div>
-        <div className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1 text-xs">
-          {tiers.map((t) => (
+        <div className={`text-right text-sm font-bold ${b.totalNights === b.TARGET_NIGHTS ? "text-emerald-300" : "text-rose-300"}`}>
+          {b.totalNights}/{b.TARGET_NIGHTS} noites
+          <div className="text-[11px] font-normal text-slate-400">
+            hospedagem: {formatBRL(b.lodgingTotal)} · trens: {formatBRL(b.intercityTotal)}
+          </div>
+        </div>
+      </div>
+
+      {/* Presets */}
+      <div className="card p-4">
+        <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          Combinações prontas (clique para aplicar):
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {STAY_PRESETS.map((p) => (
             <button
-              key={t.id}
+              key={p.label}
               type="button"
-              onClick={() => setLodgingTier(t.id)}
-              className={`rounded-lg px-3 py-1.5 font-semibold transition ${
-                lodgingTier === t.id
-                  ? "bg-rose-500/30 text-rose-50 ring-1 ring-inset ring-rose-400/40"
-                  : "text-slate-300"
-              }`}
+              onClick={() => setStays(p.stays.map((s) => ({ ...s })))}
+              className="rounded-lg border border-rose-400/30 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-100 transition hover:bg-rose-500/20"
             >
-              {t.label}
+              {p.label}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="anim-stagger grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {LODGING_AREAS.map((a) => {
-          const on = a.id === lodgingId;
-          const night = a.priceNight[lodgingTier];
+      {/* Stays */}
+      <ol className="anim-stagger space-y-3">
+        {stayRows.map((s, i) => {
+          const cityAreas = LODGING_AREAS.filter((a) => a.city === s.area?.city);
           return (
-            <button
-              key={a.id}
-              type="button"
-              onClick={() => setLodgingId(a.id)}
-              className={`card card-hover p-5 text-left ${on ? "ring-2 ring-rose-400/60" : ""}`}
-            >
-              <div className="flex items-start justify-between">
-                <div className="text-lg font-bold text-white">
-                  {a.emoji} {a.name}
+            <li key={i} className="card p-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="grid h-9 w-9 flex-none place-items-center rounded-full bg-rose-500/20 text-sm font-bold text-rose-100">
+                  {i + 1}
                 </div>
-                {on && <span className="badge-ok">Sua base</span>}
+
+                {/* Cidade */}
+                <div className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1 text-xs">
+                  {CITIES.map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setCity(i, c.id)}
+                      className={`rounded-lg px-2.5 py-1.5 font-semibold transition ${
+                        s.area?.city === c.id
+                          ? "bg-rose-500/30 text-rose-50 ring-1 ring-inset ring-rose-400/40"
+                          : "text-slate-300 hover:text-white"
+                      }`}
+                    >
+                      {c.emoji} {c.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Noites */}
+                <div className="ml-auto flex items-center gap-1.5">
+                  <button type="button" className="btn-ghost !px-2 !py-1.5" onClick={() => update(i, { nights: Math.max(1, s.nights - 1) })}>
+                    <Minus size={13} />
+                  </button>
+                  <span className="w-16 text-center text-sm font-bold text-white">
+                    {s.nights} noite{s.nights > 1 ? "s" : ""}
+                  </span>
+                  <button type="button" className="btn-ghost !px-2 !py-1.5" onClick={() => update(i, { nights: s.nights + 1 })}>
+                    <Plus size={13} />
+                  </button>
+                </div>
+
+                {/* Ordem / remover */}
+                <div className="flex items-center gap-1">
+                  <button type="button" className="btn-ghost !px-2 !py-1.5" onClick={() => move(i, -1)} disabled={i === 0}>
+                    <ArrowUp size={13} />
+                  </button>
+                  <button type="button" className="btn-ghost !px-2 !py-1.5" onClick={() => move(i, 1)} disabled={i === stays.length - 1}>
+                    <ArrowDown size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-ghost !px-2 !py-1.5 text-rose-300"
+                    onClick={() => remove(i)}
+                    disabled={stays.length === 1}
+                    title="Remover base"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
               </div>
-              <div className="mt-2 text-2xl font-bold text-white">
-                {formatBRL(night)}
-                <span className="text-xs font-normal text-slate-400"> /noite</span>
+
+              {/* Área + tier + preço */}
+              <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-3">
+                <div className="lg:col-span-2">
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                    {cityAreas.map((a) => {
+                      const on = a.id === s.areaId;
+                      const night = a.priceNight[s.tier];
+                      return (
+                        <button
+                          key={a.id}
+                          type="button"
+                          onClick={() => update(i, { areaId: a.id })}
+                          className={`rounded-xl border p-3 text-left text-xs transition ${
+                            on
+                              ? "border-rose-400/50 bg-rose-500/10"
+                              : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                          }`}
+                          title={a.verdict}
+                        >
+                          <div className="flex items-center justify-between font-bold text-white">
+                            <span>{a.emoji} {a.name}</span>
+                            {on && <Check size={13} className="text-rose-300" />}
+                          </div>
+                          <div className="mt-1 text-sm font-bold text-white">
+                            {formatBRL(night)}
+                            <span className="text-[10px] font-normal text-slate-400">/noite</span>
+                          </div>
+                          <div className="mt-1 line-clamp-2 text-[10px] text-slate-400">{a.verdict}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <div className="inline-flex w-full rounded-xl border border-white/10 bg-white/5 p-1 text-xs">
+                    {tiers.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => update(i, { tier: t.id })}
+                        className={`flex-1 rounded-lg px-2 py-1.5 font-semibold transition ${
+                          s.tier === t.id
+                            ? "bg-rose-500/30 text-rose-50 ring-1 ring-inset ring-rose-400/40"
+                            : "text-slate-300"
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-2 rounded-xl bg-white/[0.04] p-3 text-center">
+                    <div className="text-[10px] uppercase tracking-wider text-slate-400">
+                      Esta base ({s.nights}n × {formatBRL(s.night)})
+                    </div>
+                    <div className="text-lg font-bold text-white">{formatBRL(s.total)}</div>
+                  </div>
+                </div>
               </div>
-              <div className="text-[11px] text-slate-400">
-                {nights} noites: {formatBRL(night * nights)}
-              </div>
-              <ul className="mt-3 space-y-1 text-xs text-slate-300">
-                {a.pros.map((p, i) => (
-                  <li key={i}>✅ {p}</li>
-                ))}
-                {a.cons.map((c, i) => (
-                  <li key={i} className="text-slate-400">⚠️ {c}</li>
-                ))}
-              </ul>
-              <div className="mt-3 rounded-lg bg-white/[0.04] p-2.5 text-xs italic text-slate-200">
-                {a.verdict}
-              </div>
-            </button>
+            </li>
           );
         })}
-      </div>
+      </ol>
+
+      <button type="button" className="btn-primary w-full" onClick={addStay}>
+        <Plus size={14} /> Adicionar base (Kyoto, Osaka, Hakone…)
+      </button>
+
+      {/* Trechos */}
+      {legs.length > 0 && (
+        <div className="card p-4">
+          <h4 className="mb-2 text-sm font-bold text-white">
+            <Train size={14} className="mr-1.5 inline -mt-0.5 text-cyan-300" />
+            Deslocamentos entre cidades (calculados)
+          </h4>
+          <ul className="divide-y divide-white/5 text-xs">
+            {legs.map((l, i) => (
+              <li key={i} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                <span className="text-slate-200">
+                  {l.from?.emoji} {l.from?.label} → {l.to?.emoji} {l.to?.label}
+                  <span className="ml-2 text-slate-400">{l.label}</span>
+                </span>
+                <span className="font-semibold text-white">
+                  {formatBRL(l.totalBRL)} <span className="font-normal text-slate-400">({formatBRL(l.costBRL)}/pessoa)</span>
+                </span>
+              </li>
+            ))}
+            <li className="flex justify-between py-2 font-bold text-white">
+              <span>Total em trens</span>
+              <span>{formatBRL(b.intercityTotal)}</span>
+            </li>
+          </ul>
+        </div>
+      )}
     </section>
   );
 }
 
-function TransportTab() {
+function TransportTab({ legs, budget }) {
   return (
-    <section className="anim-stagger grid grid-cols-1 gap-4 lg:grid-cols-2">
-      {TRANSPORT_GUIDE.map((t) => (
-        <div key={t.id} className="card card-hover p-5">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="text-sm font-bold text-white">{t.name}</h3>
-            <span className="chip flex-none">
-              {t.costBRL > 0 ? `${formatBRL(t.costBRL)} · ${t.per}` : t.per}
-            </span>
-          </div>
-          <p className="mt-2 text-sm text-slate-300">{t.desc}</p>
-          <div className="mt-2 rounded-lg bg-amber-500/10 p-2.5 text-xs text-amber-100 ring-1 ring-inset ring-amber-400/20">
-            💡 {t.tip}
-          </div>
+    <section className="space-y-4">
+      {legs.length > 0 && (
+        <div className="card border-cyan-400/20 bg-gradient-to-r from-cyan-500/10 to-sky-500/10 p-4 text-sm text-cyan-50">
+          🚄 Seu plano atual tem <strong>{legs.length} deslocamento(s)</strong> entre cidades,
+          somando <strong>{formatBRL(budget.intercityTotal)}</strong> — detalhes na aba Bases.
         </div>
-      ))}
+      )}
+      <div className="anim-stagger grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {TRANSPORT_GUIDE.map((t) => (
+          <div key={t.id} className="card card-hover p-5">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-sm font-bold text-white">{t.name}</h3>
+              <span className="chip flex-none">
+                {t.costBRL > 0 ? `${formatBRL(t.costBRL)} · ${t.per}` : t.per}
+              </span>
+            </div>
+            <p className="mt-2 text-sm text-slate-300">{t.desc}</p>
+            <div className="mt-2 rounded-lg bg-amber-500/10 p-2.5 text-xs text-amber-100 ring-1 ring-inset ring-amber-400/20">
+              💡 {t.tip}
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
@@ -454,7 +693,8 @@ function ItineraryTab() {
     <section className="space-y-3">
       <div className="card p-4 text-xs text-slate-300">
         Roteiro sugerido 07→22/jan com o torneio de sumô (10-24/jan) e extensão opcional
-        Kyoto/Nara/Osaka nos dias 18-21. Ajuste os day trips pelo tempo — Fuji só em dia limpo.
+        Kyoto/Nara/Osaka nos dias 18-21 — se você criar bases em Kyoto/Osaka na aba Bases,
+        use esses dias como referência.
       </div>
       <ol className="anim-stagger space-y-2.5">
         {JAPAN_ITINERARY.map((d) => (
@@ -484,10 +724,12 @@ function ItineraryTab() {
   );
 }
 
-function BudgetTab({ budget, lodging, style, dailyStyle, setDailyStyle, selectedPois }) {
+function BudgetTab({ budget, stayRows, style, dailyStyle, setDailyStyle, selectedPois }) {
   const b = budget;
+  const staysLabel = stayRows.map((s) => `${s.city?.label} ${s.nights}n`).join(" + ");
   const rows = [
-    { label: `🏨 Hospedagem ${lodging?.name} · ${b.N} noites`, value: b.lodgingTotal },
+    { label: `🏨 Hospedagem (${staysLabel})`, value: b.lodgingTotal },
+    { label: `🚄 Trens entre cidades`, value: b.intercityTotal },
     { label: `🍜 Diárias (${style.label}) × ${b.D}d × ${b.P}p`, value: b.dailyTotal },
     { label: `🎟️ Ingressos dos ${selectedPois.length} lugares`, value: b.attractionsEntry },
     { label: "🛡️ Seguro + eSIM + extras", value: b.fixed },
@@ -540,9 +782,7 @@ function BudgetTab({ budget, lodging, style, dailyStyle, setDailyStyle, selected
               <div className="text-[11px] uppercase tracking-wider text-slate-400">Planejado</div>
               <div className="text-2xl font-bold text-white">{formatBRL(b.plannedTotal)}</div>
               <div className={`text-[11px] font-semibold ${b.fits ? "text-emerald-300" : "text-rose-300"}`}>
-                {b.fits
-                  ? `✅ sobra ${formatBRL(b.leftover)}`
-                  : `⚠️ estoura ${formatBRL(-b.leftover)}`}
+                {b.fits ? `✅ sobra ${formatBRL(b.leftover)}` : `⚠️ estoura ${formatBRL(-b.leftover)}`}
               </div>
             </div>
           </header>
@@ -576,31 +816,22 @@ function BudgetTab({ budget, lodging, style, dailyStyle, setDailyStyle, selected
 }
 
 function PlanTab({
-  budget, lodging, lodgingTier, style, selectedPois, onToggle,
+  budget, stayRows, legs, style, selectedPois, onToggle,
   buildPlanJSON, buildSummaryText, onPdf,
 }) {
-  const [copied, setCopied] = useState(null); // "json" | "texto"
+  const [copied, setCopied] = useState(null);
   const b = budget;
 
   const onDownloadJSON = () => {
-    downloadTextFile(
-      "voaja-plano-japao.json",
-      JSON.stringify(buildPlanJSON(), null, 2)
-    );
+    downloadTextFile("voaja-plano-japao.json", JSON.stringify(buildPlanJSON(), null, 2));
   };
   const onCopyJSON = async () => {
     const ok = await copyToClipboard(JSON.stringify(buildPlanJSON(), null, 2));
-    if (ok) {
-      setCopied("json");
-      setTimeout(() => setCopied(null), 2000);
-    }
+    if (ok) { setCopied("json"); setTimeout(() => setCopied(null), 2000); }
   };
   const onCopyText = async () => {
     const ok = await copyToClipboard(buildSummaryText());
-    if (ok) {
-      setCopied("texto");
-      setTimeout(() => setCopied(null), 2000);
-    }
+    if (ok) { setCopied("texto"); setTimeout(() => setCopied(null), 2000); }
   };
 
   const byCat = POI_CATEGORIES.map((c) => ({
@@ -617,8 +848,7 @@ function PlanTab({
             Tudo que vocês escolheram, compilado
           </h3>
           <p className="text-xs text-slate-400">
-            Exporte em JSON (estruturado, pronto p/ virar app) ou como resumo de texto p/ mandar
-            no WhatsApp. O PDF imprime esta página inteira.
+            Exporte em JSON (estruturado, pronto p/ virar app) ou como resumo de texto.
           </p>
         </div>
         <div className="flex flex-wrap gap-2 no-print">
@@ -637,26 +867,30 @@ function PlanTab({
         </div>
       </div>
 
-      {/* Resumo do plano */}
+      {/* Bases resumo */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="card p-5">
-          <div className="text-[11px] uppercase tracking-wider text-slate-400">Base</div>
-          <div className="mt-1 text-lg font-bold text-white">
-            {lodging?.emoji} {lodging?.name}
-          </div>
-          <div className="text-xs text-slate-300">
-            {lodgingTier === "hostel" ? "Hostel/cápsula" : lodgingTier === "midrange" ? "Hotel 3★" : "Hotel 4-5★"}{" "}
-            · {formatBRL(b.lodgingNight)}/noite · {b.N} noites
-          </div>
-          <div className="mt-1 text-sm font-semibold text-white">{formatBRL(b.lodgingTotal)}</div>
-        </div>
-        <div className="card p-5">
-          <div className="text-[11px] uppercase tracking-wider text-slate-400">Estilo diário</div>
-          <div className="mt-1 text-lg font-bold text-white">{style.label}</div>
-          <div className="text-xs text-slate-300">
-            {formatBRL(b.dailyPerPerson)}/dia/pessoa · comida + metrô + lazer
-          </div>
-          <div className="mt-1 text-sm font-semibold text-white">{formatBRL(b.dailyTotal)} na viagem</div>
+        <div className="card p-5 lg:col-span-2">
+          <div className="text-[11px] uppercase tracking-wider text-slate-400">Bases da viagem</div>
+          <ul className="mt-2 space-y-2">
+            {stayRows.map((s, i) => (
+              <li key={i} className="flex flex-wrap items-center justify-between gap-2 text-sm">
+                <span className="font-semibold text-white">
+                  {i + 1}. {s.city?.emoji} {s.city?.label} — {s.area?.name}
+                  <span className="ml-2 font-normal text-slate-400">{tierLabel(s.tier)}</span>
+                </span>
+                <span className="text-slate-200">
+                  {s.nights}n × {formatBRL(s.night)} ={" "}
+                  <span className="font-bold text-white">{formatBRL(s.total)}</span>
+                </span>
+              </li>
+            ))}
+            {legs.map((l, i) => (
+              <li key={`leg-${i}`} className="flex justify-between text-xs text-cyan-200/80">
+                <span>🚄 {l.from?.label} → {l.to?.label} ({l.label})</span>
+                <span>{formatBRL(l.totalBRL)}</span>
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="card p-5">
           <div className="text-[11px] uppercase tracking-wider text-slate-400">Conta final</div>
@@ -665,6 +899,7 @@ function PlanTab({
           </div>
           <div className="text-xs text-slate-300">
             {b.fits ? `Sobram ${formatBRL(b.leftover)}` : `Estoura ${formatBRL(-b.leftover)}`}
+            {" · "}{style.label}
           </div>
           <div className="mt-2 h-1.5 w-full overflow-hidden rounded bg-white/5">
             <div
@@ -675,7 +910,6 @@ function PlanTab({
         </div>
       </div>
 
-      {/* Lugares por categoria */}
       {selectedPois.length === 0 ? (
         <div className="card p-6 text-center text-sm text-slate-300">
           Nenhum lugar escolhido ainda — volte ao Mapa e toque em "+ Adicionar ao plano".
@@ -719,11 +953,10 @@ function PlanTab({
         </div>
       )}
 
-      {/* Prévia do JSON */}
       <details className="card p-5">
         <summary className="cursor-pointer text-sm font-bold text-white">
           <FileJson size={14} className="mr-1.5 inline -mt-0.5 text-cyan-300" />
-          Prévia do JSON exportado (schema voaja.japan-plan/v1)
+          Prévia do JSON exportado (schema voaja.japan-plan/v2)
         </summary>
         <pre className="mt-3 max-h-80 overflow-auto rounded-xl border border-white/10 bg-black/40 p-4 text-[11px] leading-relaxed text-cyan-100">
           {JSON.stringify(buildPlanJSON(), null, 2)}
