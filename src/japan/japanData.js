@@ -14,6 +14,9 @@ export const JAPAN_TRIP = {
   nights: 15,
   days: 16,
   people: 2,
+  // Orçamento real: passagens JÁ COMPRADAS por R$18.000; teto total R$40.000.
+  totalBudgetBRL: 40000,
+  flightsPaidBRL: 18000,
 };
 
 // Categorias de POI para filtro do mapa
@@ -172,6 +175,103 @@ export const JAPAN_POIS = [
   { id: "nara", name: "Nara (cervos + Buda gigante)", cat: "extensao", lat: 34.6851, lng: 135.8048, costBRL: yen(800), spendBRL: 100, duration: "meio dia",
     desc: "Cervos que fazem reverência + Todai-ji, o maior Buda de bronze em prédio de madeira.",
     transport: "De Kyoto: JR ¥720 (~45min)", tip: "Bolachas p/ cervos ¥200. Cuidado: eles roubam papel/comida da mão." },
+
+  // ===== EXPANSÃO: mais lugares para o plano =====
+
+  // Vistas extras
+  { id: "bunkyo", name: "Observatório GRÁTIS Bunkyo Civic Center", cat: "vista", lat: 35.7081, lng: 139.7522, costBRL: 0, spendBRL: 0, duration: "45min",
+    desc: "Vista de graça do 25º andar: Skytree de um lado, Fuji do outro em dia limpo.",
+    transport: "Metrô → Korakuen (¥180)", tip: "Menos conhecido que o Tocho — quase sempre vazio." },
+  { id: "cat3d", name: "Gato 3D de Shinjuku (billboard)", cat: "vista", lat: 35.6910, lng: 139.7005, costBRL: 0, spendBRL: 0, duration: "20min",
+    desc: "O telão curvo com o gato gigante 3D que virou símbolo da nova Shinjuku.",
+    transport: "Saída leste da estação Shinjuku", tip: "O gato aparece a cada ~15min entre anúncios. Filma em slow motion!" },
+  { id: "borderless", name: "teamLab Borderless (Azabudai Hills)", cat: "vista", lat: 35.6600, lng: 139.7414, costBRL: yen(3800), spendBRL: 0, duration: "3h",
+    desc: "O 'irmão' do Planets: salas infinitas de luz que mudam enquanto você anda.",
+    transport: "Metrô → Kamiyacho (¥180)", tip: "¥3800. Se só der p/ um teamLab, Planets (água) é mais único. Os dois esgotam." },
+  { id: "sumida-cruise", name: "Cruzeiro rio Sumida → Odaiba", cat: "vista", lat: 35.7107, lng: 139.7973, costBRL: yen(1720), spendBRL: 30, duration: "1h",
+    desc: "Barco futurista Hotaluna (desenhado pelo criador do Galaxy Express 999) de Asakusa a Odaiba.",
+    transport: "Píer de Asakusa", tip: "¥1720. Jeito mais bonito de 'viajar' entre Asakusa e Odaiba — 12 pontes no caminho." },
+
+  // Templos/tradição extras
+  { id: "nezu", name: "Santuário Nezu (mini Fushimi Inari)", cat: "templo", lat: 35.7201, lng: 139.7610, costBRL: 0, spendBRL: 0, duration: "1h",
+    desc: "Túnel de toriis vermelhos SEM ir a Kyoto, num santuário de 1705 quase sem turistas.",
+    transport: "Metrô Chiyoda → Nezu (¥180)", tip: "Combine com Yanaka (10min a pé). Foto no túnel de toriis de manhã." },
+  { id: "hie", name: "Santuário Hie (escadaria de toriis)", cat: "templo", lat: 35.6745, lng: 139.7397, costBRL: 0, spendBRL: 0, duration: "45min",
+    desc: "Escadaria coberta de toriis no meio dos arranha-céus de Akasaka.",
+    transport: "Metrô → Tameike-sanno (¥180)", tip: "Macacos de pedra no lugar dos leões — protetor dos casais." },
+  { id: "kagurazaka", name: "Kagurazaka (a 'Kyoto de Tóquio')", cat: "templo", lat: 35.7020, lng: 139.7400, costBRL: 0, spendBRL: 90, duration: "2h",
+    desc: "Ladeira de paralelepípedos com vielas de gueixa, restaurantes franceses e izakayas.",
+    transport: "Metrô → Iidabashi (¥180)", tip: "Desça as vielas laterais (Hyogo Yokocho) — é onde mora o charme." },
+
+  // Bairros/parques extras
+  { id: "kichijoji", name: "Kichijoji + Parque Inokashira", cat: "bairro", lat: 35.7004, lng: 139.5795, costBRL: yen(700), spendBRL: 100, duration: "3h",
+    desc: "Bairro favorito dos tóquiotas: parque com pedalinho de cisne, Harmonica Yokocho.",
+    transport: "JR Chuo → Kichijoji (¥230)", tip: "Pedalinho ¥700/30min. Fica ao lado do Museu Ghibli — combine!" },
+  { id: "koenji", name: "Koenji (vintage + punk)", cat: "bairro", lat: 35.7057, lng: 139.6497, costBRL: 0, spendBRL: 140, duration: "2h30",
+    desc: "O bairro mais alternativo: brechós mais baratos que Shimokita, bares punk, lives.",
+    transport: "JR Chuo → Koenji (¥180)", tip: "Look Street e PAL p/ garimpo. Menos turista, preço melhor." },
+  { id: "jimbocho", name: "Jimbocho (cidade dos livros)", cat: "bairro", lat: 35.6959, lng: 139.7575, costBRL: 0, spendBRL: 80, duration: "1h30",
+    desc: "180 sebos e livrarias — mangás antigos, gravuras ukiyo-e acessíveis, art books.",
+    transport: "Metrô → Jimbocho (¥180)", tip: "Gravuras vintage a partir de ¥1000 = souvenir de arte barato." },
+  { id: "shinjuku-gyoen", name: "Shinjuku Gyoen (jardim imperial)", cat: "bairro", lat: 35.6852, lng: 139.7100, costBRL: yen(500), spendBRL: 0, duration: "2h",
+    desc: "O jardim mais bonito da cidade — japonês, inglês e francês em um. Paz total.",
+    transport: "Metrô → Shinjuku-gyoemmae (¥180)", tip: "¥500. Em janeiro tem ameixeiras precoces florindo. Fecha às 16h30!" },
+  { id: "kappabashi", name: "Kappabashi (rua das facas)", cat: "bairro", lat: 35.7139, lng: 139.7887, costBRL: 0, spendBRL: 250, duration: "1h30",
+    desc: "Rua dos utensílios de cozinha: facas japonesas, cerâmica, comida de plástico.",
+    transport: "A pé de Asakusa (10min)", tip: "Faca boa de presente: ¥8-15k na Kamata ou Seki. Gravam o nome grátis." },
+
+  // Geek extras
+  { id: "nakano", name: "Nakano Broadway (anime raiz)", cat: "geek", lat: 35.7089, lng: 139.6657, costBRL: 0, spendBRL: 180, duration: "2h",
+    desc: "Shopping retrô com 30+ lojas Mandarake: figures raras, cels de anime, mangás vintage.",
+    transport: "JR Chuo → Nakano (¥180)", tip: "Melhor preço de colecionáveis da cidade — melhor que Akihabara." },
+  { id: "gigo", name: "GiGO Akihabara (arcades)", cat: "geek", lat: 35.6995, lng: 139.7714, costBRL: 0, spendBRL: 70, duration: "1h30",
+    desc: "4 prédios de arcade: taiko, dance, UFO catcher, purikura.",
+    transport: "Em Akihabara", tip: "Fichas ¥100. Dica de UFO catcher: peça ajuda ao staff — eles reposicionam!" },
+  { id: "donki", name: "Don Quijote MEGA (Shibuya)", cat: "geek", lat: 35.6580, lng: 139.6997, costBRL: 0, spendBRL: 300, duration: "1h30",
+    desc: "Loja-caos de 7 andares aberta 24h: KitKat de sabores, cosméticos, doces, tudo.",
+    transport: "Em Shibuya", tip: "Tax-free acima de ¥5000. Deixe p/ perto do fim da viagem (souvenirs)." },
+  { id: "karaoke-kan", name: "Karaokê Kan (Lost in Translation)", cat: "geek", lat: 35.6613, lng: 139.6989, costBRL: yen(1400), spendBRL: 60, duration: "1h30",
+    desc: "Cabine privada de karaokê — o do filme com Bill Murray fica em Shibuya.",
+    transport: "Em Shibuya", tip: "~¥700/30min/pessoa com bebida. Depois das 23h fica mais caro." },
+
+  // Comida extras
+  { id: "afuri", name: "Afuri Ramen (caldo de yuzu)", cat: "comida", lat: 35.6467, lng: 139.7101, costBRL: 0, spendBRL: 50, duration: "1h",
+    desc: "Ramen leve e cítrico de yuzu — o contraponto perfeito ao tonkotsu pesado.",
+    transport: "JR Yamanote → Ebisu (¥170)", tip: "¥1400. Ebisu também tem ótimos bares de vinho natural." },
+  { id: "gyukatsu", name: "Gyukatsu Motomura (Shibuya)", cat: "comida", lat: 35.6570, lng: 139.7038, costBRL: 0, spendBRL: 75, duration: "1h",
+    desc: "Bife empanado que VOCÊ grelha na pedra quente na mesa. Viral com razão.",
+    transport: "Em Shibuya", tip: "¥2000 o set. Fila de 30-60min — vá 14h30 ou 17h." },
+  { id: "harmonica", name: "Harmonica Yokocho (Kichijoji)", cat: "comida", lat: 35.7036, lng: 139.5797, costBRL: 0, spendBRL: 120, duration: "2h",
+    desc: "Vielas de feira dos anos 40 que viram bar à noite — versão local do Omoide.",
+    transport: "Em Kichijoji", tip: "Menos turista que Golden Gai, preço mais honesto." },
+  { id: "torikizoku", name: "Torikizoku (yakitori ¥370)", cat: "comida", lat: 35.6600, lng: 139.7017, costBRL: 0, spendBRL: 85, duration: "1h30",
+    desc: "Rede de izakaya onde TUDO custa ¥370: espetos, cerveja, highball.",
+    transport: "Várias unidades (Shibuya/Shinjuku)", tip: "Jantar + bebidas por ¥2500/pessoa. Peça o momo-kizoku-yaki." },
+
+  // Day trips extras
+  { id: "kawagoe", name: "Kawagoe ('Pequena Edo')", cat: "daytrip", lat: 35.9251, lng: 139.4858, costBRL: 0, spendBRL: 130, duration: "meio dia",
+    desc: "Cidade-armazém do período Edo a 1h: sino Toki no Kane, ruela dos doces.",
+    transport: "Tobu Tojo de Ikebukuro (~35min, ¥490)", tip: "Batata-doce é a especialidade — croquete, chips, até cerveja." },
+  { id: "takao", name: "Monte Takao (trilha + vista Fuji)", cat: "daytrip", lat: 35.6254, lng: 139.2439, costBRL: yen(490), spendBRL: 90, duration: "meio dia",
+    desc: "A montanha sagrada de Tóquio: teleférico, templo com tengus, Fuji no topo.",
+    transport: "Keio de Shinjuku (~50min, ¥430)", tip: "Teleférico ¥490. Janeiro = céu limpo = Fuji quase garantido do cume." },
+
+  // Kansai individual (extensão)
+  { id: "fushimi", name: "Fushimi Inari (mil toriis)", cat: "extensao", lat: 34.9671, lng: 135.7727, costBRL: 0, spendBRL: 50, duration: "3h",
+    desc: "A trilha de milhares de portões vermelhos subindo a montanha. O ícone de Kyoto.",
+    transport: "De Kyoto St.: JR Nara → Inari (¥150)", tip: "GRÁTIS e aberto 24h. Às 7h você tem os toriis quase só p/ vocês." },
+  { id: "kinkakuji", name: "Kinkaku-ji (Pavilhão Dourado)", cat: "extensao", lat: 35.0394, lng: 135.7292, costBRL: yen(500), spendBRL: 30, duration: "1h30",
+    desc: "O templo coberto de ouro refletido no lago — ainda mais bonito no inverno.",
+    transport: "Ônibus 101/205 de Kyoto St. (¥230)", tip: "¥500. Se nevar, corra p/ lá: kinkaku com neve é foto de vida." },
+  { id: "arashiyama", name: "Bambuzal de Arashiyama", cat: "extensao", lat: 35.0170, lng: 135.6710, costBRL: 0, spendBRL: 80, duration: "3h",
+    desc: "O túnel de bambus gigantes + ponte Togetsukyo + macacos no morro.",
+    transport: "JR Sagano de Kyoto (¥240)", tip: "Grátis. Iwatayama (macacos) ¥800 — vista incrível de Kyoto." },
+  { id: "gion", name: "Gion (distrito das gueixas)", cat: "extensao", lat: 35.0037, lng: 135.7780, costBRL: 0, spendBRL: 150, duration: "2h30",
+    desc: "Ruas de madeira preservadas, casas de chá — no fim da tarde dá pra ver gueixas indo trabalhar.",
+    transport: "Ônibus/metrô até Gion-Shijo", tip: "NÃO fotografe gueixas de perto (multa ¥10k nas ruas privadas). Discrição." },
+  { id: "usj", name: "Universal Studios Japan (Osaka)", cat: "extensao", lat: 34.6654, lng: 135.4323, costBRL: yen(8600), spendBRL: 200, duration: "dia inteiro",
+    desc: "Super Nintendo World: entrar no mundo do Mario vale a viagem p/ gamers.",
+    transport: "De Osaka: JR Yumesaki → Universal City (¥190)", tip: "¥8600 + Express Pass se quiser garantir Nintendo World (¥7-10k). Reserve área via app." },
 ];
 
 /*

@@ -66,6 +66,61 @@ body {
   color: #fff;
 }
 
+/* ===== Motion / polish ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes pulseRing {
+  0%   { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.35); }
+  70%  { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+}
+
+.anim-in { animation: fadeUp 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+.anim-stagger > * { animation: fadeUp 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+.anim-stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.anim-stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.anim-stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.anim-stagger > *:nth-child(4) { animation-delay: 0.14s; }
+.anim-stagger > *:nth-child(5) { animation-delay: 0.18s; }
+.anim-stagger > *:nth-child(6) { animation-delay: 0.22s; }
+.anim-stagger > *:nth-child(7) { animation-delay: 0.26s; }
+.anim-stagger > *:nth-child(8) { animation-delay: 0.3s; }
+
+.floaty { animation: floaty 3.5s ease-in-out infinite; }
+.pulse-ring { animation: pulseRing 2.4s ease-out infinite; }
+
+.gradient-text {
+  background: linear-gradient(90deg, #fb7185, #f59e0b, #fb7185);
+  background-size: 200% auto;
+  animation: shimmer 5s linear infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), border-color 0.25s, background-color 0.25s;
+}
+.card-hover:hover { transform: translateY(-3px); }
+
+.bar-animated { transition: width 0.6s cubic-bezier(0.2, 0.7, 0.3, 1); }
+
+.sticky-tabs {
+  position: sticky;
+  top: 8px;
+  z-index: 1100;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
