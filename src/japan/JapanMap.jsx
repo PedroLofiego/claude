@@ -3,7 +3,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Check, Clock, Plus, Train } from "lucide-react";
-import { JAPAN_POIS, LODGING_AREAS, POI_CATEGORIES } from "./japanData.js";
+import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { formatBRL } from "../lib/calc.js";
 
 function catOf(id) {
@@ -35,7 +35,7 @@ const hotelIcon = L.divIcon({
   popupAnchor: [0, -16],
 });
 
-export default function JapanMap({ selectedIds, onToggle, lodgingId }) {
+export default function JapanMap({ selectedIds, onToggle, bases = [] }) {
   const [activeCats, setActiveCats] = useState(() => new Set(POI_CATEGORIES.map((c) => c.id)));
   const [onlySelected, setOnlySelected] = useState(false);
 
@@ -56,7 +56,7 @@ export default function JapanMap({ selectedIds, onToggle, lodgingId }) {
     [activeCats, onlySelected, selectedIds]
   );
 
-  const chosenLodging = LODGING_AREAS.find((a) => a.id === lodgingId);
+  const baseList = bases.length ? bases : [];
 
   return (
     <div className="card overflow-hidden">
@@ -104,16 +104,16 @@ export default function JapanMap({ selectedIds, onToggle, lodgingId }) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           />
-          {chosenLodging && (
-            <Marker position={[chosenLodging.lat, chosenLodging.lng]} icon={hotelIcon}>
+          {baseList.map((base) => (
+            <Marker key={base.id} position={[base.lat, base.lng]} icon={hotelIcon}>
               <Popup>
                 <div style={{ minWidth: 180 }}>
-                  <strong>🏨 Sua base: {chosenLodging.name}</strong>
-                  <div style={{ fontSize: 12, marginTop: 4 }}>{chosenLodging.verdict}</div>
+                  <strong>🏨 Base: {base.name}</strong>
+                  <div style={{ fontSize: 12, marginTop: 4 }}>{base.verdict}</div>
                 </div>
               </Popup>
             </Marker>
-          )}
+          ))}
           {visible.map((p) => {
             const cat = catOf(p.cat);
             const isSel = selectedIds.has(p.id);
