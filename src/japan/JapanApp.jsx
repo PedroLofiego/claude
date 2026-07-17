@@ -1,41 +1,41 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowDown, ArrowLeft, ArrowUp, BedDouble, Calendar, Check, ClipboardCopy,
-  FileDown, FileJson, Map as MapIcon, Minus, PackageCheck, Plus, Ticket,
-  Train, Trash2, Wallet,
+  ExternalLink, FileDown, FileJson, Map as MapIcon, Minus, PackageCheck, Plus,
+  ShoppingBag, Ticket, Train, Trash2, Wallet,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import {
   CITIES, DAILY_STYLES, intercityRoute, JAPAN_ITINERARY, JAPAN_POIS,
-  JAPAN_TRIP, LODGING_AREAS, POI_CATEGORIES, TRANSPORT_GUIDE,
+  JAPAN_TRIP, LODGING_AREAS, POI_CATEGORIES, SHOPPING_GUIDE, TRANSPORT_GUIDE,
 } from "./japanData.js";
 import { formatBRL } from "../lib/calc.js";
 import { copyToClipboard, downloadTextFile } from "../lib/report.js";
 
 const STORAGE_KEY = "voaja:japan:v3";
 
-const DEFAULT_STAYS = [{ areaId: "asakusa", tier: "midrange", nights: 15 }];
+const DEFAULT_STAYS = [{ areaId: "asakusa", tier: "midrange", nights: 13 }];
 
 const STAY_PRESETS = [
-  { label: "Só Tóquio (15n)", stays: [{ areaId: "asakusa", tier: "midrange", nights: 15 }] },
-  { label: "Clássico: Tóquio 10 + Kyoto 3 + Osaka 2", stays: [
-    { areaId: "asakusa", tier: "midrange", nights: 10 },
+  { label: "Só Tóquio (13n)", stays: [{ areaId: "asakusa", tier: "midrange", nights: 13 }] },
+  { label: "Clássico: Tóquio 8 + Kyoto 3 + Osaka 2", stays: [
+    { areaId: "asakusa", tier: "midrange", nights: 8 },
     { areaId: "kawaramachi", tier: "midrange", nights: 3 },
     { areaId: "namba", tier: "midrange", nights: 2 },
   ]},
-  { label: "Kansai forte: Tóquio 8 + Kyoto 4 + Osaka 3", stays: [
-    { areaId: "asakusa", tier: "midrange", nights: 8 },
-    { areaId: "kawaramachi", tier: "midrange", nights: 4 },
+  { label: "Kansai forte: Tóquio 7 + Kyoto 3 + Osaka 3", stays: [
+    { areaId: "asakusa", tier: "midrange", nights: 7 },
+    { areaId: "kawaramachi", tier: "midrange", nights: 3 },
     { areaId: "namba", tier: "midrange", nights: 3 },
   ]},
-  { label: "Com ryokan: Tóquio 10 + Hakone 1 + Kyoto 4", stays: [
-    { areaId: "asakusa", tier: "midrange", nights: 10 },
+  { label: "Com ryokan: Tóquio 8 + Hakone 1 + Kyoto 4", stays: [
+    { areaId: "asakusa", tier: "midrange", nights: 8 },
     { areaId: "hakone-onsen", tier: "midrange", nights: 1 },
     { areaId: "kawaramachi", tier: "midrange", nights: 4 },
   ]},
-  { label: "Base dupla: Tóquio 9 + Osaka 6", stays: [
-    { areaId: "asakusa", tier: "midrange", nights: 9 },
-    { areaId: "namba", tier: "midrange", nights: 6 },
+  { label: "Base dupla: Tóquio 8 + Osaka 5 (Airbnb)", stays: [
+    { areaId: "asakusa", tier: "airbnb", nights: 8 },
+    { areaId: "namba", tier: "airbnb", nights: 5 },
   ]},
 ];
 
@@ -55,13 +55,17 @@ const TABS = [
   { id: "transporte", label: "Transporte", icon: Train },
   { id: "roteiro", label: "Roteiro", icon: Calendar },
   { id: "orcamento", label: "Orçamento", icon: Wallet },
+  { id: "compras", label: "Compras", icon: ShoppingBag },
   { id: "plano", label: "Meu Plano", icon: PackageCheck },
 ];
 
 const areaOf = (id) => LODGING_AREAS.find((a) => a.id === id);
 const cityOf = (id) => CITIES.find((c) => c.id === id);
 const tierLabel = (t) =>
-  t === "hostel" ? "Hostel/cápsula" : t === "midrange" ? "Hotel 3★" : "Hotel 4-5★";
+  t === "hostel" ? "Hostel/cápsula"
+  : t === "airbnb" ? "Airbnb (apto)"
+  : t === "midrange" ? "Rede 2-3★"
+  : "Hotel 4-5★";
 
 export default function JapanApp() {
   const saved = useMemo(loadState, []);
@@ -152,8 +156,8 @@ export default function JapanApp() {
     generatedAt: new Date().toISOString(),
     trip: {
       destination: "Japão",
-      arrive: "2027-01-07",
-      depart: "2027-01-22",
+      arrive: "2026-12-09",
+      depart: "2026-12-22",
       days: D,
       nights: TARGET_NIGHTS,
       people: P,
@@ -216,7 +220,7 @@ export default function JapanApp() {
   const buildSummaryText = () => {
     const L = [];
     L.push("🇯🇵 PLANO DE VIAGEM — JAPÃO");
-    L.push(`📅 07 → 22/jan (${D} dias) · ${P} pessoas`);
+    L.push(`📅 09 → 22/dez (${D} dias) · ${P} pessoas · chegada e volta por Narita (NRT)`);
     L.push("");
     L.push(`💰 Orçamento: ${formatBRL(JAPAN_TRIP.totalBudgetBRL)} · voos pagos ${formatBRL(JAPAN_TRIP.flightsPaidBRL)} · restante ${formatBRL(remainingBudget)}`);
     L.push("");
@@ -378,6 +382,8 @@ export default function JapanApp() {
 
         {tab === "roteiro" && <ItineraryTab />}
 
+        {tab === "compras" && <ShoppingTab />}
+
         {tab === "orcamento" && (
           <BudgetTab
             budget={budget}
@@ -405,9 +411,9 @@ export default function JapanApp() {
       </main>
 
       <footer className="mt-10 border-t border-white/10 pt-5 text-xs text-slate-400">
-        Preços em BRL (¥100 ≈ R$3,30 · Mai/2026). Hospedagem = quarto p/ 2 em janeiro (baixa
-        temporada). Shinkansen ~10% mais barato no app SmartEX. Reserve com antecedência:
-        sumô, teamLab, Shibuya Sky e Ghibli (10/dez).
+        Preços em BRL (¥100 ≈ R$3,30 · Mai/2026). Hospedagem = quarto/apto p/ 2 em dezembro.
+        Shinkansen ~10% mais barato no app SmartEX. Reserve antes: teamLab, Shibuya Sky,
+        asageiko de sumô e restaurantes concorridos. Iluminações vão até 25/dez — vocês pegam!
       </footer>
     </div>
   );
@@ -438,7 +444,8 @@ function StaysTab({ stays, setStays, stayRows, legs, budget }) {
   const b = budget;
   const tiers = [
     { id: "hostel", label: "Hostel" },
-    { id: "midrange", label: "3★" },
+    { id: "airbnb", label: "Airbnb" },
+    { id: "midrange", label: "Rede 2-3★" },
     { id: "upscale", label: "4-5★" },
   ];
 
@@ -594,6 +601,11 @@ function StaysTab({ stays, setStays, stayRows, legs, budget }) {
                       );
                     })}
                   </div>
+                  {s.area?.chains && (
+                    <div className="mt-2 rounded-lg bg-cyan-500/5 p-2.5 text-[11px] text-cyan-100 ring-1 ring-inset ring-cyan-400/15">
+                      🏢 Redes 2-3★ nesta área: {s.area.chains.join(" · ")}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="inline-flex w-full rounded-xl border border-white/10 bg-white/5 p-1 text-xs">
@@ -692,9 +704,10 @@ function ItineraryTab() {
   return (
     <section className="space-y-3">
       <div className="card p-4 text-xs text-slate-300">
-        Roteiro sugerido 07→22/jan com o torneio de sumô (10-24/jan) e extensão opcional
-        Kyoto/Nara/Osaka nos dias 18-21 — se você criar bases em Kyoto/Osaka na aba Bases,
-        use esses dias como referência.
+        Roteiro sugerido 09→22/dez: iluminações de Natal por toda parte, onsen
+        tattoo-friendly, hidden gems e bloco Kyoto/Nara/Osaka nos dias 18-21 (alinhe com
+        suas bases na aba Bases). Dezembro não tem torneio de sumô — mas tem treino
+        matinal (asageiko), no dia 17.
       </div>
       <ol className="anim-stagger space-y-2.5">
         {JAPAN_ITINERARY.map((d) => (
@@ -962,6 +975,51 @@ function PlanTab({
           {JSON.stringify(buildPlanJSON(), null, 2)}
         </pre>
       </details>
+    </section>
+  );
+}
+
+function ShoppingTab() {
+  return (
+    <section className="space-y-4">
+      <div className="card border-amber-400/20 bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-4 text-sm text-amber-50">
+        🛍️ <strong>Compras ficam FORA dos cálculos do orçamento</strong> — é gasto pessoal de
+        cada um. Use os links p/ pesquisar preços antes. Regra de ouro: tax-free acima de
+        ¥5.000 por loja (passaporte em mãos), e Yodobashi/Bic têm cupom de turista de 5-7%.
+      </div>
+      <div className="anim-stagger space-y-4">
+        {SHOPPING_GUIDE.map((sec) => (
+          <div key={sec.id} className="card p-5">
+            <h3 className="mb-3 text-sm font-bold text-white">
+              {sec.emoji} {sec.label}{" "}
+              <span className="font-normal text-slate-400">({sec.items.length} lugares)</span>
+            </h3>
+            <ul className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+              {sec.items.map((it) => (
+                <li
+                  key={it.name}
+                  className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 transition hover:bg-white/[0.06]"
+                >
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-white">{it.name}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500">{it.area}</div>
+                    <div className="mt-1 text-[11px] text-slate-300">{it.desc}</div>
+                  </div>
+                  <a
+                    href={it.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-ghost flex-none !px-2.5 !py-1.5 text-[11px]"
+                    title={`Abrir site: ${it.url}`}
+                  >
+                    <ExternalLink size={12} /> site
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
