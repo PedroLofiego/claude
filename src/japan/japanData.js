@@ -341,6 +341,32 @@ export const JAPAN_POIS = [
   { id: "yebisu-xmas", name: "Yebisu Garden Place (lustre Baccarat)", cat: "vista", lat: 35.6425, lng: 139.7130, costBRL: 0, spendBRL: 40, duration: "1h",
     desc: "O lustre de cristal Baccarat gigante + iluminação clássica — clima de filme de Natal japonês.",
     transport: "JR Yamanote → Ebisu (¥170)", tip: "GRÁTIS. Combine com Afuri ramen ali do lado." },
+
+  // ===== 🍜 COMIDA: os hypados das redes =====
+  { id: "rokurinsha", name: "Rokurinsha (Ramen Street, Tokyo Station)", cat: "comida", lat: 35.6812, lng: 139.7671, costBRL: 0, spendBRL: 40, duration: "1h",
+    desc: "O tsukemen (macarrão p/ mergulhar) mais famoso do Japão, na 'rua do ramen' dentro da estação.",
+    transport: "Tokyo Station (subsolo Yaesu)", tip: "~¥1100. Fila de 30-45min no almoço; vá 10h30 ou 15h." },
+  { id: "gyoza-lou", name: "Harajuku Gyoza Lou", cat: "comida", lat: 35.6699, lng: 139.7060, costBRL: 0, spendBRL: 40, duration: "1h",
+    desc: "Gyoza de ¥350 a meia dúzia, sempre com fila de locais — o segredo mais barato de Harajuku.",
+    transport: "Perto da Takeshita St.", tip: "Peça grelhado E cozido + cerveja. Jantar inteiro por ¥1200." },
+  { id: "kura-harajuku", name: "Kura Sushi Global Flagship (Harajuku)", cat: "comida", lat: 35.6690, lng: 139.7027, costBRL: 0, spendBRL: 55, duration: "1h30",
+    desc: "O kaiten sushi viral: esteira gigante, ¥115/prato, e a cada 5 pratos você joga o 'bikkura-pon' (gacha).",
+    transport: "Em Harajuku (With Harajuku Bldg.)", tip: "Reserve pelo app da Kura p/ pular a fila. Almoço farto ¥1500." },
+  { id: "happy-pancake", name: "A Happy Pancake (Omotesando)", cat: "comida", lat: 35.6653, lng: 139.7104, costBRL: 0, spendBRL: 45, duration: "1h",
+    desc: "A panqueca soufflé que balança — o doce mais filmado do Japão.",
+    transport: "Metrô → Omotesando (¥180)", tip: "~¥1300. Vá em dia útil de manhã; fds a fila passa de 1h." },
+  { id: "marion", name: "Marion Crepes (Takeshita St.)", cat: "comida", lat: 35.6716, lng: 139.7031, costBRL: 0, spendBRL: 25, duration: "30min",
+    desc: "O crepe original de Harajuku desde 1976 — 70+ sabores enrolados na hora.",
+    transport: "Takeshita Street", tip: "~¥700. O de cheesecake com morango é o clássico." },
+  { id: "mizuno", name: "Okonomiyaki Mizuno (Dotonbori)", cat: "comida", lat: 34.6685, lng: 135.5019, costBRL: 0, spendBRL: 60, duration: "1h",
+    desc: "80 anos de okonomiyaki com estrela no Michelin Bib — feito na chapa na sua frente.",
+    transport: "Em Dotonbori (Osaka)", tip: "~¥1500. Peça o yamaimo-yaki (massa de inhame). Fila anda rápido." },
+  { id: "wanaka", name: "Takoyaki Wanaka (Osaka)", cat: "comida", lat: 34.6656, lng: 135.5064, costBRL: 0, spendBRL: 20, duration: "30min",
+    desc: "O takoyaki preferido dos locais — crocante fora, cremoso dentro.",
+    transport: "Sennichimae, Osaka", tip: "8 bolinhas ¥600. Coma em pé com cerveja de vending machine." },
+  { id: "nishiki", name: "Mercado Nishiki (Kyoto)", cat: "comida", lat: 35.0050, lng: 135.7649, costBRL: 0, spendBRL: 90, duration: "2h",
+    desc: "'A cozinha de Kyoto': 400m de barracas de tamagoyaki, mochi grelhado, tofu de soja preta.",
+    transport: "A pé de Kawaramachi", tip: "Vá com fome às 11h. Espetinho de polvo c/ ovo de codorna = icônico." },
 ];
 
 /*
@@ -519,14 +545,19 @@ export const JAPAN_ITINERARY = [
     items: ["Café tranquilo + malas", "Tax-free conferido (recibos no passaporte)", "Skyliner/N'EX p/ NARITA 4h antes do voo"] },
 ];
 
-// Estimativa diária por pessoa (sem hotel), estilo de gasto
+// Estimativa diária por pessoa (sem hotel).
+// Comida no estilo de vocês: café no 7-Eleven, almoço na rua, janta em
+// lugar de esquina ou hypado das redes. meals = por refeição (R$/pessoa).
 export const DAILY_STYLES = [
-  { id: "economic", label: "Econômico", foodBRL: 100, transportBRL: 28, funBRL: 60,
-    desc: "Konbini de manhã, ramen/teishoku, metrô, atrações grátis priorizadas" },
-  { id: "comfortable", label: "Confortável", foodBRL: 220, transportBRL: 35, funBRL: 130,
-    desc: "Restaurantes de verdade 2x/dia, todas as atrações que quiser" },
-  { id: "premium", label: "Premium", foodBRL: 500, transportBRL: 60, funBRL: 250,
-    desc: "Omakase, wagyu, táxi ocasional, compras sem culpa" },
+  { id: "economic", label: "Econômico", foodBRL: 112, transportBRL: 28, funBRL: 60,
+    meals: { breakfast: 20, lunch: 34, dinner: 58 },
+    desc: "Konbini de manhã (R$20) + gyudon/soba em pé no almoço (R$34) + ramen ou izakaya barato à noite (R$58)" },
+  { id: "comfortable", label: "Nosso estilo", foodBRL: 158, transportBRL: 35, funBRL: 130,
+    meals: { breakfast: 22, lunch: 46, dinner: 90 },
+    desc: "7-Eleven de manhã (R$22) + esquina/kaiten no almoço (R$46) + jantar hypado das redes: Gyukatsu, Ichiran, yokocho (R$90)" },
+  { id: "premium", label: "Premium", foodBRL: 330, transportBRL: 60, funBRL: 250,
+    meals: { breakfast: 30, lunch: 90, dinner: 210 },
+    desc: "Café em kissaten + almoços de sushi de balcão + jantares top (wagyu, omakase acessível 1-2x na viagem)" },
 ];
 
 /*
@@ -566,4 +597,55 @@ export const SHOPPING_GUIDE = [
     { name: "3COINS", area: "várias", url: "https://www.3coins.jp/", desc: "'Daiso premium': tudo ¥330 com ótimo design." },
     { name: "Kappabashi (rua das facas)", area: "Asakusa", url: "https://www.kappabashi.or.jp/", desc: "Faca japonesa com nome gravado grátis — presente definitivo." },
   ]},
+];
+
+/*
+ * Guia de alimentação — no estilo da dupla:
+ * café no konbini, almoço de rua, janta de esquina ou hypada.
+ * priceBRL = por pessoa. Já coberto pela "diária" do orçamento.
+ */
+export const FOOD_GUIDE = [
+  { id: "cafe", label: "Café da manhã no konbini (7-Eleven/Lawson/FamilyMart)", emoji: "🏪",
+    note: "Meta: ~R$20-22/pessoa. Konbini no Japão é NÍVEL: tudo fresco, caixas sem fila, café bom.",
+    items: [
+      { name: "Onigiri (salmão, atum-maionese, umeboshi)", priceBRL: 6, yen: "¥180", desc: "O básico perfeito — pegue 2" },
+      { name: "Tamago sando (sanduíche de ovo)", priceBRL: 9, yen: "¥280", desc: "O sanduíche viral do 7-Eleven" },
+      { name: "Melon pan / croissant", priceBRL: 5, yen: "¥160", desc: "Doce de padaria de konbini" },
+      { name: "Café drip da máquina (L)", priceBRL: 6, yen: "¥180", desc: "Melhor que muito café de cafeteria" },
+      { name: "Karaage-kun (Lawson)", priceBRL: 8, yen: "¥240", desc: "Frango frito de balcão — vício" },
+      { name: "Iogurte / fruta cortada", priceBRL: 7, yen: "¥200", desc: "P/ aliviar a consciência" },
+    ]},
+  { id: "almoco", label: "Almoço de rua e esquina", emoji: "🍛",
+    note: "Meta: ~R$34-50/pessoa. Redes de esquina japonesas são baratas, rápidas e boas.",
+    items: [
+      { name: "Gyudon (Sukiya / Yoshinoya / Matsuya)", priceBRL: 18, yen: "¥550", desc: "Bowl de arroz c/ carne — pede na máquina" },
+      { name: "Soba/udon em pé (tachigui)", priceBRL: 15, yen: "¥450", desc: "Experiência salaryman raiz" },
+      { name: "Teishoku (prato feito japonês)", priceBRL: 31, yen: "¥950", desc: "Arroz + missô + principal — Yayoiken" },
+      { name: "CoCo Ichibanya (curry)", priceBRL: 36, yen: "¥1100", desc: "Monte seu curry — nível de picância 1-10" },
+      { name: "Kaiten sushi (Kura / Sushiro / Uobei)", priceBRL: 46, yen: "¥1400", desc: "10-12 pratos girando ou por tablet" },
+      { name: "Ichiran / ramen de balcão", priceBRL: 43, yen: "¥1300", desc: "O clássico das cabines individuais" },
+      { name: "Bento de depachika", priceBRL: 40, yen: "¥1200", desc: "Após 19h30 cai p/ metade!" },
+    ]},
+  { id: "jantar", label: "Jantar: esquinas e hypados das redes", emoji: "🔥",
+    note: "Meta: ~R$58-99/pessoa. Os virais valem: quase todos custam menos que restaurante médio no Brasil.",
+    items: [
+      { name: "Gyukatsu Motomura (Shibuya)", priceBRL: 64, yen: "¥1930", desc: "Bife empanado que você grelha na pedra" },
+      { name: "Harajuku Gyoza Lou", priceBRL: 40, yen: "¥1200", desc: "Jantar inteiro de gyoza + cerveja" },
+      { name: "Rokurinsha (Tokyo Station)", priceBRL: 36, yen: "¥1100", desc: "O tsukemen mais famoso do país" },
+      { name: "Afuri (Ebisu)", priceBRL: 46, yen: "¥1400", desc: "Ramen de yuzu leve e cítrico" },
+      { name: "Torikizoku (yakitori)", priceBRL: 83, yen: "¥2500", desc: "TUDO ¥370: espetos + bebidas a noite toda" },
+      { name: "Shibuya/Harmonica Yokocho (izakaya crawl)", priceBRL: 99, yen: "¥3000", desc: "Vários bares, pratinhos + drinks" },
+      { name: "Okonomiyaki Mizuno (Osaka)", priceBRL: 50, yen: "¥1500", desc: "Bib Gourmand na chapa" },
+      { name: "Yakiniku em pé (Jiromaru)", priceBRL: 99, yen: "¥3000", desc: "Wagyu por espeto, sem taxa de serviço" },
+    ]},
+  { id: "doces", label: "Doces e cafés virais", emoji: "🍡",
+    note: "Encaixe 1/dia no 'lazer' da diária — nenhum passa de R$45.",
+    items: [
+      { name: "Crepe da Marion (Takeshita St.)", priceBRL: 23, yen: "¥700", desc: "O crepe original de Harajuku" },
+      { name: "A Happy Pancake (soufflé)", priceBRL: 43, yen: "¥1300", desc: "A panqueca que balança" },
+      { name: "Taiyaki (peixinho de massa)", priceBRL: 8, yen: "¥250", desc: "Recheio de anko ou creme, na rua" },
+      { name: "Cream puff do Totoro (Shirohige)", priceBRL: 20, yen: "¥600", desc: "A carolina mais fofa do mundo" },
+      { name: "Pudim / mochi de konbini", priceBRL: 10, yen: "¥300", desc: "Sobremesa de ¥300 nível confeitaria" },
+      { name: "Matcha + doce em Kyoto (Nishiki)", priceBRL: 30, yen: "¥900", desc: "Chá batido na hora c/ wagashi" },
+    ]},
 ];
