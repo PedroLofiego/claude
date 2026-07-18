@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowDown, ArrowLeft, ArrowUp, BedDouble, Calendar, Check, ClipboardCopy,
   ExternalLink, FileDown, FileJson, Map as MapIcon, Minus, PackageCheck, Plus,
-  ShoppingBag, Ticket, Train, Trash2, Wallet,
+  ShoppingBag, Ticket, Train, Trash2, Utensils, Wallet,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import {
   CITIES, DAILY_STYLES, intercityRoute, JAPAN_ITINERARY, JAPAN_POIS,
-  JAPAN_TRIP, LODGING_AREAS, POI_CATEGORIES, SHOPPING_GUIDE, TRANSPORT_GUIDE,
+  FOOD_GUIDE, JAPAN_TRIP, LODGING_AREAS, POI_CATEGORIES, SHOPPING_GUIDE,
+  TRANSPORT_GUIDE,
 } from "./japanData.js";
 import { formatBRL } from "../lib/calc.js";
 import { copyToClipboard, downloadTextFile } from "../lib/report.js";
@@ -54,6 +55,7 @@ const TABS = [
   { id: "bases", label: "Bases & Hotéis", icon: BedDouble },
   { id: "transporte", label: "Transporte", icon: Train },
   { id: "roteiro", label: "Roteiro", icon: Calendar },
+  { id: "comida", label: "Comida", icon: Utensils },
   { id: "orcamento", label: "Orçamento", icon: Wallet },
   { id: "compras", label: "Compras", icon: ShoppingBag },
   { id: "plano", label: "Meu Plano", icon: PackageCheck },
@@ -381,6 +383,8 @@ export default function JapanApp() {
         {tab === "transporte" && <TransportTab legs={legs} budget={budget} />}
 
         {tab === "roteiro" && <ItineraryTab />}
+
+        {tab === "comida" && <FoodTab style={style} budget={budget} />}
 
         {tab === "compras" && <ShoppingTab />}
 
@@ -777,6 +781,14 @@ function BudgetTab({ budget, stayRows, style, dailyStyle, setDailyStyle, selecte
                   <span>{formatBRL(s.foodBRL + s.transportBRL + s.funBRL)}/dia/pessoa</span>
                 </div>
                 <div className="mt-0.5 text-slate-400">{s.desc}</div>
+                {s.meals && (
+                  <div className="mt-1.5 flex flex-wrap gap-2 text-[10px] text-slate-400">
+                    <span>🏪 café {formatBRL(s.meals.breakfast)}</span>
+                    <span>🍛 almoço {formatBRL(s.meals.lunch)}</span>
+                    <span>🔥 janta {formatBRL(s.meals.dinner)}</span>
+                    <span className="ml-auto font-semibold text-slate-300">= {formatBRL(s.foodBRL)} comida/dia</span>
+                  </div>
+                )}
               </button>
             ))}
           </div>
@@ -1021,5 +1033,81 @@ function ShoppingTab() {
         ))}
       </div>
     </section>
+  );
+}
+
+function FoodTab({ style, budget }) {
+  const m = style.meals ?? { breakfast: 0, lunch: 0, dinner: 0 };
+  const foodDay = style.foodBRL;
+  const foodTrip = foodDay * budget.P * budget.D;
+  return (
+    <section className="space-y-4">
+      <div className="card border-amber-400/20 bg-gradient-to-r from-amber-500/10 to-rose-500/10 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-bold text-white">
+              🍜 A conta da comida — no estilo de vocês
+            </h3>
+            <p className="mt-1 text-xs text-slate-300">
+              Café no 7-Eleven → almoço na rua → janta de esquina ou hypada das redes.
+              Já está DENTRO da diária do orçamento (estilo "{style.label}").
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 text-center">
+            <MealStat emoji="🏪" label="Café" value={m.breakfast} />
+            <MealStat emoji="🍛" label="Almoço" value={m.lunch} />
+            <MealStat emoji="🔥" label="Janta" value={m.dinner} />
+            <div className="rounded-xl bg-white/10 px-3 py-2">
+              <div className="text-[10px] uppercase tracking-wider text-slate-300">Dia/pessoa</div>
+              <div className="text-lg font-bold text-white">{formatBRL(foodDay)}</div>
+              <div className="text-[10px] text-slate-400">
+                {formatBRL(foodTrip)} na viagem ({budget.P}p)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="anim-stagger space-y-4">
+        {FOOD_GUIDE.map((sec) => (
+          <div key={sec.id} className="card p-5">
+            <h3 className="text-sm font-bold text-white">{sec.emoji} {sec.label}</h3>
+            <p className="mt-0.5 text-[11px] text-slate-400">{sec.note}</p>
+            <ul className="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-2">
+              {sec.items.map((it) => (
+                <li
+                  key={it.name}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 transition hover:bg-white/[0.06]"
+                >
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-white">{it.name}</div>
+                    <div className="text-[11px] text-slate-400">{it.desc}</div>
+                  </div>
+                  <div className="flex-none text-right">
+                    <div className="text-sm font-bold text-white">{formatBRL(it.priceBRL)}</div>
+                    <div className="text-[10px] text-slate-500">{it.yen}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="card p-4 text-xs text-slate-300">
+        💡 Dicas de ouro: água/chá do konbini (¥110) em vez de restaurante; máquinas de venda
+        têm café quente (¥130); depachika depois das 19h30 = bentos gourmet pela metade;
+        gorjeta NÃO existe no Japão — o preço é o preço.
+      </div>
+    </section>
+  );
+}
+
+function MealStat({ emoji, label, value }) {
+  return (
+    <div className="rounded-xl bg-white/5 px-3 py-2">
+      <div className="text-[10px] uppercase tracking-wider text-slate-400">{emoji} {label}</div>
+      <div className="text-sm font-bold text-white">{formatBRL(value)}</div>
+    </div>
   );
 }
