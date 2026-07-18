@@ -271,31 +271,7 @@ export default function JapanApp() {
 
   return (
     <div className="mx-auto min-h-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-      <header className="anim-in flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="floaty grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 text-2xl shadow-soft">
-            🇯🇵
-          </div>
-          <div>
-            <h1 className="text-xl font-extrabold tracking-tight sm:text-2xl">
-              <span className="gradient-text">Japão</span>{" "}
-              <span className="text-white">· Acompanhamento da viagem</span>
-            </h1>
-            <p className="text-xs text-slate-400 sm:text-sm">
-              {JAPAN_TRIP.arrive} → {JAPAN_TRIP.depart} · {D} dias ·{" "}
-              {stayRows.map((s) => `${s.city?.label} ${s.nights}n`).join(" + ")} · voos ✅
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 no-print">
-          <button type="button" className="btn-ghost" onClick={onPdf}>
-            <FileDown size={14} /> PDF
-          </button>
-          <a href="#/" className="btn-ghost">
-            <ArrowLeft size={14} /> Planejador
-          </a>
-        </div>
-      </header>
+      <Hero stayRows={stayRows} days={D} onPdf={onPdf} />
 
       <div className="anim-stagger mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatusCard label="Restante p/ gastar" value={formatBRL(remainingBudget)} sub={`de ${formatBRL(JAPAN_TRIP.totalBudgetBRL)} (voos pagos)`} />
@@ -420,6 +396,64 @@ export default function JapanApp() {
         asageiko de sumô e restaurantes concorridos. Iluminações vão até 25/dez — vocês pegam!
       </footer>
     </div>
+  );
+}
+
+const HERO_IMAGES = [
+  { url: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1600&q=75", alt: "Tóquio — Tokyo Tower entre prédios" },
+  { url: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1600&q=75", alt: "Toriis vermelhos de Fushimi Inari" },
+  { url: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1600&q=75", alt: "Neon noturno de Tóquio" },
+  { url: "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=1600&q=75", alt: "Monte Fuji e pagode Chureito" },
+];
+
+function Hero({ stayRows, days, onPdf }) {
+  return (
+    <header className="anim-in card relative h-60 overflow-hidden sm:h-72">
+      {HERO_IMAGES.map((img, i) => (
+        <img
+          key={img.url}
+          src={img.url}
+          alt={img.alt}
+          loading={i === 0 ? "eager" : "lazy"}
+          className="hero-img"
+          style={{ animationDelay: `${i * 6}s` }}
+          onError={(e) => (e.currentTarget.style.display = "none")}
+        />
+      ))}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#070a1a] via-[#070a1a]/55 to-[#070a1a]/10" />
+
+      <div className="absolute right-4 top-4 flex items-center gap-2 no-print">
+        <button type="button" className="btn-ghost backdrop-blur-md" onClick={onPdf}>
+          <FileDown size={14} /> PDF
+        </button>
+        <a href="#/" className="btn-ghost backdrop-blur-md">
+          <ArrowLeft size={14} /> Planejador
+        </a>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-rose-300/90">
+              VoaJá apresenta
+            </div>
+            <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              <span className="gradient-text">Japão</span>{" "}
+              <span className="text-white">2026</span>
+            </h1>
+            <p className="mt-1 text-xs text-slate-300 sm:text-sm">
+              {JAPAN_TRIP.arrive} → {JAPAN_TRIP.depart} · {days} dias ·{" "}
+              {stayRows.map((s) => `${s.city?.label} ${s.nights}n`).join(" + ")} · voos ✅
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            <span className="chip backdrop-blur-md">🗺️ 96 lugares mapeados</span>
+            <span className="chip backdrop-blur-md">♨️ onsen tattoo-OK</span>
+            <span className="chip backdrop-blur-md">🎄 iluminações de dez</span>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
 
