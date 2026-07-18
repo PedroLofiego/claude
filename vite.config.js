@@ -12,4 +12,16 @@ export default defineConfig({
     host: true,
     port: 5173,
   },
+  build: {
+    // Divide vendors em chunks próprios: melhora cache entre deploys e
+    // permite carregar Leaflet em paralelo com o código do app.
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          leaflet: ["leaflet", "react-leaflet"],
+        },
+      },
+    },
+  },
 });
