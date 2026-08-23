@@ -205,7 +205,7 @@ function Header() {
         </div>
         <div>
           <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-            VoaJá · Planejador de Orçamento
+            VoaJá <span className="text-slate-500">·</span> Planejador de Orçamento
           </h1>
           <p className="text-xs text-slate-400 sm:text-sm">
             Compare destinos internacionais, monte combos de várias cidades e simule cenários.
@@ -213,11 +213,10 @@ function Header() {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <a
-          href="#/japao"
-          className="inline-flex items-center gap-2 rounded-xl border border-rose-400/40 bg-gradient-to-r from-rose-500/25 to-red-500/25 px-4 py-2 text-sm font-bold text-rose-50 shadow-soft transition hover:from-rose-500/40 hover:to-red-500/40"
-        >
-          🇯🇵 Viagem escolhida: Japão →
+        <a href="#/japao" className="btn cta-japan">
+          <span className="text-base leading-none">🇯🇵</span>
+          Viagem escolhida: Japão
+          <span aria-hidden="true" className="cta-arrow">→</span>
         </a>
         <span className="chip">v1.0 · 40 destinos</span>
       </div>
