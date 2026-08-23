@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowDown, ArrowLeft, ArrowUp, BedDouble, Calendar, Check, ClipboardCopy,
-  ExternalLink, FileDown, FileJson, Map as MapIcon, Minus, PackageCheck, Plus,
-  ShoppingBag, Ticket, Train, Trash2, Utensils, Wallet,
+  Compass, ExternalLink, FileDown, FileJson, Map as MapIcon, Minus, PackageCheck,
+  Plus, ShoppingBag, Ticket, Train, Trash2, Utensils, Wallet,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import {
-  CITIES, DAILY_STYLES, intercityRoute, JAPAN_ITINERARY, JAPAN_POIS,
+  CITIES, DAILY_STYLES, inferCity, intercityRoute, JAPAN_ITINERARY, JAPAN_POIS,
   FOOD_GUIDE, JAPAN_TRIP, LODGING_AREAS, POI_CATEGORIES, SHOPPING_GUIDE,
   TRANSPORT_GUIDE,
 } from "./japanData.js";
@@ -51,6 +51,7 @@ function loadState() {
 }
 
 const TABS = [
+  { id: "descubra", label: "Descubra", icon: Compass },
   { id: "mapa", label: "Mapa", icon: MapIcon },
   { id: "bases", label: "Bases & Hotéis", icon: BedDouble },
   { id: "transporte", label: "Transporte", icon: Train },
@@ -71,7 +72,7 @@ const tierLabel = (t) =>
 
 export default function JapanApp() {
   const saved = useMemo(loadState, []);
-  const [tab, setTab] = useState("mapa");
+  const [tab, setTab] = useState("descubra");
   const [selectedIds, setSelectedIds] = useState(
     () => new Set(saved?.selected ?? ["shibuya-sky", "teamlab", "sumo", "sensoji", "hakone"])
   );
@@ -344,6 +345,14 @@ export default function JapanApp() {
       </nav>
 
       <main className="anim-in mt-4 space-y-5">
+        {tab === "descubra" && (
+          <DiscoverTab
+            selectedIds={selectedIds}
+            onToggle={togglePoi}
+            onGoToMap={() => setTab("mapa")}
+          />
+        )}
+
         {tab === "mapa" && (
           <JapanMap selectedIds={selectedIds} onToggle={togglePoi} bases={baseAreas} />
         )}
@@ -449,7 +458,7 @@ function Hero({ stayRows, days, onPdf }) {
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5">
-            <span className="chip backdrop-blur-md">🗺️ 96 lugares mapeados</span>
+            <span className="chip backdrop-blur-md">🗺️ {JAPAN_POIS.length} lugares mapeados</span>
             <span className="chip backdrop-blur-md">♨️ onsen tattoo-OK</span>
             <span className="chip backdrop-blur-md">🎄 iluminações de dez</span>
           </div>
@@ -1150,5 +1159,246 @@ function MealStat({ emoji, label, value }) {
       <div className="text-[10px] uppercase tracking-wider text-slate-400">{emoji} {label}</div>
       <div className="text-sm font-bold text-white">{formatBRL(value)}</div>
     </div>
+  );
+}
+
+// ==== Aba Descubra: "o que você quer ver e onde?" ====
+const PRICE_FILTERS = [
+  { id: "all", label: "Qualquer preço" },
+  { id: "free", label: "Só grátis" },
+  { id: "cheap", label: "Até R$100" },
+  { id: "mid", label: "Até R$250" },
+];
+
+function DiscoverTab({ selectedIds, onToggle, onGoToMap }) {
+  const [cities, setCities] = useState(new Set());
+  const [cats, setCats] = useState(new Set());
+  const [price, setPrice] = useState("all");
+  const [query, setQuery] = useState("");
+
+  const toggleIn = (setter) => (value) =>
+    setter((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
+  const toggleCity = toggleIn(setCities);
+  const toggleCat = toggleIn(setCats);
+
+  const withCity = useMemo(
+    () => JAPAN_POIS.map((p) => ({ ...p, cityId: inferCity(p.lat, p.lng) })),
+    []
+  );
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return withCity.filter((p) => {
+      if (cities.size && !cities.has(p.cityId)) return false;
+      if (cats.size && !cats.has(p.cat)) return false;
+      if (price === "free" && p.costBRL > 0) return false;
+      if (price === "cheap" && p.costBRL > 100) return false;
+      if (price === "mid" && p.costBRL > 250) return false;
+      if (q && !(`${p.name} ${p.desc} ${p.tip}`.toLowerCase().includes(q))) return false;
+      return true;
+    });
+  }, [withCity, cities, cats, price, query]);
+
+  const grouped = CITIES.map((c) => ({
+    city: c,
+    pois: results.filter((p) => p.cityId === c.id),
+  })).filter((g) => g.pois.length > 0);
+
+  const clearAll = () => {
+    setCities(new Set());
+    setCats(new Set());
+    setPrice("all");
+    setQuery("");
+  };
+  const hasFilters = cities.size || cats.size || price !== "all" || query.trim();
+
+  return (
+    <section className="space-y-4">
+      <div className="card border-sky-400/20 bg-gradient-to-r from-sky-500/10 to-indigo-500/10 p-5">
+        <h3 className="text-base font-bold text-white">
+          <Compass size={16} className="mr-1.5 inline -mt-1 text-sky-300" />
+          O que vocês querem ver — e onde?
+        </h3>
+        <p className="mt-1 text-xs text-slate-300">
+          Escolha o tipo de passeio e a cidade. São {JAPAN_POIS.length} lugares mapeados;
+          o resultado vem agrupado por região p/ vocês se localizarem.
+        </p>
+
+        <div className="mt-4 space-y-3">
+          <div>
+            <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              1. Onde?
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {CITIES.map((c) => {
+                const on = cities.has(c.id);
+                const count = withCity.filter((p) => p.cityId === c.id).length;
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => toggleCity(c.id)}
+                    className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
+                      on
+                        ? "border-sky-400/60 bg-sky-500/25 text-sky-50"
+                        : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                    }`}
+                  >
+                    {c.emoji} {c.label}{" "}
+                    <span className="font-normal opacity-60">({count})</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              2. O que curtem?
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {POI_CATEGORIES.map((c) => {
+                const on = cats.has(c.id);
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => toggleCat(c.id)}
+                    className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
+                      on
+                        ? "border-white/25 bg-white/15 text-white"
+                        : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                    }`}
+                    style={on ? { borderColor: c.color + "88", background: c.color + "26" } : undefined}
+                  >
+                    {c.emoji} {c.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-end gap-3">
+            <div>
+              <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                3. Preço
+              </div>
+              <div className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1 text-xs">
+                {PRICE_FILTERS.map((f) => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => setPrice(f.id)}
+                    className={`rounded-lg px-2.5 py-1.5 font-semibold transition ${
+                      price === f.id
+                        ? "bg-sky-500/30 text-sky-50 ring-1 ring-inset ring-sky-400/40"
+                        : "text-slate-300 hover:text-white"
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="min-w-[180px] flex-1">
+              <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                Buscar
+              </div>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="ex.: aquário, jardim, anime…"
+                className="input"
+              />
+            </div>
+            {hasFilters ? (
+              <button type="button" className="btn-ghost" onClick={clearAll}>
+                Limpar filtros
+              </button>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="text-sm text-slate-300">
+          <span className="font-bold text-white">{results.length}</span> lugares encontrados
+          {grouped.length > 1 && ` em ${grouped.length} regiões`}
+        </div>
+        <button type="button" className="btn-ghost no-print" onClick={onGoToMap}>
+          <MapIcon size={14} /> Ver no mapa
+        </button>
+      </div>
+
+      {results.length === 0 && (
+        <div className="card p-6 text-center text-sm text-slate-300">
+          Nada com esses filtros. Tente tirar alguma categoria ou aumentar o limite de preço.
+        </div>
+      )}
+
+      <div className="anim-stagger space-y-4">
+        {grouped.map(({ city, pois }) => (
+          <div key={city.id} className="card p-5">
+            <h4 className="mb-3 text-sm font-bold text-white">
+              {city.emoji} {city.label}{" "}
+              <span className="font-normal text-slate-400">({pois.length} lugares)</span>
+            </h4>
+            <ul className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+              {pois.map((p) => {
+                const cat = POI_CATEGORIES.find((c) => c.id === p.cat);
+                const isSel = selectedIds.has(p.id);
+                return (
+                  <li
+                    key={p.id}
+                    className={`rounded-xl border p-3 transition ${
+                      isSel
+                        ? "border-emerald-400/40 bg-emerald-500/10"
+                        : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-white">
+                          {cat?.emoji} {p.name}
+                        </div>
+                        <div className="mt-0.5 text-[11px] text-slate-300">{p.desc}</div>
+                        <div className="mt-1 text-[10px] text-slate-400">
+                          ⏱ {p.duration} · 🚇 {p.transport}
+                        </div>
+                        {p.howToBuy && (
+                          <div className="mt-1 text-[10px] text-cyan-200/80">🎫 {p.howToBuy}</div>
+                        )}
+                      </div>
+                      <div className="flex-none text-right">
+                        <div className="text-sm font-bold text-white">
+                          {p.costBRL > 0 ? formatBRL(p.costBRL) : "Grátis"}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => onToggle(p.id)}
+                          className={`mt-1.5 rounded-lg px-2 py-1 text-[10px] font-bold transition ${
+                            isSel
+                              ? "bg-rose-500/25 text-rose-200 hover:bg-rose-500/40"
+                              : "bg-indigo-500/30 text-indigo-100 hover:bg-indigo-500/50"
+                          }`}
+                        >
+                          {isSel ? "✕ remover" : "+ ao plano"}
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
