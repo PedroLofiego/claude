@@ -312,7 +312,7 @@ export default function JapanApp() {
       </div>
 
       <nav className="sticky-tabs no-print mt-5">
-        <div className="card flex flex-wrap gap-1.5 p-2">
+        <div className="card tab-strip flex gap-1.5 p-2">
           {TABS.map((t) => {
             const Icon = t.icon;
             const on = tab === t.id;
@@ -321,7 +321,7 @@ export default function JapanApp() {
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
-                className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-semibold transition ${
+                className={`filter-pill inline-flex flex-none items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-semibold ${
                   on
                     ? "bg-rose-500/25 text-rose-50 ring-1 ring-inset ring-rose-400/50"
                     : "text-slate-300 hover:bg-white/10 hover:text-white"
@@ -419,7 +419,7 @@ const HERO_IMAGES = [
 
 function Hero({ stayRows, days, onPdf }) {
   return (
-    <header className="anim-in card relative h-60 overflow-hidden sm:h-72">
+    <header className="anim-in card relative min-h-[17rem] overflow-hidden sm:min-h-[18rem]">
       {HERO_IMAGES.map((img, i) => (
         <img
           key={img.url}
@@ -433,28 +433,33 @@ function Hero({ stayRows, days, onPdf }) {
       ))}
       <div className="absolute inset-0 bg-gradient-to-t from-[#070a1a] via-[#070a1a]/55 to-[#070a1a]/10" />
 
-      <div className="absolute right-4 top-4 flex items-center gap-2 no-print">
-        <button type="button" className="btn-ghost backdrop-blur-md" onClick={onPdf}>
-          <FileDown size={14} /> PDF
-        </button>
-        <a href="#/" className="btn-ghost backdrop-blur-md">
-          <ArrowLeft size={14} /> Planejador
-        </a>
-      </div>
+      <div className="relative flex h-full flex-col justify-between gap-4 p-5 sm:p-6">
+        <div className="flex items-center justify-end gap-2 no-print">
+          <button type="button" className="btn-ghost backdrop-blur-md" onClick={onPdf}>
+            <FileDown size={14} /> PDF
+          </button>
+          <a href="#/" className="btn-ghost backdrop-blur-md">
+            <ArrowLeft size={14} /> Planejador
+          </a>
+        </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-rose-300/90">
               VoaJá apresenta
             </div>
-            <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <h1 className="mt-1 text-4xl font-extrabold sm:text-5xl" style={{ letterSpacing: "-0.035em" }}>
               <span className="gradient-text">Japão</span>{" "}
               <span className="text-white">2026</span>
             </h1>
-            <p className="mt-1 text-xs text-slate-300 sm:text-sm">
-              {JAPAN_TRIP.arrive} → {JAPAN_TRIP.depart} · {days} dias ·{" "}
-              {stayRows.map((s) => `${s.city?.label} ${s.nights}n`).join(" + ")} · voos ✅
+            <p className="mt-1.5 text-xs text-slate-300/90 sm:text-sm">
+              {JAPAN_TRIP.arrive} → {JAPAN_TRIP.depart}
+              <span className="mx-1.5 text-slate-500">·</span>
+              {days} dias
+              <span className="mx-1.5 text-slate-500">·</span>
+              {stayRows.map((s) => `${s.city?.label} ${s.nights}n`).join(" + ")}
+              <span className="mx-1.5 text-slate-500">·</span>
+              voos ✅
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -548,7 +553,7 @@ function StaysTab({ stays, setStays, stayRows, legs, budget }) {
               key={p.label}
               type="button"
               onClick={() => setStays(p.stays.map((s) => ({ ...s })))}
-              className="rounded-lg border border-rose-400/30 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-100 transition hover:bg-rose-500/20"
+              className="filter-pill rounded-lg border border-rose-400/30 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-100 hover:bg-rose-500/20"
             >
               {p.label}
             </button>
@@ -574,7 +579,7 @@ function StaysTab({ stays, setStays, stayRows, legs, budget }) {
                       key={c.id}
                       type="button"
                       onClick={() => setCity(i, c.id)}
-                      className={`rounded-lg px-2.5 py-1.5 font-semibold transition ${
+                      className={`filter-pill rounded-lg px-2.5 py-1.5 font-semibold ${
                         s.area?.city === c.id
                           ? "bg-rose-500/30 text-rose-50 ring-1 ring-inset ring-rose-400/40"
                           : "text-slate-300 hover:text-white"
@@ -630,7 +635,7 @@ function StaysTab({ stays, setStays, stayRows, legs, budget }) {
                           key={a.id}
                           type="button"
                           onClick={() => update(i, { areaId: a.id })}
-                          className={`rounded-xl border p-3 text-left text-xs transition ${
+                          className={`filter-pill rounded-xl border p-3 text-left text-xs ${
                             on
                               ? "border-rose-400/50 bg-rose-500/10"
                               : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
@@ -663,7 +668,7 @@ function StaysTab({ stays, setStays, stayRows, legs, budget }) {
                         key={t.id}
                         type="button"
                         onClick={() => update(i, { tier: t.id })}
-                        className={`flex-1 rounded-lg px-2 py-1.5 font-semibold transition ${
+                        className={`filter-pill flex-1 rounded-lg px-2 py-1.5 font-semibold ${
                           s.tier === t.id
                             ? "bg-rose-500/30 text-rose-50 ring-1 ring-inset ring-rose-400/40"
                             : "text-slate-300"
@@ -815,7 +820,7 @@ function BudgetTab({ budget, stayRows, style, dailyStyle, setDailyStyle, selecte
                 key={s.id}
                 type="button"
                 onClick={() => setDailyStyle(s.id)}
-                className={`w-full rounded-xl border p-3 text-left text-xs transition ${
+                className={`filter-pill w-full rounded-xl border p-3 text-left text-xs ${
                   dailyStyle === s.id
                     ? "border-rose-400/50 bg-rose-500/10 text-white"
                     : "border-white/10 bg-white/[0.03] text-slate-300 hover:bg-white/[0.06]"
@@ -1060,7 +1065,7 @@ function ShoppingTab() {
               {sec.items.map((it) => (
                 <li
                   key={it.name}
-                  className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 transition hover:bg-white/[0.06]"
+                  className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 row-hover"
                 >
                   <div className="min-w-0">
                     <div className="text-xs font-bold text-white">{it.name}</div>
@@ -1127,7 +1132,7 @@ function FoodTab({ style, budget }) {
               {sec.items.map((it) => (
                 <li
                   key={it.name}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 transition hover:bg-white/[0.06]"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 row-hover"
                 >
                   <div className="min-w-0">
                     <div className="text-xs font-bold text-white">{it.name}</div>
@@ -1219,7 +1224,7 @@ function DiscoverTab({ selectedIds, onToggle, onGoToMap }) {
 
   return (
     <section className="space-y-4">
-      <div className="card border-sky-400/20 bg-gradient-to-r from-sky-500/10 to-indigo-500/10 p-5">
+      <div className="card panel-accent p-5">
         <h3 className="text-base font-bold text-white">
           <Compass size={16} className="mr-1.5 inline -mt-1 text-sky-300" />
           O que vocês querem ver — e onde?
@@ -1243,7 +1248,7 @@ function DiscoverTab({ selectedIds, onToggle, onGoToMap }) {
                     key={c.id}
                     type="button"
                     onClick={() => toggleCity(c.id)}
-                    className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
+                    className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
                       on
                         ? "border-sky-400/60 bg-sky-500/25 text-sky-50"
                         : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
@@ -1269,7 +1274,7 @@ function DiscoverTab({ selectedIds, onToggle, onGoToMap }) {
                     key={c.id}
                     type="button"
                     onClick={() => toggleCat(c.id)}
-                    className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
+                    className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
                       on
                         ? "border-white/25 bg-white/15 text-white"
                         : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
@@ -1294,7 +1299,7 @@ function DiscoverTab({ selectedIds, onToggle, onGoToMap }) {
                     key={f.id}
                     type="button"
                     onClick={() => setPrice(f.id)}
-                    className={`rounded-lg px-2.5 py-1.5 font-semibold transition ${
+                    className={`filter-pill rounded-lg px-2.5 py-1.5 font-semibold ${
                       price === f.id
                         ? "bg-sky-500/30 text-sky-50 ring-1 ring-inset ring-sky-400/40"
                         : "text-slate-300 hover:text-white"
@@ -1356,7 +1361,7 @@ function DiscoverTab({ selectedIds, onToggle, onGoToMap }) {
                 return (
                   <li
                     key={p.id}
-                    className={`rounded-xl border p-3 transition ${
+                    className={`filter-pill rounded-xl border p-3 ${
                       isSel
                         ? "border-emerald-400/40 bg-emerald-500/10"
                         : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
@@ -1382,7 +1387,7 @@ function DiscoverTab({ selectedIds, onToggle, onGoToMap }) {
                         <button
                           type="button"
                           onClick={() => onToggle(p.id)}
-                          className={`mt-1.5 rounded-lg px-2 py-1 text-[10px] font-bold transition ${
+                          className={`filter-pill mt-1.5 rounded-lg px-2 py-1 text-[10px] font-bold ${
                             isSel
                               ? "bg-rose-500/25 text-rose-200 hover:bg-rose-500/40"
                               : "bg-indigo-500/30 text-indigo-100 hover:bg-indigo-500/50"

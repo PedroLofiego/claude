@@ -2,14 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   DESIGN TOKENS
+   Curvas fortes (as nativas do CSS são fracas demais),
+   elevação em camadas e ritmo de opacidade consistente.
+   ============================================================ */
 :root {
   color-scheme: dark;
+
+  /* Easing — ease-out para entrada, ease-in-out para movimento */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-soft: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Duração — UI abaixo de 300ms */
+  --dur-press: 130ms;
+  --dur-fast: 180ms;
+  --dur-base: 240ms;
+
+  /* Superfícies em camadas */
+  --surface-1: rgba(255, 255, 255, 0.035);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --surface-3: rgba(255, 255, 255, 0.09);
+  --line-1: rgba(255, 255, 255, 0.08);
+  --line-2: rgba(255, 255, 255, 0.16);
+
+  /* Elevação: sombra + luz de topo (o que dá sensação de vidro real) */
+  --elev-1: 0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+            0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --elev-2: 0 1px 0 0 rgba(255, 255, 255, 0.09) inset,
+            0 18px 40px -18px rgba(0, 0, 0, 0.75);
+
+  --brand: 99, 102, 241;
+  --accent: 244, 63, 94;
 }
 
 html,
 body,
 #root {
   height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -19,36 +54,69 @@ body {
     radial-gradient(1100px 600px at 85% -10%, rgba(99, 102, 241, 0.18), transparent 60%),
     radial-gradient(900px 500px at -10% 10%, rgba(6, 182, 212, 0.14), transparent 60%),
     linear-gradient(180deg, #070a1a 0%, #0b1020 60%, #070a1a 100%);
+  background-attachment: fixed;
   color: #e6e8f2;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Tipografia refinada: ligaturas contextuais + zero cortado */
+  font-feature-settings: "cv11", "ss01";
+  font-variant-ligatures: contextual;
+}
+
+/* Títulos com tracking óptico — quanto maior o texto, mais fechado */
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+h1 {
+  letter-spacing: -0.03em;
+}
+
+/* Números alinhados em colunas — essencial num app de orçamento.
+   Sem isso, "R$ 1.111" e "R$ 8.888" ficam com larguras diferentes. */
+.tabular-nums,
+.card [class*="font-bold"],
+.card [class*="font-semibold"] {
+  font-variant-numeric: tabular-nums;
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-soft;
-  }
-  .card-hover {
-    @apply transition hover:border-white/20 hover:bg-white/[0.06];
+    @apply rounded-2xl border backdrop-blur-md;
+    border-color: var(--line-1);
+    background: var(--surface-1);
+    box-shadow: var(--elev-1);
   }
   .chip {
-    @apply inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-slate-200;
+    @apply inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium text-slate-200;
+    border-color: var(--line-1);
+    background: var(--surface-2);
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50;
+    /* Nunca focus:outline-none sem substituto — a11y */
+    outline: none;
   }
   .btn-primary {
-    @apply btn bg-gradient-to-br from-indigo-500 to-cyan-500 text-white shadow-soft hover:from-indigo-400 hover:to-cyan-400;
+    @apply btn text-white;
+    background: linear-gradient(135deg, rgb(99, 102, 241), rgb(6, 182, 212));
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.18) inset,
+                0 8px 20px -8px rgba(99, 102, 241, 0.6);
   }
   .btn-ghost {
-    @apply btn border border-white/10 bg-white/5 text-slate-100 hover:bg-white/10;
+    @apply btn border text-slate-100;
+    border-color: var(--line-1);
+    background: var(--surface-2);
   }
   .input,
   .select {
-    @apply w-full rounded-xl border border-white/10 bg-white/[0.06] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 focus:border-indigo-400/60 focus:outline-none focus:ring-2 focus:ring-indigo-400/30;
+    @apply w-full rounded-xl border px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500;
+    border-color: var(--line-1);
+    background: var(--surface-2);
+    outline: none;
   }
   .label {
-    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-300;
+    @apply mb-1.5 block text-xs font-semibold uppercase text-slate-400;
+    letter-spacing: 0.06em;
   }
   .badge-ok {
     @apply inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-semibold text-emerald-300 ring-1 ring-inset ring-emerald-400/30;
@@ -61,14 +129,86 @@ body {
   }
 }
 
-::selection {
-  background: rgba(99, 102, 241, 0.35);
-  color: #fff;
+/* ============================================================
+   TRANSIÇÕES — propriedades explícitas, nunca `all`
+   ============================================================ */
+.card {
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
-/* ===== Motion / polish ===== */
+.btn {
+  transform: translateZ(0);
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.chip {
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.input,
+.select {
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.input:focus,
+.select:focus {
+  border-color: rgba(var(--brand), 0.6);
+  box-shadow: 0 0 0 3px rgba(var(--brand), 0.18);
+}
+
+/* Foco visível consistente para teclado (a11y sem poluir o mouse) */
+.btn:focus-visible,
+.chip:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  box-shadow: 0 0 0 2px rgba(9, 12, 28, 1), 0 0 0 4px rgba(var(--brand), 0.7);
+}
+
+/* Press: feedback instantâneo. Vale para todo elemento clicável. */
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+
+/* Hover só onde existe mouse de verdade — em touch, hover gruda no tap */
+@media (hover: hover) and (pointer: fine) {
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--surface-3);
+    border-color: var(--line-2);
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.22) inset,
+                0 12px 26px -8px rgba(99, 102, 241, 0.75);
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-2);
+    background: var(--surface-2);
+    box-shadow: var(--elev-2);
+  }
+  .chip:hover {
+    border-color: var(--line-2);
+  }
+}
+
+/* ============================================================
+   MOTION
+   ============================================================ */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: none; }
 }
 @keyframes floaty {
@@ -80,24 +220,32 @@ body {
   100% { background-position: 200% 50%; }
 }
 @keyframes pulseRing {
-  0%   { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.35); }
-  70%  { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(var(--accent), 0.35); }
+  70%  { box-shadow: 0 0 0 10px rgba(var(--accent), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--accent), 0); }
 }
 
-.anim-in { animation: fadeUp 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
-.anim-stagger > * { animation: fadeUp 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
-.anim-stagger > *:nth-child(1) { animation-delay: 0.02s; }
-.anim-stagger > *:nth-child(2) { animation-delay: 0.06s; }
-.anim-stagger > *:nth-child(3) { animation-delay: 0.1s; }
-.anim-stagger > *:nth-child(4) { animation-delay: 0.14s; }
-.anim-stagger > *:nth-child(5) { animation-delay: 0.18s; }
-.anim-stagger > *:nth-child(6) { animation-delay: 0.22s; }
-.anim-stagger > *:nth-child(7) { animation-delay: 0.26s; }
-.anim-stagger > *:nth-child(8) { animation-delay: 0.3s; }
+.anim-in {
+  animation: fadeUp 320ms var(--ease-out) both;
+}
 
-.floaty { animation: floaty 3.5s ease-in-out infinite; }
-.pulse-ring { animation: pulseRing 2.4s ease-out infinite; }
+/* Stagger de 45ms — cascata perceptível sem atrasar a leitura */
+.anim-stagger > * {
+  animation: fadeUp 340ms var(--ease-out) both;
+}
+.anim-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.anim-stagger > *:nth-child(2) { animation-delay: 45ms; }
+.anim-stagger > *:nth-child(3) { animation-delay: 90ms; }
+.anim-stagger > *:nth-child(4) { animation-delay: 135ms; }
+.anim-stagger > *:nth-child(5) { animation-delay: 180ms; }
+.anim-stagger > *:nth-child(6) { animation-delay: 225ms; }
+.anim-stagger > *:nth-child(7) { animation-delay: 270ms; }
+.anim-stagger > *:nth-child(8) { animation-delay: 300ms; }
+/* Teto de 300ms: itens 9+ entram juntos em vez de arrastar a cascata */
+.anim-stagger > *:nth-child(n + 9) { animation-delay: 300ms; }
+
+.floaty { animation: floaty 3.5s var(--ease-in-out) infinite; }
+.pulse-ring { animation: pulseRing 2.4s var(--ease-out) infinite; }
 
 .gradient-text {
   background: linear-gradient(90deg, #fb7185, #f59e0b, #fb7185);
@@ -108,17 +256,120 @@ body {
   color: transparent;
 }
 
-.card {
-  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), border-color 0.25s, background-color 0.25s;
+/* Barras de progresso: movimento é o dado mudando, então ease-in-out */
+.bar-animated {
+  transition: width 520ms var(--ease-in-out);
 }
-.card-hover:hover { transform: translateY(-3px); }
 
-.bar-animated { transition: width 0.6s cubic-bezier(0.2, 0.7, 0.3, 1); }
+/* CTA do Japão — a seta anda no hover, sinalizando "leva a outro lugar" */
+.cta-japan {
+  border: 1px solid rgba(var(--accent), 0.4);
+  background: linear-gradient(135deg, rgba(var(--accent), 0.28), rgba(220, 38, 38, 0.24));
+  color: #fff1f2;
+  font-weight: 700;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.12) inset,
+              0 8px 20px -10px rgba(var(--accent), 0.7);
+}
+.cta-arrow {
+  display: inline-block;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cta-japan:hover {
+    border-color: rgba(var(--accent), 0.7);
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.16) inset,
+                0 12px 26px -10px rgba(var(--accent), 0.9);
+  }
+  .cta-japan:hover .cta-arrow {
+    transform: translateX(3px);
+  }
+}
+
+/* Painel em destaque: acento é uma faixa de luz no topo,
+   não um banho de cor — mantém o painel na mesma família dos cards */
+.panel-accent {
+  position: relative;
+  border-color: rgba(56, 189, 248, 0.22);
+  background:
+    linear-gradient(180deg, rgba(56, 189, 248, 0.07), transparent 40%),
+    var(--surface-1);
+}
+.panel-accent::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(125, 211, 252, 0.5),
+    transparent
+  );
+}
+
+/* Linhas de lista clicáveis (compras, comida) */
+.row-hover {
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .row-hover:hover {
+    background: var(--surface-2);
+    border-color: var(--line-2);
+  }
+}
+
+/* Filtros/toggles: mesmo press feedback dos botões, sem virar .btn */
+.filter-pill {
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+.filter-pill:active {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .filter-pill:active { transform: none; }
+  .cta-japan:hover .cta-arrow { transform: none; }
+}
 
 .sticky-tabs {
   position: sticky;
   top: 8px;
   z-index: 1100;
+}
+/* Barra de abas ganha peso ao descolar do topo */
+.sticky-tabs > .card {
+  box-shadow: var(--elev-2);
+}
+
+/* Abas: uma linha só, deslizando na horizontal.
+   9 abas quebrando em 5 linhas no celular é o pior cenário —
+   uma faixa rolável mantém a hierarquia e o polegar alcança tudo. */
+.tab-strip {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  /* Esmaece as pontas p/ sinalizar que há mais conteúdo */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+.tab-strip::-webkit-scrollbar { display: none; }
+.tab-strip > * { scroll-snap-align: start; }
+
+/* Em telas largas cabe tudo: sem máscara nem rolagem */
+@media (min-width: 1180px) {
+  .tab-strip {
+    overflow-x: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 /* ===== Hero com imagens em rotação (Ken Burns) ===== */
@@ -139,26 +390,37 @@ body {
   will-change: opacity, transform;
   animation: heroCycle 24s linear infinite;
 }
-@media (prefers-reduced-motion: reduce) {
-  .hero-img { animation: none; }
-  .hero-img:first-child { opacity: 1; }
-  .floaty, .pulse-ring, .gradient-text { animation: none; }
-}
 
 /* Loader da tela inicial */
 @keyframes loaderSlide {
   0%   { transform: translateX(-120%); }
   100% { transform: translateX(420%); }
 }
-.loader-bar { animation: loaderSlide 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+.loader-bar { animation: loaderSlide 1.1s var(--ease-in-out) infinite; }
 
-/* Micro-interações */
-.btn { transform: translateZ(0); transition: transform 0.15s ease, filter 0.2s ease; }
-.btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.08); }
-.btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
-.chip { transition: border-color 0.2s, background-color 0.2s; }
+/* ============================================================
+   ACESSIBILIDADE — movimento reduzido mantém opacidade,
+   remove deslocamento (o que causa enjoo)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-img { animation: none; }
+  .hero-img:first-child { opacity: 1; }
+  .floaty, .pulse-ring, .gradient-text, .loader-bar { animation: none; }
+  .anim-in, .anim-stagger > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .card-hover:hover { transform: none; }
+  .btn:active:not(:disabled) { transform: none; }
+  .bar-animated { transition-duration: 1ms; }
+}
 
-html { scroll-behavior: smooth; }
+::selection {
+  background: rgba(var(--brand), 0.35);
+  color: #fff;
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar {
@@ -168,11 +430,17 @@ html { scroll-behavior: smooth; }
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.18);
+  background-clip: content-box;
 }
 
+/* ============================================================
+   IMPRESSÃO / PDF
+   ============================================================ */
 @media print {
   @page {
     size: A4;
@@ -208,5 +476,11 @@ html { scroll-behavior: smooth; }
   }
   ul, ol, li, .card {
     page-break-inside: avoid;
+  }
+  /* Em papel, animação não existe — garante estado final visível */
+  .anim-in, .anim-stagger > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
