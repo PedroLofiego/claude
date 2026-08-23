@@ -154,7 +154,7 @@ export default function JapanApp() {
   // ==== Export ====
   const buildPlanJSON = () => ({
     app: "VoaJá · Modo Japão",
-    schema: "voaja.japan-plan/v2",
+    schema: "voaja.japan-plan/v3",
     generatedAt: new Date().toISOString(),
     trip: {
       destination: "Japão",
@@ -213,6 +213,7 @@ export default function JapanApp() {
       duration: p.duration,
       transport: p.transport,
       tip: p.tip,
+      howToBuy: p.howToBuy || null,
     })),
     itinerary: JAPAN_ITINERARY.map((d) => ({
       day: d.day, date: d.date, theme: d.theme, activities: d.items,
@@ -244,6 +245,7 @@ export default function JapanApp() {
     L.push(`🎟️ LUGARES ESCOLHIDOS (${selectedPois.length}):`);
     selectedPois.forEach((p) => {
       L.push(`  • ${p.name} — ${p.costBRL > 0 ? formatBRL(p.costBRL) + "/pessoa" : "grátis"}`);
+      if (p.howToBuy) L.push(`     🎫 ${p.howToBuy}`);
     });
     L.push("");
     L.push("📊 CONTA FINAL:");
@@ -983,7 +985,7 @@ function PlanTab({
               </h4>
               <ul className="divide-y divide-white/5">
                 {pois.map((p) => (
-                  <li key={p.id} className="flex flex-wrap items-center gap-2 py-2 text-xs">
+                  <li key={p.id} className="flex flex-wrap items-center gap-x-2 gap-y-1 py-2 text-xs">
                     <Check size={13} className="flex-none text-emerald-300" />
                     <span className="min-w-0 flex-1 font-semibold text-slate-100">{p.name}</span>
                     <span className="text-slate-400">{p.duration}</span>
@@ -997,6 +999,11 @@ function PlanTab({
                     >
                       remover
                     </button>
+                    {p.howToBuy && (
+                      <div className="ml-6 w-full text-[10px] text-cyan-200/80">
+                        🎫 {p.howToBuy}
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -1015,7 +1022,7 @@ function PlanTab({
       <details className="card p-5">
         <summary className="cursor-pointer text-sm font-bold text-white">
           <FileJson size={14} className="mr-1.5 inline -mt-0.5 text-cyan-300" />
-          Prévia do JSON exportado (schema voaja.japan-plan/v2)
+          Prévia do JSON exportado (schema voaja.japan-plan/v3)
         </summary>
         <pre className="mt-3 max-h-80 overflow-auto rounded-xl border border-white/10 bg-black/40 p-4 text-[11px] leading-relaxed text-cyan-100">
           {JSON.stringify(buildPlanJSON(), null, 2)}

@@ -134,6 +134,11 @@ export default function JapanMap({ selectedIds, onToggle, bases = [] }) {
                       <br />🚇 {p.transport}
                     </div>
                     <div style={{ fontSize: 12, marginTop: 6, fontStyle: "italic" }}>💡 {p.tip}</div>
+                    {p.howToBuy && (
+                      <div style={{ fontSize: 12, marginTop: 6, background: "#eef2ff", padding: "6px 8px", borderRadius: 6 }}>
+                        🎫 <strong>Onde comprar:</strong> {p.howToBuy}
+                      </div>
+                    )}
                     <button
                       onClick={() => onToggle(p.id)}
                       style={{
