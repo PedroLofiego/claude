@@ -6,6 +6,8 @@
 
 export const JPY_TO_BRL = 0.033;
 export const yen = (v) => Math.round(v * JPY_TO_BRL);
+// Câmbio do documento de roteiro: 1 BRL ≈ ¥30,7
+const brlOf = (v) => Math.round(v / 30.7);
 
 export const JAPAN_TRIP = {
   label: "Japão · Tóquio + Kansai",
@@ -690,6 +692,58 @@ export const JAPAN_POIS = [
     desc: "Jardim japonês tradicional com prédios históricos reais trazidos de outras partes do Japão — bem menos turístico que Kyoto.",
     transport: "Ônibus da Estação Yokohama (~35min)", tip: "¥700. Combine com o Cosmoworld e Minato Mirai no mesmo dia.",
     howToBuy: "sankeien.or.jp (site oficial)" },
+
+  // ===== 📌 LUGARES DO ROTEIRO CONFIRMADO (dez/2026) =====
+  { id: "himeji", name: "Castelo de Himeji", cat: "roteiro", lat: 34.8394, lng: 134.6939, costBRL: brlOf(1000), spendBRL: 60, duration: "3h",
+    desc: "Único castelo original e intacto do Japão — nunca foi destruído por guerra, incêndio ou terremoto. Pedido da Gio.",
+    transport: "Shinkansen de Osaka, 30–50min (¥1.520–2.310)", tip: "Dia 18/12 de manhã (8h). Chegar cedo: a subida até o topo tem fila e degraus íngremes.",
+    howToBuy: "Bilheteria na entrada — ¥1.000 castelo, ¥1.050 combo com jardim Koko-en" },
+  { id: "kobe-kitano", name: "Kobe — bairro de Kitano", cat: "roteiro", lat: 34.7019, lng: 135.1888, costBRL: 0, spendBRL: 250, duration: "meio dia",
+    desc: "Bairro das casas de comerciantes ocidentais do séc. XIX, ladeira com vista do porto. Pedido do Pedro; jantar de carne de Kobe no caminho de volta.",
+    transport: "JR Special Rapid de Osaka, ~22min (¥420–1.110)", tip: "Dia 18/12 à tarde, emendando com Himeji. Iluminação de Natal de Kobe (Luminarie) costuma rolar em dezembro.",
+    howToBuy: "Bairro livre; casas individuais cobram ¥500–750 cada" },
+  { id: "arima-onsen", name: "Arima Onsen — banho privativo (kashikiri)", cat: "roteiro", lat: 34.7981, lng: 135.2478, costBRL: brlOf(3500), spendBRL: 150, duration: "dia",
+    desc: "Um dos onsens mais antigos do Japão. Banho PRIVATIVO reservado — resolve tatuagem e o fato de serem irmãos de uma vez só.",
+    transport: "Ônibus direto de Osaka, ~50–70min (~¥1.100–1.400)", tip: "Dia 19/12. RESERVAR COM ANTECEDÊNCIA — cai num sábado. Mais frio que Osaka por estar na montanha.",
+    howToBuy: "Reserva direta no ryokan/casa de banho (Taiko-no-Yu, Gin-no-Yu têm kashikiri)" },
+  { id: "uji", name: "Uji — capital do matcha", cat: "roteiro", lat: 34.8914, lng: 135.8073, costBRL: 0, spendBRL: 180, duration: "meio dia",
+    desc: "Cidade do melhor chá verde do Japão + templo Byodo-in (o da moeda de ¥10). Pedido do Pedro que ficou fora do roteiro-base.",
+    transport: "JR Nara Line de Kyoto, ~30min (¥240)", tip: "Encaixa no lugar da tarde de compras do dia 16. Byodo-in ¥600. Nakamura Tokichi p/ sobremesa de matcha.",
+    howToBuy: "Cidade livre; cerimônia de chá formal precisa reserva (Taihoan ¥1.000)" },
+  { id: "teamlab-kyoto", name: "teamLab Biovortex Kyoto", cat: "roteiro", lat: 34.9880, lng: 135.7590, costBRL: brlOf(4500), spendBRL: 0, duration: "2–3h",
+    desc: "A unidade escolhida (em vez da de Tóquio, pra não duplicar). Pedido da Gio.",
+    transport: "Centro de Kyoto", tip: "Dia 16/12 às 11h. RESERVAR com 2–3 semanas de antecedência — ingresso por horário.",
+    howToBuy: "teamlab.art (site oficial) — ingresso com data e horário marcados" },
+  { id: "kuromon", name: "Kuromon Ichiba Market", cat: "roteiro", lat: 34.6654, lng: 135.5061, costBRL: 0, spendBRL: 140, duration: "1h30",
+    desc: "'A cozinha de Osaka': 150 barracas de frutos do mar grelhados na hora, wagyu em espeto, frutas caras.",
+    transport: "Metrô → Nippombashi (¥190)", tip: "Dia 17/12 à noite, emendando com Dotonbori. Comida de rua é a prioridade nº1 combinada de vocês.",
+    howToBuy: "Livre — paga barraca por barraca, leve dinheiro" },
+  { id: "hozenji", name: "Hozenji Yokocho", cat: "roteiro", lat: 34.6685, lng: 135.5030, costBRL: 0, spendBRL: 0, duration: "20–30 min",
+    desc: "Viela de pedra com o templinho do Fudo-Myoo coberto de musgo — joga água na estátua e faz o pedido.",
+    transport: "Dentro da zona de Dotonbori, a pé", tip: "O 'gostinho de templo' sem custar tempo — encaixe perfeito numa noite de bar.",
+    howToBuy: "Livre, aberto 24h" },
+  { id: "shinsaibashi", name: "Shinsaibashi-suji (galeria de compras)", cat: "roteiro", lat: 34.6723, lng: 135.5010, costBRL: 0, spendBRL: 300, duration: "2h",
+    desc: "600m de galeria coberta com 180 lojas — a rua de compras mais movimentada de Osaka.",
+    transport: "Metrô → Shinsaibashi (¥190)", tip: "Dia 20/12 à noite. Compras é a prioridade nº2 combinada. Emenda com Amerikamura do lado.",
+    howToBuy: "Livre — tax-free acima de ¥5.000 por loja com passaporte" },
+  { id: "koyasan", name: "Koyasan (mosteiro na montanha)", cat: "roteiro", lat: 34.2131, lng: 135.5850, costBRL: brlOf(12000), spendBRL: 200, duration: "pernoite",
+    desc: "Complexo budista Shingon com pernoite em templo (shukubo), comida vegetariana monástica e cemitério Okunoin à luz de lanternas.",
+    transport: "Nankai de Osaka + funicular, ~2h (¥1.700)", tip: "Só entra se abrirem mão de uma noite de Osaka ou Kyoto. Muito frio em dezembro.",
+    howToBuy: "Reserva de shukubo pelo site da Koyasan Shukubo Association" },
+  { id: "nakanoshima-illum", name: "Iluminações de Nakanoshima (OSAKA光のルネサンス)", cat: "roteiro", lat: 34.6937, lng: 135.4990, costBRL: 0, spendBRL: 40, duration: "1h",
+    desc: "Festival de luzes de Osaka na ilha fluvial, com projeção na Biblioteca Central. Roda em dezembro.",
+    transport: "Metrô → Yodoyabashi (¥190)", tip: "Gio marcou iluminações como fácil de cortar — manter como 'se sobrar tempo'.",
+    howToBuy: "Grátis; algumas atrações do festival cobram à parte" },
+
+  // ===== 🏨 HOSPEDAGEM =====
+  { id: "hotel-tokyo", name: "🏨 Comfort Hotel Tokyo Higashi Nihombashi", cat: "base", lat: 35.6925, lng: 139.7847, costBRL: 0, spendBRL: 0, duration: "5 noites",
+    desc: "CONFIRMADO — 09 a 14/12, 2 adultos, cama de casal. R$ 2.824 no total (~R$565/noite).",
+    transport: "Perto da Estação de Kanda e da Estação de Tóquio (shinkansen do dia 14)", tip: "Cancelamento grátis. Do Narita, o Access Express chega direto em Nihonbashi sem baldeação (¥1.380).",
+    howToBuy: "Já reservado e pago" },
+  { id: "hotel-narita", name: "🏨 9h nine hours Narita Airport", cat: "base", lat: 35.7719, lng: 140.3877, costBRL: 0, spendBRL: 0, duration: "1 noite",
+    desc: "CONFIRMADO — 21 a 22/12, Standard Plan (pernoite), 2 cápsulas. ¥13.110 (~R$427). Homens e mulheres em andares separados.",
+    transport: "Terminal 2 do Narita, subsolo B1, perto do estacionamento P2", tip: "Sinalização ruim no B1 — reservar tempo extra pra achar. Check-in das 14h até de madrugada.",
+    howToBuy: "Já reservado e pago. Cancelamento grátis até 20/12" },
 
   // ===== 🍜 COMIDA: os hypados das redes =====
   { id: "rokurinsha", name: "Rokurinsha (Ramen Street, Tokyo Station)", cat: "comida", lat: 35.6812, lng: 139.7671, costBRL: 0, spendBRL: 40, duration: "1h",
