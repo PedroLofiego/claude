@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Check, Clock, Plus, Train } from "lucide-react";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
-import { formatBRL } from "../lib/calc.js";
+import { formatBRL } from "../lib/format.js";
 
 function catOf(id) {
   return POI_CATEGORIES.find((c) => c.id === id);

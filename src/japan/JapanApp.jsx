@@ -1,26 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  AlertTriangle, ArrowLeft, BedDouble, CalendarDays, Check, CheckCircle2,
+  AlertTriangle, BedDouble, CalendarDays, Check, CheckCircle2,
   ClipboardCopy, Compass, FileDown, FileJson, Info, LayoutDashboard,
   Map as MapIcon, PackageCheck, Plane, Sparkles, Train, Users, Wallet,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
+import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
 import {
-  BUDGET_LINES, CHECKLIST, CITY_BLOCKS, CONFLICTS, EXTRAS, KYOTO_DAYS,
+  BUDGET_LINES, CHECKLIST, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
   LOGISTICS, LOGISTICS_NOTES, OPEN_DECISIONS, OSAKA_DAYS, PACE,
   PERSON_PROFILES, PRACTICAL, PREFERENCES, SETTLED, STAYS, TOKYO_VARIANTS,
   TRIP,
 } from "./tripData.js";
-import { copyToClipboard, downloadTextFile } from "../lib/report.js";
-import { formatBRL } from "../lib/calc.js";
+import { copyToClipboard, downloadTextFile, formatBRL } from "../lib/format.js";
 
 const STORAGE_KEY = "voaja:japan:v4";
 
 const TABS = [
   { id: "geral", label: "Visão geral", icon: LayoutDashboard },
   { id: "roteiro", label: "Roteiro", icon: CalendarDays },
-  { id: "passeios", label: "Escolher passeios", icon: Compass },
+  { id: "passeios", label: "Explorar e montar", icon: Compass },
   { id: "mapa", label: "Mapa", icon: MapIcon },
   { id: "hospedagem", label: "Hospedagem", icon: BedDouble },
   { id: "transporte", label: "Transporte", icon: Train },
@@ -86,7 +86,7 @@ export default function JapanApp() {
   const toggleDone = toggleIn(setDone);
   const togglePoi = toggleIn(setPoiIds);
 
-  const chosenExtras = EXTRAS.filter((e) => extras.has(e.id));
+  const chosenActs = ACTIVITIES.filter((a) => extras.has(a.id));
   const chosenPois = JAPAN_POIS.filter((p) => poiIds.has(p.id));
   const daysLeft = daysUntil(TRIP.arriveISO);
   const pendingCount = OPEN_DECISIONS.length;
@@ -126,10 +126,13 @@ export default function JapanApp() {
       days: TOKYO_VARIANTS[tokyoVariant].days,
     },
     baseItinerary: { kyoto: KYOTO_DAYS, osaka: OSAKA_DAYS },
-    selectedExtras: chosenExtras.map((e) => ({
-      id: e.id, city: e.city, name: e.name, category: e.category,
-      duration: e.duration, match: e.match, level: e.level, note: e.note,
-      coordinates: { lat: e.lat, lng: e.lng },
+    selectedActivities: chosenActs.map((a) => ({
+      id: a.id, city: a.city, area: a.area, name: a.name,
+      category: ACT_CATEGORIES.find((c) => c.id === a.cat)?.label,
+      hours: a.hours, costBRL: a.costBRL, match: a.match, level: a.level,
+      what: a.what, tickets: a.tickets, bestTime: a.bestTime,
+      december: a.december, swapFor: a.swapFor,
+      coordinates: { lat: a.lat, lng: a.lng },
     })),
     selectedPlaces: chosenPois.map((p) => ({
       id: p.id, name: p.name, category: POI_CATEGORIES.find((c) => c.id === p.cat)?.label,
@@ -172,12 +175,13 @@ export default function JapanApp() {
       L.push(`  ${d.date} — ${d.title}`);
       d.slots.forEach((sl) => L.push(`     ${sl.time} ${sl.what}`));
     });
-    if (chosenExtras.length) {
+    if (chosenActs.length) {
       L.push("");
-      L.push(`✨ PASSEIOS EXTRAS ESCOLHIDOS (${chosenExtras.length})`);
-      chosenExtras.forEach((e) =>
-        L.push(`  • [${e.city}] ${e.name} — ${e.duration} · match: ${MATCH_STYLE[e.match].label}`)
-      );
+      L.push(`✨ ATIVIDADES ESCOLHIDAS (${chosenActs.length})`);
+      chosenActs.forEach((a) => {
+        L.push(`  • [${a.city}] ${a.name} — ${a.hours}h · ${a.costBRL > 0 ? formatBRL(a.costBRL) : "grátis"} · match: ${MATCH_STYLE[a.match].label}`);
+        if (a.tickets?.where) L.push(`     🎫 ${a.tickets.where}`);
+      });
     }
     L.push("");
     L.push(`⏳ PENDÊNCIAS (${pendingCount})`);
@@ -197,7 +201,7 @@ export default function JapanApp() {
       <div className="anim-stagger mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Faltam" value={`${daysLeft} dias`} sub={TRIP.arriveLabel.split(",")[0]} highlight />
         <Stat label="Duração" value={`${TRIP.days} dias`} sub={`${TRIP.nights} noites · ${TRIP.people} pessoas`} />
-        <Stat label="Passeios extras" value={extras.size} sub="escolhidos do catálogo" />
+        <Stat label="Atividades escolhidas" value={extras.size} sub={`de ${ACTIVITIES.length} no catálogo`} />
         <Stat label="Pendências" value={pendingCount} sub={`+ ${checklistLeft} do checklist`} bad={pendingCount > 0} />
       </div>
 
@@ -236,7 +240,7 @@ export default function JapanApp() {
           <Overview
             daysLeft={daysLeft}
             tokyoVariant={tokyoVariant}
-            chosenExtras={chosenExtras}
+            chosenActs={chosenActs}
             done={done}
             onGo={setTab}
           />
@@ -245,11 +249,11 @@ export default function JapanApp() {
           <Itinerary
             tokyoVariant={tokyoVariant}
             setTokyoVariant={setTokyoVariant}
-            chosenExtras={chosenExtras}
+            chosenActs={chosenActs}
           />
         )}
         {tab === "passeios" && (
-          <ExtrasCatalog extras={extras} onToggle={toggleExtra} />
+          <ActivityCatalog chosen={extras} onToggle={toggleExtra} />
         )}
         {tab === "mapa" && (
           <JapanMap selectedIds={poiIds} onToggle={togglePoi} bases={mapBases} />
@@ -260,7 +264,7 @@ export default function JapanApp() {
         {tab === "pratico" && <Practical done={done} onToggle={toggleDone} />}
         {tab === "plano" && (
           <PlanTab
-            chosenExtras={chosenExtras}
+            chosenActs={chosenActs}
             chosenPois={chosenPois}
             tokyoVariant={tokyoVariant}
             done={done}
@@ -299,11 +303,9 @@ function Hero({ daysLeft, onPdf }) {
       <div className="relative flex h-full flex-col justify-between gap-4 p-5 sm:p-6">
         <div className="flex items-center justify-end gap-2 no-print">
           <button type="button" className="btn-ghost backdrop-blur-md" onClick={onPdf}>
-            <FileDown size={14} /> PDF
+            <FileDown size={14} /> Exportar PDF
           </button>
-          <a href="#/" className="btn-ghost backdrop-blur-md">
-            <ArrowLeft size={14} /> Planejador
-          </a>
+
         </div>
 
         <div className="flex flex-wrap items-end justify-between gap-3">
@@ -382,7 +384,7 @@ function MatchBadge({ match, level }) {
 }
 
 // ==================== VISÃO GERAL ====================
-function Overview({ daysLeft, tokyoVariant, chosenExtras, done, onGo }) {
+function Overview({ daysLeft, tokyoVariant, chosenActs, done, onGo }) {
   const confirmed = STAYS.filter((s) => s.status === "confirmada");
   const pendingStays = STAYS.filter((s) => s.status === "pendente");
   const paid = BUDGET_LINES.filter((b) => b.status === "pago").reduce((s, b) => s + (b.brl || 0), 0);
@@ -478,7 +480,7 @@ function Overview({ daysLeft, tokyoVariant, chosenExtras, done, onGo }) {
             <SectionTitle icon={Sparkles}>Estado atual do plano</SectionTitle>
             <ul className="space-y-1.5 text-xs text-slate-200">
               <li>🗼 Tóquio na versão <strong>{TOKYO_VARIANTS[tokyoVariant].label}</strong></li>
-              <li>✨ {chosenExtras.length} passeio(s) extra(s) escolhido(s)</li>
+              <li>✨ {chosenActs.length} passeio(s) extra(s) escolhido(s)</li>
               <li>🏨 {confirmed.length} hotéis confirmados, {pendingStays.length} a reservar</li>
               <li>☑️ {done.size}/{CHECKLIST.length} itens do checklist feitos</li>
             </ul>
@@ -490,9 +492,9 @@ function Overview({ daysLeft, tokyoVariant, chosenExtras, done, onGo }) {
 }
 
 // ==================== ROTEIRO ====================
-function Itinerary({ tokyoVariant, setTokyoVariant, chosenExtras }) {
+function Itinerary({ tokyoVariant, setTokyoVariant, chosenActs }) {
   const variant = TOKYO_VARIANTS[tokyoVariant];
-  const extrasByCity = (city) => chosenExtras.filter((e) => e.city === city);
+  const extrasByCity = (city) => chosenActs.filter((e) => e.city === city);
 
   return (
     <section className="space-y-5">
@@ -597,169 +599,21 @@ function ExtrasInline({ list }) {
         + {list.length} extra(s) que vocês escolheram
       </div>
       <ul className="mt-1.5 space-y-1 text-xs text-emerald-50">
-        {list.map((e) => (
-          <li key={e.id} className="flex flex-wrap items-center gap-2">
-            <span className="font-semibold">{e.name}</span>
-            <span className="text-emerald-200/70">{e.duration}</span>
-            <MatchBadge match={e.match} />
+        {list.map((a) => (
+          <li key={a.id} className="flex flex-wrap items-center gap-2">
+            <span className="font-semibold">{a.name}</span>
+            <span className="text-emerald-200/70">{a.hours}h</span>
+            <span className="text-emerald-200/70">
+              {a.costBRL > 0 ? formatBRL(a.costBRL) : "grátis"}
+            </span>
+            <MatchBadge match={a.match} />
+            {a.swapFor && (
+              <span className="w-full text-[10px] text-emerald-200/60">↔ {a.swapFor}</span>
+            )}
           </li>
         ))}
       </ul>
     </div>
-  );
-}
-
-// ==================== CATÁLOGO DE PASSEIOS ====================
-function ExtrasCatalog({ extras, onToggle }) {
-  const [city, setCity] = useState("todos");
-  const [match, setMatch] = useState("todos");
-
-  const cities = [
-    { id: "todos", label: "Todas", emoji: "🌏" },
-    { id: "toquio", label: "Tóquio", emoji: "🗼" },
-    { id: "kyoto", label: "Kyoto", emoji: "🎎" },
-    { id: "osaka", label: "Osaka", emoji: "🐙" },
-  ];
-  const matches = [
-    { id: "todos", label: "Todos" },
-    { id: "pedro", label: "🧑 Pedro" },
-    { id: "gio", label: "👩 Gio" },
-    { id: "ambos", label: "👥 Os dois" },
-  ];
-
-  const list = EXTRAS.filter(
-    (e) => (city === "todos" || e.city === city) && (match === "todos" || e.match === match)
-  );
-  const priority = EXTRAS.filter((e) => e.priority);
-
-  return (
-    <section className="space-y-4">
-      <div className="card panel-accent p-5">
-        <SectionTitle icon={Compass} sub="Tudo aqui já está filtrado pelas preferências de vocês dois. Marque o que entra — o roteiro e a exportação se atualizam sozinhos.">
-          Passeios extras além do roteiro-base
-        </SectionTitle>
-
-        <div className="mt-3 space-y-2">
-          <div className="flex flex-wrap gap-1.5">
-            {cities.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => setCity(c.id)}
-                className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
-                  city === c.id
-                    ? "border-sky-400/60 bg-sky-500/25 text-sky-50"
-                    : "border-white/10 bg-white/5 text-slate-300"
-                }`}
-              >
-                {c.emoji} {c.label}
-              </button>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {matches.map((m) => (
-              <button
-                key={m.id}
-                type="button"
-                onClick={() => setMatch(m.id)}
-                className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
-                  match === m.id
-                    ? "border-white/25 bg-white/15 text-white"
-                    : "border-white/10 bg-white/5 text-slate-300"
-                }`}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Achados que merecem atenção */}
-      <div className="card border-amber-400/30 bg-amber-500/[0.07] p-5">
-        <SectionTitle icon={AlertTriangle} sub="Dois pontos que apareceram só ao montar o documento com calma">
-          Pedidos que ficaram sem lugar no roteiro
-        </SectionTitle>
-        <ul className="space-y-2.5">
-          {priority.map((e) => (
-            <li key={e.id} className="rounded-xl border border-amber-400/25 bg-black/20 p-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-bold text-white">{e.name}</span>
-                <MatchBadge match={e.match} level={e.level} />
-                {extras.has(e.id) && <span className="badge-ok">no plano</span>}
-              </div>
-              <p className="mt-1 text-xs text-amber-50/90">{e.note}</p>
-              <button
-                type="button"
-                onClick={() => onToggle(e.id)}
-                className={`filter-pill mt-2 rounded-lg px-3 py-1.5 text-[11px] font-bold no-print ${
-                  extras.has(e.id)
-                    ? "bg-rose-500/25 text-rose-200"
-                    : "bg-amber-500/30 text-amber-50"
-                }`}
-              >
-                {extras.has(e.id) ? "✕ tirar do plano" : "+ incluir no plano"}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-slate-300">
-          <span className="font-bold text-white">{list.length}</span> passeios ·{" "}
-          <span className="font-bold text-emerald-300">{extras.size}</span> escolhidos
-        </span>
-      </div>
-
-      <div className="anim-stagger grid grid-cols-1 gap-3 lg:grid-cols-2">
-        {list.map((e) => {
-          const on = extras.has(e.id);
-          return (
-            <button
-              key={e.id}
-              type="button"
-              onClick={() => onToggle(e.id)}
-              className={`filter-pill card card-hover p-4 text-left ${
-                on ? "ring-2 ring-emerald-400/50" : ""
-              }`}
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-sm font-bold text-white">{e.name}</span>
-                    {on && <Check size={14} className="flex-none text-emerald-300" />}
-                  </div>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[10px] text-slate-400">
-                    <span className="rounded bg-white/10 px-1.5 py-0.5">{e.category}</span>
-                    <span>⏱ {e.duration}</span>
-                  </div>
-                </div>
-                <MatchBadge match={e.match} level={e.level} />
-              </div>
-              <p className="mt-2 text-xs text-slate-300">{e.note}</p>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {e.priority && (
-                  <span className="rounded bg-amber-500/25 px-1.5 py-0.5 text-[9px] font-bold text-amber-200">
-                    PRIORIDADE ESQUECIDA
-                  </span>
-                )}
-                {e.cutByBoth && (
-                  <span className="rounded bg-slate-500/25 px-1.5 py-0.5 text-[9px] font-bold text-slate-300">
-                    CORTADO POR AMBOS
-                  </span>
-                )}
-                {e.solo && (
-                  <span className="rounded bg-indigo-500/25 px-1.5 py-0.5 text-[9px] font-bold text-indigo-200">
-                    PROGRAMA INDIVIDUAL · {e.solo === "pedro" ? "PEDRO" : "GIO"}
-                  </span>
-                )}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </section>
   );
 }
 
@@ -1019,7 +873,7 @@ function Practical({ done, onToggle }) {
 }
 
 // ==================== MEU PLANO ====================
-function PlanTab({ chosenExtras, chosenPois, tokyoVariant, done, buildJSON, buildText, onPdf }) {
+function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildText, onPdf }) {
   const [copied, setCopied] = useState(null);
 
   const onDownloadJSON = () =>
@@ -1091,15 +945,15 @@ function PlanTab({ chosenExtras, chosenPois, tokyoVariant, done, buildJSON, buil
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="card p-5">
           <SectionTitle sub={`Versão de Tóquio: ${TOKYO_VARIANTS[tokyoVariant].label}`}>
-            ✨ Passeios extras escolhidos ({chosenExtras.length})
+            ✨ Passeios extras escolhidos ({chosenActs.length})
           </SectionTitle>
-          {chosenExtras.length === 0 ? (
+          {chosenActs.length === 0 ? (
             <p className="text-xs text-slate-400">
               Nenhum ainda — vá em "Escolher passeios" e marque o que entra.
             </p>
           ) : (
             <ul className="space-y-1.5 text-xs">
-              {chosenExtras.map((e) => (
+              {chosenActs.map((e) => (
                 <li key={e.id} className="flex flex-wrap items-center gap-2">
                   <Check size={12} className="flex-none text-emerald-300" />
                   <span className="font-semibold text-slate-100">{e.name}</span>
@@ -1153,5 +1007,270 @@ function PlanTab({ chosenExtras, chosenPois, tokyoVariant, done, buildJSON, buil
         </pre>
       </details>
     </section>
+  );
+}
+
+// ==================== CATÁLOGO DE ATIVIDADES ====================
+const CITY_TABS = [
+  { id: "todas", label: "Todas", emoji: "🌏" },
+  { id: "toquio", label: "Tóquio", emoji: "🗼" },
+  { id: "kyoto", label: "Kyoto", emoji: "🎎" },
+  { id: "osaka", label: "Osaka", emoji: "🐙" },
+];
+const MATCH_TABS = [
+  { id: "todos", label: "Todos" },
+  { id: "pedro", label: "🧑 Pedro" },
+  { id: "gio", label: "👩 Gio" },
+  { id: "ambos", label: "👥 Os dois" },
+];
+
+function ActivityCatalog({ chosen, onToggle }) {
+  const [city, setCity] = useState("todas");
+  const [cat, setCat] = useState("todas");
+  const [match, setMatch] = useState("todos");
+  const [hideInBase, setHideInBase] = useState(true);
+  const [openId, setOpenId] = useState(null);
+  const [q, setQ] = useState("");
+
+  const list = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    return ACTIVITIES.filter((a) => {
+      if (city !== "todas" && a.city !== city) return false;
+      if (cat !== "todas" && a.cat !== cat) return false;
+      if (match !== "todos" && a.match !== match) return false;
+      if (hideInBase && a.inBase && !chosen.has(a.id)) return false;
+      if (term && !`${a.name} ${a.what} ${a.area}`.toLowerCase().includes(term)) return false;
+      return true;
+    }).sort((a, b) => {
+      const w = (x) => (x.priority ? 0 : x.level === "alto" ? 1 : x.level === "medio" ? 2 : 3);
+      return w(a) - w(b);
+    });
+  }, [city, cat, match, hideInBase, q, chosen]);
+
+  const chosenList = ACTIVITIES.filter((a) => chosen.has(a.id));
+  const totalHours = chosenList.reduce((s, a) => s + a.hours, 0);
+  const totalCost = chosenList.reduce((s, a) => s + (a.costBRL || 0), 0) * 2;
+  const priority = ACTIVITIES.filter((a) => a.priority);
+
+  return (
+    <section className="space-y-4">
+      {/* Filtros */}
+      <div className="card panel-accent p-5">
+        <SectionTitle icon={Compass} sub={`${ACTIVITIES.length} atividades com ingresso, melhor horário, o que dizem e o que muda em dezembro. Clique para abrir os detalhes; marque para entrar no roteiro.`}>
+          Explorar e montar o roteiro
+        </SectionTitle>
+
+        <div className="mt-3 space-y-2">
+          <div className="flex flex-wrap gap-1.5">
+            {CITY_TABS.map((c) => (
+              <button key={c.id} type="button" onClick={() => setCity(c.id)}
+                className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
+                  city === c.id ? "border-sky-400/60 bg-sky-500/25 text-sky-50" : "border-white/10 bg-white/5 text-slate-300"
+                }`}>
+                {c.emoji} {c.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            <button type="button" onClick={() => setCat("todas")}
+              className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
+                cat === "todas" ? "border-white/25 bg-white/15 text-white" : "border-white/10 bg-white/5 text-slate-300"
+              }`}>Tudo</button>
+            {ACT_CATEGORIES.map((c) => (
+              <button key={c.id} type="button" onClick={() => setCat(c.id)}
+                className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
+                  cat === c.id ? "border-white/25 bg-white/15 text-white" : "border-white/10 bg-white/5 text-slate-300"
+                }`}
+                style={cat === c.id ? { borderColor: c.color + "88", background: c.color + "26" } : undefined}>
+                {c.emoji} {c.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap gap-1.5">
+              {MATCH_TABS.map((m) => (
+                <button key={m.id} type="button" onClick={() => setMatch(m.id)}
+                  className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
+                    match === m.id ? "border-white/25 bg-white/15 text-white" : "border-white/10 bg-white/5 text-slate-300"
+                  }`}>{m.label}</button>
+              ))}
+            </div>
+            <input type="text" value={q} onChange={(e) => setQ(e.target.value)}
+              placeholder="buscar: matcha, onsen, vista…"
+              className="input min-w-[160px] flex-1" />
+            <button type="button" onClick={() => setHideInBase((v) => !v)}
+              className={`filter-pill rounded-xl border px-3 py-1.5 text-xs font-semibold ${
+                hideInBase ? "border-white/10 bg-white/5 text-slate-300" : "border-emerald-400/50 bg-emerald-500/20 text-emerald-100"
+              }`}>
+              {hideInBase ? "mostrar o que já está no roteiro" : "ocultar o que já está no roteiro"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Contador do que foi escolhido */}
+      {chosenList.length > 0 && (
+        <div className="card flex flex-wrap items-center justify-between gap-3 border-emerald-400/30 bg-emerald-500/[0.07] p-4">
+          <div className="text-sm text-emerald-50">
+            <span className="font-bold">{chosenList.length} atividade(s)</span> no plano ·{" "}
+            <span className="font-bold">{totalHours.toFixed(1)}h</span> somadas ·{" "}
+            <span className="font-bold">{formatBRL(totalCost)}</span> em ingressos (2 pessoas)
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {chosenList.map((a) => (
+              <button key={a.id} type="button" onClick={() => onToggle(a.id)}
+                className="filter-pill rounded-lg bg-emerald-500/20 px-2 py-1 text-[10px] font-bold text-emerald-100 no-print">
+                {a.name} ✕
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Pedidos esquecidos */}
+      <div className="card border-amber-400/30 bg-amber-500/[0.07] p-5">
+        <SectionTitle icon={AlertTriangle} sub="Apareceram só ao montar o documento com calma">
+          Pedidos que ficaram sem lugar no roteiro
+        </SectionTitle>
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {priority.map((a) => (
+            <ActivityCard key={a.id} a={a} chosen={chosen.has(a.id)} onToggle={onToggle}
+              open={openId === a.id} onOpen={() => setOpenId(openId === a.id ? null : a.id)} />
+          ))}
+        </div>
+      </div>
+
+      <div className="text-sm text-slate-300">
+        <span className="font-bold text-white">{list.length}</span> atividades
+        {hideInBase && <span className="text-slate-500"> · itens do roteiro-base ocultos</span>}
+      </div>
+
+      <div className="anim-stagger grid grid-cols-1 gap-3 lg:grid-cols-2">
+        {list.map((a) => (
+          <ActivityCard key={a.id} a={a} chosen={chosen.has(a.id)} onToggle={onToggle}
+            open={openId === a.id} onOpen={() => setOpenId(openId === a.id ? null : a.id)} />
+        ))}
+      </div>
+
+      {/* Bate-voltas */}
+      <div className="card p-5">
+        <SectionTitle icon={Train} sub="A partir de Kyoto e Osaka — tempo de trem, custo e quanto do dia consome">
+          🚄 Bate-voltas possíveis
+        </SectionTitle>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-white/10 text-left text-slate-400">
+                <th className="pb-2 pr-3 font-semibold">Destino</th>
+                <th className="pb-2 pr-3 font-semibold">Saindo de</th>
+                <th className="pb-2 pr-3 font-semibold">Trem</th>
+                <th className="pb-2 pr-3 font-semibold">Custo</th>
+                <th className="pb-2 pr-3 font-semibold">Consome</th>
+                <th className="pb-2 font-semibold">Por quê</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {DAY_TRIPS.map((d) => (
+                <tr key={d.id} className={d.heavy ? "opacity-60" : ""}>
+                  <td className="py-2 pr-3 font-bold text-white">
+                    {d.name}
+                    {d.inBase && <span className="ml-1.5 rounded bg-emerald-500/25 px-1 text-[9px] text-emerald-200">no roteiro</span>}
+                    {d.priority && <span className="ml-1.5 rounded bg-amber-500/25 px-1 text-[9px] text-amber-200">pedido</span>}
+                    {d.cutByBoth && <span className="ml-1.5 rounded bg-slate-500/25 px-1 text-[9px] text-slate-300">cortado</span>}
+                  </td>
+                  <td className="py-2 pr-3 text-slate-300">{d.from}</td>
+                  <td className="py-2 pr-3 text-slate-400">{d.mode} · {d.time}</td>
+                  <td className="py-2 pr-3 text-slate-300">{d.cost}</td>
+                  <td className="py-2 pr-3 font-semibold text-white">{d.hours >= 24 ? "pernoite" : `${d.hours}h`}</td>
+                  <td className="py-2 text-slate-300">{d.why}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ActivityCard({ a, chosen, onToggle, open, onOpen }) {
+  const cat = ACT_CATEGORIES.find((c) => c.id === a.cat);
+  const eff = EFFORT[a.effort];
+  return (
+    <div className={`card p-4 ${chosen ? "ring-2 ring-emerald-400/50" : ""}`}>
+      <div className="flex items-start justify-between gap-2">
+        <button type="button" onClick={onOpen} className="min-w-0 flex-1 text-left">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-sm font-bold text-white">{a.name}</span>
+            {chosen && <Check size={14} className="flex-none text-emerald-300" />}
+            {a.inBase && <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-bold text-emerald-200">JÁ NO ROTEIRO</span>}
+            {a.priority && <span className="rounded bg-amber-500/25 px-1.5 py-0.5 text-[9px] font-bold text-amber-200">PEDIDO ESQUECIDO</span>}
+            {a.cutByBoth && <span className="rounded bg-slate-500/25 px-1.5 py-0.5 text-[9px] font-bold text-slate-300">CORTADO POR AMBOS</span>}
+            {a.solo && <span className="rounded bg-indigo-500/25 px-1.5 py-0.5 text-[9px] font-bold text-indigo-200">SOLO · {a.solo === "pedro" ? "PEDRO" : "GIO"}</span>}
+          </div>
+          <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[10px] text-slate-400">
+            <span className="rounded bg-white/10 px-1.5 py-0.5">{cat?.emoji} {cat?.label}</span>
+            <span>📍 {a.area}</span>
+            <span>⏱ {a.hours}h</span>
+            <span className="font-semibold text-slate-200">
+              {a.costBRL > 0 ? `${formatBRL(a.costBRL)}/pessoa` : "grátis"}
+            </span>
+            {a.rating && <span>⭐ {a.rating.toFixed(1)}</span>}
+            {eff && <span style={{ color: eff.color }}>● {eff.label}</span>}
+          </div>
+          <p className="mt-2 text-xs text-slate-300">{a.what}</p>
+        </button>
+        <div className="flex flex-none flex-col items-end gap-1.5">
+          <MatchBadge match={a.match} level={a.level} />
+          <button type="button" onClick={() => onToggle(a.id)}
+            className={`filter-pill rounded-lg px-2.5 py-1 text-[10px] font-bold no-print ${
+              chosen ? "bg-rose-500/25 text-rose-200" : "bg-indigo-500/30 text-indigo-100"
+            }`}>
+            {chosen ? "✕ tirar" : "+ ao plano"}
+          </button>
+        </div>
+      </div>
+
+      <button type="button" onClick={onOpen}
+        className="mt-2 text-[11px] font-semibold text-sky-300 no-print hover:text-sky-200">
+        {open ? "▲ menos detalhes" : "▼ ingressos, horário, avaliações e dezembro"}
+      </button>
+
+      {open && (
+        <div className="mt-3 space-y-2.5 border-t border-white/10 pt-3 text-xs">
+          <Detail icon="🎫" title="Ingresso">
+            <div><span className="text-slate-400">Onde:</span> {a.tickets.where}</div>
+            <div><span className="text-slate-400">Quando compra:</span> {a.tickets.when}</div>
+            <div><span className="text-slate-400">Esgota?</span> {a.tickets.sellsOut}</div>
+            <div className="mt-1 rounded bg-amber-500/10 p-2 text-amber-100">💡 {a.tickets.tip}</div>
+          </Detail>
+          <Detail icon="🕐" title="Melhor horário">{a.bestTime}</Detail>
+          <Detail icon="🎄" title="Em dezembro">{a.december}</Detail>
+          <Detail icon="💬" title="O que as pessoas dizem">
+            <ul className="space-y-0.5">
+              {a.says.good.map((g, i) => <li key={`g${i}`} className="text-emerald-200">+ {g}</li>)}
+              {a.says.bad.map((b, i) => <li key={`b${i}`} className="text-rose-200">− {b}</li>)}
+            </ul>
+          </Detail>
+          {a.swapFor && <Detail icon="↔️" title="Impacto no roteiro">{a.swapFor}</Detail>}
+          {a.spendBRL > 0 && (
+            <Detail icon="💸" title="Gasto típico no local">
+              ~{formatBRL(a.spendBRL)}/pessoa além da entrada (comida, compras)
+            </Detail>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Detail({ icon, title, children }) {
+  return (
+    <div>
+      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+        {icon} {title}
+      </div>
+      <div className="mt-0.5 text-slate-200">{children}</div>
+    </div>
   );
 }
