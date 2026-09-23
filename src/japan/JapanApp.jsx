@@ -3,10 +3,12 @@ import {
   AlertTriangle, BedDouble, CalendarDays, Check, CheckCircle2,
   ClipboardCopy, Compass, FileDown, FileJson, Info, LayoutDashboard,
   Map as MapIcon, PackageCheck, Plane, Sparkles, Train, Users, Wallet,
+  ArrowRight, ScrollText, X,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
+import { AGENCY_ROUTES, COVERAGE, YOUR_EDGE } from "./agencyRoutes.js";
 import {
   BUDGET_LINES, CHECKLIST, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
   LOGISTICS, LOGISTICS_NOTES, OPEN_DECISIONS, OSAKA_DAYS, PACE,
@@ -18,15 +20,26 @@ import { copyToClipboard, downloadTextFile, formatBRL } from "../lib/format.js";
 const STORAGE_KEY = "voaja:japan:v4";
 
 const TABS = [
-  { id: "geral", label: "Visão geral", icon: LayoutDashboard },
-  { id: "roteiro", label: "Roteiro", icon: CalendarDays },
-  { id: "passeios", label: "Explorar e montar", icon: Compass },
-  { id: "mapa", label: "Mapa", icon: MapIcon },
-  { id: "hospedagem", label: "Hospedagem", icon: BedDouble },
-  { id: "transporte", label: "Transporte", icon: Train },
-  { id: "perfis", label: "Perfis", icon: Users },
-  { id: "pratico", label: "Prático", icon: Info },
-  { id: "plano", label: "Meu Plano", icon: PackageCheck },
+  { id: "geral", label: "Visão geral", icon: LayoutDashboard,
+    help: "O resumo de tudo: voos, orçamento, o que já está fechado e o que falta decidir." },
+  { id: "passeios", label: "Explorar e montar", icon: Compass, step: 1,
+    help: "O catálogo. Filtre por cidade e por interesse, leia as avaliações e toque em “Adicionar” para jogar o passeio no seu plano." },
+  { id: "mapa", label: "Mapa", icon: MapIcon, step: 2,
+    help: "Onde cada lugar fica de verdade. Use para agrupar o que é perto e não atravessar a cidade à toa." },
+  { id: "roteiro", label: "Roteiro dia a dia", icon: CalendarDays, step: 3,
+    help: "Os 13 dias já divididos por cidade. O que você escolher no catálogo aparece encaixado no dia certo." },
+  { id: "plano", label: "Meu Plano", icon: PackageCheck, step: 4,
+    help: "O fechamento: suas escolhas somadas, com custo total, e os botões de exportar em PDF, texto e JSON." },
+  { id: "roteiros", label: "Roteiros de agência", icon: ScrollText,
+    help: "Os dois pacotes que você recebeu, item por item, mostrando o que este site já cobre e o que não faz sentido em dezembro." },
+  { id: "hospedagem", label: "Hospedagem", icon: BedDouble,
+    help: "Onde vocês dormem em cada cidade, o que já está pago e o que falta reservar." },
+  { id: "transporte", label: "Transporte", icon: Train,
+    help: "Como ir do aeroporto ao hotel e de cidade em cidade, com os preços de cada passe." },
+  { id: "perfis", label: "Perfis", icon: Users,
+    help: "O que você e a Gio querem de cada categoria — e onde vocês discordam." },
+  { id: "pratico", label: "Prático", icon: Info,
+    help: "Dinheiro, chip, tomada, clima de dezembro e o checklist do que fazer antes de embarcar." },
 ];
 
 const MATCH_STYLE = {
@@ -225,7 +238,18 @@ export default function JapanApp() {
                     : "text-slate-300 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                <Icon size={14} /> {t.label}
+                {t.step ? (
+                  <span
+                    className={`grid h-4 w-4 flex-none place-items-center rounded-full text-[9px] font-black ${
+                      on ? "bg-rose-400 text-rose-950" : "bg-white/15 text-slate-200"
+                    }`}
+                  >
+                    {t.step}
+                  </span>
+                ) : (
+                  <Icon size={14} />
+                )}
+                {t.label}
                 {badge > 0 && (
                   <span className="rounded-full bg-rose-500/40 px-1.5 text-[10px] font-bold">{badge}</span>
                 )}
@@ -233,6 +257,9 @@ export default function JapanApp() {
             );
           })}
         </div>
+        <p className="mt-2 px-1 text-xs leading-relaxed text-slate-400">
+          {TABS.find((t) => t.id === tab)?.help}
+        </p>
       </nav>
 
       <main className="anim-in mt-4 space-y-5">
@@ -258,6 +285,7 @@ export default function JapanApp() {
         {tab === "mapa" && (
           <JapanMap selectedIds={poiIds} onToggle={togglePoi} bases={mapBases} />
         )}
+        {tab === "roteiros" && <AgencyCompare onGo={setTab} />}
         {tab === "hospedagem" && <Lodging />}
         {tab === "transporte" && <Transport />}
         {tab === "perfis" && <Profiles />}
@@ -393,6 +421,8 @@ function Overview({ daysLeft, tokyoVariant, chosenActs, done, onGo }) {
 
   return (
     <section className="space-y-4">
+      <HowToUse onGo={onGo} chosenCount={chosenActs.length} />
+
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="card p-5 lg:col-span-2">
           <SectionTitle icon={Plane} sub="Dados fixos, já confirmados">Voos</SectionTitle>
@@ -486,6 +516,168 @@ function Overview({ daysLeft, tokyoVariant, chosenActs, done, onGo }) {
             </ul>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ==================== COMO USAR ====================
+const STEPS = [
+  { n: 1, tab: "passeios", title: "Escolha o que te interessa",
+    text: "São 115 passeios no catálogo, cada um com preço, quanto tempo leva, como comprar o ingresso e o que as pessoas reclamam. Filtre por cidade e toque em Adicionar." },
+  { n: 2, tab: "mapa", title: "Veja onde cada coisa fica",
+    text: "204 pontos no mapa. Serve para agrupar o que é perto e não gastar o dia dentro do metrô." },
+  { n: 3, tab: "roteiro", title: "Encaixe nos 13 dias",
+    text: "A divisão Tóquio / Kyoto / Osaka já está fechada. O que você escolheu aparece automaticamente no dia da cidade certa." },
+  { n: 4, tab: "plano", title: "Feche e exporte",
+    text: "Some o custo de tudo que escolheu e mande para a Gio em PDF, texto ou JSON." },
+];
+
+function HowToUse({ onGo, chosenCount }) {
+  const [hidden, setHidden] = useState(() => {
+    try { return localStorage.getItem("voaja:japan:howto") === "off"; } catch { return false; }
+  });
+  const dismiss = () => {
+    setHidden(true);
+    try { localStorage.setItem("voaja:japan:howto", "off"); } catch { /* ignore */ }
+  };
+  if (hidden) {
+    return (
+      <button type="button" onClick={() => setHidden(false)} className="btn-ghost no-print w-full text-xs">
+        Mostrar novamente “como usar este site”
+      </button>
+    );
+  }
+  return (
+    <div className="card panel-accent relative p-5">
+      <button
+        type="button"
+        onClick={dismiss}
+        aria-label="Esconder as instruções"
+        className="no-print absolute right-3 top-3 rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
+      >
+        <X size={15} />
+      </button>
+      <SectionTitle icon={Sparkles} sub="Quatro passos, na ordem. Toque em qualquer um para ir direto.">
+        Como usar este site
+      </SectionTitle>
+      <ol className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {STEPS.map((st) => (
+          <li key={st.n}>
+            <button
+              type="button"
+              onClick={() => onGo(st.tab)}
+              className="row-hover group flex w-full items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-3 text-left"
+            >
+              <span className="grid h-7 w-7 flex-none place-items-center rounded-full bg-rose-500/25 text-sm font-black text-rose-100 ring-1 ring-inset ring-rose-400/40">
+                {st.n}
+              </span>
+              <span className="min-w-0">
+                <span className="flex items-center gap-1.5 text-sm font-bold text-white">
+                  {st.title}
+                  <ArrowRight size={13} className="flex-none text-rose-300 transition-transform group-hover:translate-x-0.5" />
+                </span>
+                <span className="mt-0.5 block text-xs leading-relaxed text-slate-300">{st.text}</span>
+              </span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-3 text-xs text-slate-400">
+        {chosenCount > 0
+          ? `Você já escolheu ${chosenCount} passeio(s). Tudo fica salvo neste navegador — pode fechar e voltar depois.`
+          : "Nada escolhido ainda. Comece pelo passo 1 — suas escolhas ficam salvas neste navegador automaticamente."}
+      </p>
+    </div>
+  );
+}
+
+// ==================== ROTEIROS DE AGÊNCIA ====================
+function AgencyCompare({ onGo }) {
+  const all = AGENCY_ROUTES.flatMap((r) => r.items);
+  const count = (st) => all.filter((i) => i.status === st).length;
+
+  return (
+    <section className="space-y-4">
+      <div className="card panel-accent p-5">
+        <SectionTitle icon={ScrollText} sub="Conferi os dois roteiros que você mandou, item por item, contra o que já existe aqui.">
+          Os pacotes que você recebeu × o seu roteiro
+        </SectionTitle>
+        <div className="grid grid-cols-3 gap-2 text-center">
+          {[["tinha", count("tinha")], ["novo", count("novo")], ["fora", count("fora")]].map(([k, v]) => (
+            <div key={k} className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
+              <div className="text-xl">{COVERAGE[k].emoji}</div>
+              <div className="text-lg font-extrabold text-white">{v}</div>
+              <div className="text-[10px] leading-tight text-slate-400">{COVERAGE[k].label}</div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-slate-300">
+          Resposta curta: <strong className="text-white">quase tudo já estava.</strong> O que faltava era o
+          bloco do Monte Fuji (Hakone e Lago Kawaguchi), Yokohama, Kamakura, Nikko, Kanazawa e dois templos
+          de Nara. Tudo isso entrou no catálogo agora, com preço, como comprar e o que muda em dezembro.
+        </p>
+      </div>
+
+      {AGENCY_ROUTES.map((r) => (
+        <div key={r.id} className="card p-5">
+          <SectionTitle icon={Plane} sub={r.source}>{r.name}</SectionTitle>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {[["Formato", r.shape], ["Preço", r.price], ["Noites", r.nights]].map(([k, v]) => (
+              <div key={k} className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
+                <div className="text-[10px] uppercase tracking-wider text-slate-400">{k}</div>
+                <div className="mt-0.5 text-xs leading-relaxed text-slate-100">{v}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 rounded-xl border border-amber-400/30 bg-amber-400/10 p-3">
+            <div className="flex items-start gap-2">
+              <AlertTriangle size={14} className="mt-0.5 flex-none text-amber-300" />
+              <p className="text-xs leading-relaxed text-amber-100">{r.verdict}</p>
+            </div>
+          </div>
+
+          <ul className="mt-3 space-y-1.5">
+            {r.items.map((i, idx) => {
+              const c = COVERAGE[i.status];
+              return (
+                <li key={idx} className="row-hover rounded-xl border border-white/10 bg-white/[0.03] p-2.5">
+                  <div className="flex items-start gap-2">
+                    <span className="flex-none text-sm" title={c.label}>{c.emoji}</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-semibold text-slate-100">{i.name}</div>
+                      {i.note && <div className="mt-0.5 text-[11px] leading-relaxed text-slate-400">{i.note}</div>}
+                    </div>
+                    {i.actId && (
+                      <button
+                        type="button"
+                        onClick={() => onGo("passeios")}
+                        className="no-print flex-none rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold text-slate-200 hover:bg-white/20 hover:text-white"
+                      >
+                        ver
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+
+      <div className="card p-5">
+        <SectionTitle icon={Sparkles} sub="Onde o roteiro de vocês ganha dos dois pacotes">
+          O que vocês têm que os pacotes não têm
+        </SectionTitle>
+        <ul className="space-y-1.5 text-xs text-slate-200">
+          {YOUR_EDGE.map((e, i) => (
+            <li key={i} className="flex gap-2">
+              <Check size={13} className="mt-0.5 flex-none text-emerald-400" />
+              <span className="leading-relaxed">{e}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
