@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  AlertTriangle, BedDouble, CalendarDays, Check, CheckCircle2,
-  ClipboardCopy, Compass, FileDown, FileJson, Info, LayoutDashboard,
-  Map as MapIcon, PackageCheck, Plane, Sparkles, Train, Users, Wallet,
+  AlertTriangle, ArrowRight, BedDouble, CalendarDays, Check, CheckCircle2,
+  ClipboardCopy, Compass, ExternalLink, FileDown, FileJson, HelpCircle, Info,
+  LayoutDashboard, Map as MapIcon, PackageCheck, Plane, Scale, Sparkles, Train,
+  Users, Wallet, X,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
+import { AGENCY_PACKAGES, COVERAGE, coverageCount } from "./agencyPackages.js";
 import {
   BUDGET_LINES, CHECKLIST, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
   LOGISTICS, LOGISTICS_NOTES, OPEN_DECISIONS, OSAKA_DAYS, PACE,
@@ -17,17 +19,47 @@ import { copyToClipboard, downloadTextFile, formatBRL } from "../lib/format.js";
 
 const STORAGE_KEY = "voaja:japan:v4";
 
+// help: o que a aba faz, em uma frase. next: sugestão de próximo passo.
 const TABS = [
-  { id: "geral", label: "Visão geral", icon: LayoutDashboard },
-  { id: "roteiro", label: "Roteiro", icon: CalendarDays },
-  { id: "passeios", label: "Explorar e montar", icon: Compass },
-  { id: "mapa", label: "Mapa", icon: MapIcon },
-  { id: "hospedagem", label: "Hospedagem", icon: BedDouble },
-  { id: "transporte", label: "Transporte", icon: Train },
-  { id: "perfis", label: "Perfis", icon: Users },
-  { id: "pratico", label: "Prático", icon: Info },
-  { id: "plano", label: "Meu Plano", icon: PackageCheck },
+  { id: "geral", label: "Visão geral", icon: LayoutDashboard,
+    help: "O resumo da viagem: voos, cidades, orçamento e o que ainda falta decidir.",
+    next: "roteiro" },
+  { id: "roteiro", label: "Roteiro", icon: CalendarDays,
+    help: "O plano dia a dia, cidade por cidade. Passeios que vocês marcarem em “Explorar” aparecem aqui no fim de cada cidade.",
+    next: "passeios" },
+  { id: "passeios", label: "Explorar", icon: Compass,
+    help: "Catálogo de atividades. Toque no card para ver ingresso e dicas; toque em “+ ao plano” para incluir no roteiro.",
+    next: "plano" },
+  { id: "pacotes", label: "Pacotes de agência", icon: Scale,
+    help: "Dois roteiros prontos de agência comparados com o de vocês: o que já está no plano, o que dá para incluir e o que não existe no site.",
+    next: "passeios" },
+  { id: "mapa", label: "Mapa", icon: MapIcon,
+    help: "Todos os lugares no mapa. Toque num ponto para ver detalhes e salvar no plano.",
+    next: "plano" },
+  { id: "hospedagem", label: "Hospedagem", icon: BedDouble,
+    help: "Os hotéis: quais já estão pagos e quais ainda precisam ser reservados.",
+    next: "transporte" },
+  { id: "transporte", label: "Transporte", icon: Train,
+    help: "Como ir de uma cidade para outra, quanto custa e quanto tempo leva.",
+    next: "pratico" },
+  { id: "perfis", label: "Perfis", icon: Users,
+    help: "O que cada um quer fazer e como os desacordos foram resolvidos.",
+    next: "passeios" },
+  { id: "pratico", label: "Checklist", icon: Info,
+    help: "Lista do que resolver antes de embarcar (toque para marcar como feito) e dicas práticas.",
+    next: "plano" },
+  { id: "plano", label: "Meu plano", icon: PackageCheck,
+    help: "Tudo o que vocês escolheram, o orçamento e botões para exportar (PDF ou resumo para WhatsApp).",
+    next: null },
 ];
+const TAB_IDS = TABS.map((t) => t.id);
+
+// Aba vem da URL (#/japao/roteiro) para dar para compartilhar o link de uma aba
+// e o botão "voltar" do celular funcionar.
+function tabFromHash() {
+  const id = window.location.hash.replace(/^#\/?(japao\/?)?/, "");
+  return TAB_IDS.includes(id) ? id : "geral";
+}
 
 const MATCH_STYLE = {
   pedro: { label: "Pedro", cls: "bg-indigo-500/20 text-indigo-200 ring-indigo-400/40", emoji: "🧑" },
@@ -59,7 +91,8 @@ function daysUntil(iso) {
 
 export default function JapanApp() {
   const saved = useMemo(loadState, []);
-  const [tab, setTab] = useState("geral");
+  const [tab, setTabState] = useState(tabFromHash);
+  const [showGuide, setShowGuide] = useState(saved?.showGuide ?? true);
   const [extras, setExtras] = useState(() => new Set(saved?.extras ?? []));
   const [tokyoVariant, setTokyoVariant] = useState(saved?.tokyoVariant ?? "sem");
   const [done, setDone] = useState(() => new Set(saved?.done ?? []));
@@ -70,11 +103,32 @@ export default function JapanApp() {
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({
-          extras: [...extras], tokyoVariant, done: [...done], poiIds: [...poiIds],
+          extras: [...extras], tokyoVariant, done: [...done], poiIds: [...poiIds], showGuide,
         })
       );
     } catch { /* ignore */ }
-  }, [extras, tokyoVariant, done, poiIds]);
+  }, [extras, tokyoVariant, done, poiIds, showGuide]);
+
+  useEffect(() => {
+    const onHash = () => setTabState(tabFromHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const setTab = (id) => {
+    if (id === tab) return;
+    window.location.hash = `/japao/${id}`;
+    setTabState(id);
+    // Se a pessoa já rolou para dentro do conteúdo, volta para o topo da aba nova.
+    const main = document.getElementById("conteudo");
+    if (main && main.getBoundingClientRect().top < 0) {
+      document.getElementById("abas")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+  const openGuide = () => {
+    setShowGuide(true);
+    setTab("geral");
+  };
 
   const toggleIn = (setter) => (id) =>
     setter((prev) => {
@@ -196,18 +250,20 @@ export default function JapanApp() {
 
   return (
     <div className="mx-auto min-h-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-      <Hero daysLeft={daysLeft} onPdf={onPdf} />
+      <Hero daysLeft={daysLeft} onPdf={onPdf} onHelp={openGuide} />
 
       <div className="anim-stagger mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Faltam" value={`${daysLeft} dias`} sub={TRIP.arriveLabel.split(",")[0]} highlight />
         <Stat label="Duração" value={`${TRIP.days} dias`} sub={`${TRIP.nights} noites · ${TRIP.people} pessoas`} />
-        <Stat label="Atividades escolhidas" value={extras.size} sub={`de ${ACTIVITIES.length} no catálogo`} />
-        <Stat label="Pendências" value={pendingCount} sub={`+ ${checklistLeft} do checklist`} bad={pendingCount > 0} />
+        <Stat label="Passeios extras escolhidos" value={extras.size} sub={`de ${ACTIVITIES.length} no catálogo`}
+          onClick={() => setTab("passeios")} />
+        <Stat label="Pendências" value={pendingCount} sub={`+ ${checklistLeft} itens no checklist`} bad={pendingCount > 0}
+          onClick={() => setTab("pratico")} />
       </div>
 
       <AirportWarning />
 
-      <nav className="sticky-tabs no-print mt-5">
+      <nav id="abas" className="sticky-tabs no-print mt-5" aria-label="Seções do site">
         <div className="card tab-strip flex gap-1.5 p-2">
           {TABS.map((t) => {
             const Icon = t.icon;
@@ -218,6 +274,8 @@ export default function JapanApp() {
               <button
                 key={t.id}
                 type="button"
+                title={t.help}
+                aria-current={on ? "page" : undefined}
                 onClick={() => setTab(t.id)}
                 className={`filter-pill inline-flex flex-none items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-semibold ${
                   on
@@ -235,7 +293,12 @@ export default function JapanApp() {
         </div>
       </nav>
 
-      <main className="anim-in mt-4 space-y-5">
+      <main id="conteudo" key={tab} className="anim-in mt-4 space-y-5">
+        <TabIntro tab={tab} onGo={setTab} />
+
+        {tab === "geral" && showGuide && (
+          <HowToUse onGo={setTab} onClose={() => setShowGuide(false)} />
+        )}
         {tab === "geral" && (
           <Overview
             daysLeft={daysLeft}
@@ -254,6 +317,12 @@ export default function JapanApp() {
         )}
         {tab === "passeios" && (
           <ActivityCatalog chosen={extras} onToggle={toggleExtra} />
+        )}
+        {tab === "pacotes" && (
+          <AgencyCompare
+            extras={extras} onToggleExtra={toggleExtra}
+            poiIds={poiIds} onTogglePoi={togglePoi}
+          />
         )}
         {tab === "mapa" && (
           <JapanMap selectedIds={poiIds} onToggle={togglePoi} bases={mapBases} />
@@ -284,7 +353,7 @@ export default function JapanApp() {
   );
 }
 
-function Hero({ daysLeft, onPdf }) {
+function Hero({ daysLeft, onPdf, onHelp }) {
   return (
     <header className="anim-in card relative min-h-[17rem] overflow-hidden sm:min-h-[18rem]">
       {HERO_IMAGES.map((img, i) => (
@@ -302,10 +371,12 @@ function Hero({ daysLeft, onPdf }) {
 
       <div className="relative flex h-full flex-col justify-between gap-4 p-5 sm:p-6">
         <div className="flex items-center justify-end gap-2 no-print">
+          <button type="button" className="btn-ghost backdrop-blur-md" onClick={onHelp}>
+            <HelpCircle size={14} /> Como usar
+          </button>
           <button type="button" className="btn-ghost backdrop-blur-md" onClick={onPdf}>
             <FileDown size={14} /> Exportar PDF
           </button>
-
         </div>
 
         <div className="flex flex-wrap items-end justify-between gap-3">
@@ -322,7 +393,7 @@ function Hero({ daysLeft, onPdf }) {
               <span className="mx-1.5 text-slate-500">·</span>
               14 dias
               <span className="mx-1.5 text-slate-500">·</span>
-              Tóquio 5n + Kyoto 3n + Osaka 4n + Narita 1n
+              Tóquio 5 noites · Kyoto 3 · Osaka 4 · Narita 1
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -347,16 +418,92 @@ function AirportWarning() {
   );
 }
 
-function Stat({ label, value, sub, highlight, bad }) {
+function Stat({ label, value, sub, highlight, bad, onClick }) {
+  const Tag = onClick ? "button" : "div";
   return (
-    <div
-      className={`card p-4 ${
+    <Tag
+      type={onClick ? "button" : undefined}
+      onClick={onClick}
+      className={`card p-4 text-left ${onClick ? "card-hover" : ""} ${
         highlight ? "ring-1 ring-inset ring-rose-400/40" : bad ? "ring-1 ring-inset ring-amber-400/40" : ""
       }`}
     >
       <div className="text-[11px] uppercase tracking-wider text-slate-400">{label}</div>
       <div className={`mt-1 truncate text-lg font-bold ${bad ? "text-amber-200" : "text-white"}`}>{value}</div>
       {sub && <div className="truncate text-[11px] text-slate-400">{sub}</div>}
+      {onClick && <div className="mt-1 text-[10px] font-semibold text-sky-300 no-print">ver →</div>}
+    </Tag>
+  );
+}
+
+// ==================== AJUDA ====================
+function TabIntro({ tab, onGo }) {
+  const t = TABS.find((x) => x.id === tab);
+  const next = TABS.find((x) => x.id === t.next);
+  const Icon = t.icon;
+  return (
+    <div className="no-print flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-sky-400/20 bg-sky-500/[0.06] px-4 py-3">
+      <p className="flex min-w-0 flex-1 items-start gap-2 text-sm text-sky-50">
+        <Icon size={16} className="mt-0.5 flex-none text-sky-300" />
+        <span><strong className="font-semibold">{t.label}:</strong> {t.help}</span>
+      </p>
+      {next && (
+        <button type="button" onClick={() => onGo(next.id)}
+          className="filter-pill inline-flex flex-none items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold text-sky-200 hover:bg-white/10">
+          Próximo: {next.label} <ArrowRight size={13} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+const GUIDE_STEPS = [
+  { n: 1, tab: "roteiro", title: "Veja o roteiro", body: "O que vocês vão fazer em cada dia, cidade por cidade." },
+  { n: 2, tab: "passeios", title: "Escolha passeios extras", body: "No catálogo, toque em “+ ao plano”. O passeio passa a aparecer no roteiro." },
+  { n: 3, tab: "pacotes", title: "Compare com agências", body: "Veja o que os pacotes prontos incluem e o que falta no plano de vocês." },
+  { n: 4, tab: "pratico", title: "Resolva as pendências", body: "Marque cada item do checklist quando estiver feito." },
+  { n: 5, tab: "plano", title: "Exporte e compartilhe", body: "PDF ou resumo pronto para mandar no WhatsApp." },
+];
+
+function HowToUse({ onGo, onClose }) {
+  return (
+    <div className="card panel-accent p-5">
+      <div className="flex items-start justify-between gap-3">
+        <SectionTitle icon={HelpCircle} sub="Cinco passos. Tudo o que vocês marcam fica salvo neste aparelho.">
+          Como usar este site
+        </SectionTitle>
+        <button type="button" onClick={onClose} aria-label="Esconder o guia"
+          className="filter-pill inline-flex flex-none items-center gap-1 rounded-lg px-2 py-1 text-xs text-slate-300 hover:bg-white/10 no-print">
+          <X size={13} /> Esconder
+        </button>
+      </div>
+      <ol className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-5">
+        {GUIDE_STEPS.map((s) => (
+          <li key={s.n}>
+            <button type="button" onClick={() => onGo(s.tab)}
+              className="card-hover flex h-full w-full flex-col gap-1 rounded-xl border border-white/10 bg-white/[0.04] p-3 text-left">
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-rose-500/30 text-xs font-bold text-rose-50">{s.n}</span>
+              <span className="text-sm font-bold text-white">{s.title}</span>
+              <span className="text-xs text-slate-300">{s.body}</span>
+              <span className="mt-auto pt-1 text-[11px] font-semibold text-sky-300">Abrir →</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-3 text-[11px] text-slate-400">
+        Para rever este guia depois, toque em <strong className="text-slate-200">Como usar</strong> no topo da página.
+      </p>
+    </div>
+  );
+}
+
+function Legend({ items }) {
+  return (
+    <div className="flex flex-wrap gap-x-4 gap-y-1.5 rounded-xl bg-white/[0.04] px-3 py-2 text-[11px] text-slate-300">
+      <span className="font-semibold text-slate-400">Legenda:</span>
+      {items.map(([tag, text]) => (
+        <span key={text} className="inline-flex items-center gap-1.5">{tag} {text}</span>
+      ))}
     </div>
   );
 }
@@ -412,7 +559,9 @@ function Overview({ daysLeft, tokyoVariant, chosenActs, done, onGo }) {
               <div key={c.id} className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">
                 <div className="text-xl">{c.emoji}</div>
                 <div className="mt-0.5 text-xs font-bold text-white">{c.label}</div>
-                <div className="text-lg font-extrabold text-white">{c.nights}n</div>
+                <div className="text-lg font-extrabold text-white">
+                  {c.nights} <span className="text-xs font-semibold text-slate-300">{c.nights > 1 ? "noites" : "noite"}</span>
+                </div>
                 <div className="text-[10px] text-slate-400">{c.range}</div>
               </div>
             ))}
@@ -498,13 +647,19 @@ function Itinerary({ tokyoVariant, setTokyoVariant, chosenActs }) {
 
   return (
     <section className="space-y-5">
+      <Legend items={[
+        [<span className="rounded bg-indigo-500/25 px-1.5 py-0.5 text-[9px] font-bold text-indigo-200">SEPARADOS</span>, "cada um faz um programa diferente e vocês se reencontram depois"],
+        [<span className="rounded bg-amber-500/25 px-1.5 py-0.5 text-[9px] font-bold text-amber-200">RESERVAR</span>, "precisa comprar ou reservar antes"],
+        [<span className="rounded bg-emerald-500/25 px-1.5 py-0.5 text-[9px] font-bold text-emerald-200">EXTRA</span>, "passeio que vocês marcaram em Explorar"],
+      ]} />
+
       {/* TÓQUIO */}
       <div className="card p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <SectionTitle sub="Chegada dia 9 ao meio-dia (recuperação), 4 dias cheios, saída dia 14 de manhã">
+          <SectionTitle sub="Chegada dia 9 ao meio-dia (recuperação), 4 dias cheios, saída dia 14 de manhã. Ainda não decidiram se vai ter DisneySea: use os botões ao lado para comparar as duas versões.">
             🗼 Tóquio · 09–14/12
           </SectionTitle>
-          <div className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1 text-xs no-print">
+          <div className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1 text-xs no-print" role="group" aria-label="Versão do roteiro de Tóquio">
             {Object.values(TOKYO_VARIANTS).map((v) => (
               <button
                 key={v.id}
@@ -571,7 +726,7 @@ function DayBlock({ title, days, extras }) {
                     {sl.what}
                     {sl.split && (
                       <span className="ml-1.5 rounded bg-indigo-500/25 px-1.5 py-0.5 text-[9px] font-bold text-indigo-200">
-                        SPLIT
+                        SEPARADOS
                       </span>
                     )}
                     {sl.booking && (
@@ -596,7 +751,8 @@ function ExtrasInline({ list }) {
   return (
     <div className="mt-3 rounded-xl border border-emerald-400/25 bg-emerald-500/[0.07] p-3">
       <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-300">
-        + {list.length} extra(s) que vocês escolheram
+        <span className="mr-1.5 rounded bg-emerald-500/25 px-1.5 py-0.5 text-[9px] font-bold text-emerald-200">EXTRA</span>
+        {list.length} passeio(s) que vocês marcaram — encaixem num dia desta cidade
       </div>
       <ul className="mt-1.5 space-y-1 text-xs text-emerald-50">
         {list.map((a) => (
@@ -949,7 +1105,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
           </SectionTitle>
           {chosenActs.length === 0 ? (
             <p className="text-xs text-slate-400">
-              Nenhum ainda — vá em "Escolher passeios" e marque o que entra.
+              Nenhum ainda — vá na aba “Explorar” e toque em “+ ao plano” no que quiserem fazer.
             </p>
           ) : (
             <ul className="space-y-1.5 text-xs">
@@ -957,7 +1113,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
                 <li key={e.id} className="flex flex-wrap items-center gap-2">
                   <Check size={12} className="flex-none text-emerald-300" />
                   <span className="font-semibold text-slate-100">{e.name}</span>
-                  <span className="text-slate-400">{e.duration}</span>
+                  <span className="text-slate-400">{e.hours}h</span>
                   <MatchBadge match={e.match} />
                 </li>
               ))}
@@ -970,7 +1126,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
             📍 Lugares salvos ({chosenPois.length})
           </SectionTitle>
           {chosenPois.length === 0 ? (
-            <p className="text-xs text-slate-400">Nenhum ainda — abra o Mapa e toque em "+ Adicionar ao plano".</p>
+            <p className="text-xs text-slate-400">Nenhum ainda — abra o Mapa, toque num ponto e salve no plano.</p>
           ) : (
             <ul className="space-y-1 text-xs">
               {chosenPois.map((p) => (
@@ -1006,6 +1162,147 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
           {JSON.stringify(buildJSON(), null, 2)}
         </pre>
       </details>
+    </section>
+  );
+}
+
+// ==================== PACOTES DE AGÊNCIA ====================
+function AgencyCompare({ extras, onToggleExtra, poiIds, onTogglePoi }) {
+  const [pkgId, setPkgId] = useState(AGENCY_PACKAGES[0].id);
+  const [only, setOnly] = useState("todos");
+  const pkg = AGENCY_PACKAGES.find((p) => p.id === pkgId);
+  const count = coverageCount(pkg);
+  const total = Object.values(count).reduce((s, n) => s + n, 0);
+  const actName = (id) => ACTIVITIES.find((a) => a.id === id)?.name;
+  const poiName = (id) => JAPAN_POIS.find((p) => p.id === id)?.name;
+
+  return (
+    <section className="space-y-4">
+      <div className="card p-5">
+        <SectionTitle icon={Scale} sub="Escolha o pacote para ver o dia a dia dele comparado com o de vocês.">
+          Qual pacote?
+        </SectionTitle>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {AGENCY_PACKAGES.map((p) => {
+            const c = coverageCount(p);
+            const n = Object.values(c).reduce((s, x) => s + x, 0);
+            const on = p.id === pkgId;
+            return (
+              <button key={p.id} type="button" onClick={() => { setPkgId(p.id); setOnly("todos"); }}
+                aria-pressed={on}
+                className={`filter-pill rounded-xl border p-3 text-left ${
+                  on ? "border-rose-400/60 bg-rose-500/15" : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                }`}>
+                <div className="text-sm font-bold text-white">{p.name}</div>
+                <div className="text-[11px] text-slate-400">{p.agency}</div>
+                <div className="mt-1 text-xs text-slate-200">{p.dates} · {p.season.split(" — ")[0]}</div>
+                <div className="mt-1.5 text-xs font-semibold text-emerald-200">
+                  {c.roteiro} de {n} atrações já estão no roteiro de vocês
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="card p-5">
+        <div className="grid grid-cols-1 gap-3 text-xs text-slate-200 sm:grid-cols-2">
+          <div><span className="text-slate-400">Datas:</span> {pkg.dates} · {pkg.japanDays}</div>
+          <div><span className="text-slate-400">Estação:</span> {pkg.season}</div>
+          <div><span className="text-slate-400">Preço:</span> {pkg.price}</div>
+          <div><span className="text-slate-400">Formato:</span> {pkg.style}</div>
+        </div>
+        <div className="mt-3 rounded-lg bg-amber-500/10 p-3 text-xs text-amber-100 ring-1 ring-inset ring-amber-400/20">
+          ⚠️ {pkg.extras}
+        </div>
+        {pkg.url && (
+          <a href={pkg.url} target="_blank" rel="noreferrer"
+            className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-sky-300 hover:text-sky-200 no-print">
+            Ver página original da agência <ExternalLink size={12} />
+          </a>
+        )}
+      </div>
+
+      <div className="card p-5">
+        <SectionTitle sub={`${total} atrações no Japão. Toque num resumo para filtrar a lista.`}>
+          Resumo da comparação
+        </SectionTitle>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {Object.entries(COVERAGE).map(([id, c]) => (
+            <button key={id} type="button" onClick={() => setOnly(only === id ? "todos" : id)}
+              aria-pressed={only === id}
+              className={`filter-pill rounded-xl p-3 text-left ring-1 ring-inset ${c.cls} ${only === id ? "ring-2" : ""}`}>
+              <div className="text-2xl font-extrabold">{count[id]}</div>
+              <div className="text-xs font-semibold">{c.emoji} {c.label}</div>
+            </button>
+          ))}
+        </div>
+        {only !== "todos" && (
+          <button type="button" onClick={() => setOnly("todos")}
+            className="mt-2 text-xs font-semibold text-sky-300 hover:text-sky-200">
+            ✕ Mostrar tudo de novo
+          </button>
+        )}
+      </div>
+
+      <ol className="space-y-3">
+        {pkg.days.map((d) => {
+          const items = (d.items || []).filter((it) => only === "todos" || it.status === only);
+          if (!d.outOfScope && items.length === 0) return null;
+          if (d.outOfScope && only !== "todos") return null;
+          return (
+            <li key={d.date} className={`card p-4 ${d.outOfScope ? "opacity-60" : ""}`}>
+              <div className="flex flex-wrap items-baseline gap-2">
+                <span className="text-xs font-bold text-white">{d.date}</span>
+                <span className="text-xs text-rose-200">{d.title}</span>
+                {d.outOfScope && <span className="text-[10px] text-slate-400">· fora do Japão</span>}
+              </div>
+              {d.note && <p className="mt-1 text-xs text-slate-400">{d.note}</p>}
+              {items.length > 0 && (
+                <ul className="mt-2 space-y-2">
+                  {items.map((it) => {
+                    const c = COVERAGE[it.status];
+                    const added = it.actId ? extras.has(it.actId) : it.poiId ? poiIds.has(it.poiId) : false;
+                    const link = it.actId ? actName(it.actId) : it.poiId ? poiName(it.poiId) : null;
+                    return (
+                      <li key={it.name} className="flex flex-wrap items-start justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-2.5">
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-semibold text-slate-100">{it.name}</div>
+                          <div className="mt-0.5 text-[11px] text-slate-400">
+                            {it.where && <>No roteiro de vocês: <span className="text-slate-200">{it.where}</span></>}
+                            {link && <>No site como: <span className="text-slate-200">{link}</span></>}
+                            {it.note && <>{(it.where || link) && " · "}{it.note}</>}
+                          </div>
+                        </div>
+                        <div className="flex flex-none items-center gap-1.5">
+                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ring-1 ring-inset ${c.cls}`}>
+                            {c.emoji} {c.short}
+                          </span>
+                          {(it.actId || it.poiId) && (
+                            <button type="button"
+                              onClick={() => (it.actId ? onToggleExtra(it.actId) : onTogglePoi(it.poiId))}
+                              className={`filter-pill rounded-lg px-2.5 py-1 text-[10px] font-bold no-print ${
+                                added ? "bg-emerald-500/25 text-emerald-100" : "bg-indigo-500/30 text-indigo-100"
+                              }`}>
+                              {added ? "✓ no plano" : "+ ao plano"}
+                            </button>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="card p-5 text-xs text-slate-300">
+        <strong className="text-white">Importante:</strong> os dois pacotes são em outra época do ano (outono e primavera)
+        e em ritmo de excursão em grupo. A viagem de vocês é em dezembro, por conta própria — use a lista para achar
+        ideias, não como roteiro a copiar. Itens marcados como “No mapa” ficam salvos em “Meu plano → Lugares salvos”.
+      </div>
     </section>
   );
 }
@@ -1056,9 +1353,15 @@ function ActivityCatalog({ chosen, onToggle }) {
     <section className="space-y-4">
       {/* Filtros */}
       <div className="card panel-accent p-5">
-        <SectionTitle icon={Compass} sub={`${ACTIVITIES.length} atividades com ingresso, melhor horário, o que dizem e o que muda em dezembro. Clique para abrir os detalhes; marque para entrar no roteiro.`}>
+        <SectionTitle icon={Compass} sub={`${ACTIVITIES.length} atividades. Use os filtros abaixo (cidade, tipo, para quem) ou busque por palavra.`}>
           Explorar e montar o roteiro
         </SectionTitle>
+        <Legend items={[
+          ["🧑 / 👩 / 👥", "para quem combina mais (Pedro, Gio ou os dois), segundo o questionário"],
+          [<span style={{ color: EFFORT.baixo.color }}>●</span>, EFFORT.baixo.label],
+          [<span style={{ color: EFFORT.medio.color }}>●</span>, EFFORT.medio.label],
+          [<span style={{ color: EFFORT.alto.color }}>●</span>, `${EFFORT.alto.label} (dia inteiro)`],
+        ]} />
 
         <div className="mt-3 space-y-2">
           <div className="flex flex-wrap gap-1.5">
