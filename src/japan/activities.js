@@ -2085,6 +2085,48 @@ export const ACTIVITIES = [
     swapFor: "NÃO RECOMENDADO para este roteiro: exige pernoite fora e desmonta a divisão Tóquio/Kyoto/Osaka já fechada.",
     combines: [],
   },
+  {
+    id: "k-heian", city: "kyoto", area: "Okazaki", cat: "templo",
+    name: "Santuário Heian + jardim", hours: 2, costBRL: 20, costYen: 600, spendBRL: 0,
+    match: "gio", level: "medio", effort: "baixo", rating: 4.3,
+    lat: 35.0160, lng: 135.7823,
+    what: "Réplica em escala 5/8 do antigo palácio imperial, construída em 1895 para os 1.100 anos de Kyoto. O torii da entrada tem 24 metros e é um dos maiores do Japão. O que vale mesmo é o jardim dos fundos, um circuito em volta de um lago com uma ponte coberta.",
+    says: {
+      good: ["O vermelho-alaranjado do prédio é fotogênico e diferente do resto de Kyoto", "O jardim é calmo e quase vazio mesmo quando o pátio está cheio", "Fica ao lado do Museu Kyocera e do zoológico — bom para juntar num bairro só"],
+      bad: ["Não é antigo: é de 1895, e quem descobre isso depois se sente enganado", "O pátio principal é de graça e vazio de conteúdo; a parte que vale é o jardim pago", "Muita gente acha que não compete com Fushimi ou Kiyomizu"],
+    },
+    tickets: {
+      where: "Pátio grátis. Jardim Shin'en ¥600, na bilheteria",
+      when: "No dia",
+      sellsOut: "Não",
+      tip: "Se for, pague o jardim. Só o pátio não justifica a viagem até Okazaki.",
+    },
+    bestTime: "Manhã, emendando com o Caminho do Filósofo, que começa perto.",
+    december: "Sem flor de cerejeira (o auge dele é abril) e sem folha vermelha. Em dezembro é o jardim vazio e silencioso — bom se o que você quer é sossego, fraco se quer espetáculo.",
+    swapFor: "Duas horas em Kyoto. Concorre com o Caminho do Filósofo, que é de graça.",
+    combines: ["k-filosofo"],
+  },
+  {
+    id: "k-tenryuji", city: "kyoto", area: "Arashiyama", cat: "templo",
+    name: "Tenryu-ji — o jardim que nunca foi refeito", hours: 2, costBRL: 29, costYen: 900, spendBRL: 0,
+    match: "ambos", level: "alto", effort: "baixo", rating: 4.6,
+    lat: 35.0159, lng: 135.6739,
+    what: "O templo zen mais importante de Arashiyama e Patrimônio da UNESCO. Os prédios queimaram oito vezes, mas o jardim Sogenchi é do século XIV e chegou intacto até hoje — o mais antigo do Japão na forma original, desenhado para emoldurar as montanhas atrás como se fizessem parte dele.",
+    says: {
+      good: ["A porta dos fundos do templo dá direto no bambuzal — dá para entrar por ali e furar a multidão da entrada principal", "Sentar na varanda de madeira olhando o lago é o momento mais tranquilo de Arashiyama", "O jardim de 700 anos sobreviveu a todos os incêndios: é o real, não uma reconstrução"],
+      bad: ["Ingresso separado para o jardim e para os prédios — confunde e irrita na bilheteria", "Arashiyama inteira é lotada; chegando depois das 10h você disputa cada metro", "Quem não liga para jardim zen acha caro pelo que é"],
+    },
+    tickets: {
+      where: "Jardim ¥500, prédios +¥300, sala do dragão +¥500. Bilheteria no local",
+      when: "No dia",
+      sellsOut: "Não",
+      tip: "Compre só o jardim e saia pela porta do fundo direto no bambuzal — você paga menos, evita a fila da entrada principal do bambuzal e ainda vê a melhor parte.",
+    },
+    bestTime: "Abre 8h30. Chegue na abertura: às 10h Arashiyama já está impraticável.",
+    december: "Jardim de coníferas, musgo e pedra — funciona o ano inteiro e não depende de folha. Com geada de manhã fica especialmente bonito, e em dezembro você tem a chance real de pegá-lo vazio.",
+    swapFor: "Duas horas dentro do dia de Arashiyama. Não é um dia extra.",
+    combines: ["k-arashiyama"],
+  },
 ];
 
 // Bate-voltas com informação consolidada de deslocamento
