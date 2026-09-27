@@ -47,38 +47,50 @@ export const STAYS = [
     lng: 139.7847,
     room: "2 adultos, 1 cama de casal",
     area: "Nihonbashi/Kanda — poucos minutos da Estação de Kanda e da Estação de Tóquio (embarque do shinkansen do dia 14)",
-    totalBRL: 2824,
-    perNightBRL: 565,
-    cancel: "Cancelamento grátis",
-    notes: [],
+    totalBRL: 2579,
+    perNightBRL: 516,
+    cancel: "Tarifa de empresa parceira",
+    notes: ["Fechou por R$ 2.579, abaixo dos R$ 2.824 orçados — R$ 245 a menos que o previsto."],
   },
   {
-    id: "kyoto-pending",
+    id: "mystays-kyoto",
     city: "kyoto",
-    status: "pendente",
-    name: "Hotel em Kyoto",
+    status: "confirmada",
+    name: "HOTEL MYSTAYS Kyoto Shijo",
     checkIn: "14/12",
     checkOut: "17/12",
     nights: 3,
-    lat: 35.0116,
-    lng: 135.7681,
-    area: "A definir — ver sugestões de bairro no mapa",
-    totalBRL: null,
-    notes: ["Ainda não reservado."],
+    lat: 34.9993,
+    lng: 135.7508,
+    room: "2 adultos",
+    area: "Shijo/Omiya — a oeste do centro, na linha Hankyu. Uma parada de Karasuma, duas de Kawaramachi (Nishiki, Pontocho e Gion).",
+    totalBRL: 653,
+    perNightBRL: 218,
+    cancel: "Tarifa de empresa parceira",
+    notes: [
+      "R$ 218 a diária para os dois. É a hospedagem mais barata das três por uma margem enorme.",
+      "Fica na Hankyu, não na Karasuma do metrô: para Fushimi Inari e Arashiyama o trajeto é direto; para a Estação de Kyoto (shinkansen do dia 17) precisa de uma baldeação.",
+    ],
   },
   {
-    id: "osaka-pending",
+    id: "travelodge-osaka",
     city: "osaka",
-    status: "pendente",
-    name: "Hotel em Osaka",
+    status: "confirmada",
+    name: "Travelodge Honmachi Osaka",
     checkIn: "17/12",
     checkOut: "21/12",
     nights: 4,
-    lat: 34.6687,
-    lng: 135.5013,
-    area: "A definir — ver sugestões de bairro no mapa",
-    totalBRL: null,
-    notes: ["Ainda não reservado."],
+    lat: 34.6821,
+    lng: 135.4997,
+    room: "2 adultos",
+    area: "Honmachi — entre Umeda e Namba, nas linhas Midosuji e Chuo. Shinsaibashi e Dotonbori ficam a uma ou duas paradas.",
+    totalBRL: 1098,
+    perNightBRL: 275,
+    cancel: "Cancelamento grátis",
+    notes: [
+      "Honmachi é bairro de escritório: silencioso à noite e sem a bagunça de Namba, mas a dois minutos de metrô dela.",
+      "É a única das quatro reservas com cancelamento grátis — se o roteiro de Osaka mudar, esta é a que dá para mexer.",
+    ],
   },
   {
     id: "9h-narita",
@@ -198,6 +210,8 @@ export const SETTLED = [
   "Usar Suica/ICOCA (mesmo cartão funciona nas duas regiões)",
   "teamLab: visitar a unidade de Kyoto (Biovortex), não a de Tóquio, para não duplicar",
   "Onsen: banho privativo, não banho público",
+  "As 4 hospedagens estão reservadas: Comfort Tóquio, MYSTAYS Kyoto, Travelodge Osaka e a cápsula de Narita",
+  "Passagens aéreas compradas: R$ 19.358 pelos dois",
 ];
 
 // ===== 5. LOGÍSTICA ENTRE CIDADES =====
@@ -491,8 +505,6 @@ export const EXTRAS = [
 // ===== 9. PENDÊNCIAS =====
 export const OPEN_DECISIONS = [
   { id: "d-disneysea", label: "DisneySea: incluir ou não", detail: "Depende de qual dos dois roteiros de Tóquio vocês escolherem.", severity: "alta" },
-  { id: "d-hotel-kyoto", label: "Hospedagem em Kyoto", detail: "Ainda não pesquisada.", severity: "alta" },
-  { id: "d-hotel-osaka", label: "Hospedagem em Osaka", detail: "Ainda não pesquisada.", severity: "alta" },
   { id: "d-teamlab", label: "Reserva do teamLab Biovortex Kyoto", detail: "Fazer com 2–3 semanas de antecedência.", severity: "alta" },
   { id: "d-arima", label: "Reserva do banho privativo em Arima", detail: "Fazer com antecedência, principalmente por cair num sábado.", severity: "alta" },
   { id: "d-himeji-kobe", label: "Himeji + Kobe no mesmo dia ou separados", detail: "O roteiro-base junta os dois; se quiserem mais tempo no castelo, dá para separar tirando uma manhã do dia do Arima.", severity: "media" },
@@ -514,16 +526,20 @@ export const PRACTICAL = [
 ];
 
 // ===== 11. ORÇAMENTO =====
+// Teto combinado da viagem, definido pelo Pedro: R$ 40.000 para os dois, tudo incluso.
+export const BUDGET_CAP = 40000;
+
 export const BUDGET_LINES = [
-  { id: "b-tokyo", label: "Hotel Tóquio (5 noites, 2 pessoas)", brl: 2824, status: "pago" },
-  { id: "b-narita", label: "Cápsula Narita (1 noite, 2 pessoas)", brl: 427, sub: "¥13.110", status: "pago" },
-  { id: "b-kyoto", label: "Hotel Kyoto (3 noites)", brl: null, status: "aberto" },
-  { id: "b-osaka", label: "Hotel Osaka (4 noites)", brl: null, status: "aberto" },
-  { id: "b-trens", label: "Trens entre cidades (por pessoa, ida)", brl: 1075, sub: "~¥30.000–35.000 (~R$ 1.000–1.150)", perPerson: true, status: "estimado" },
-  { id: "b-batevolta", label: "Bate-voltas do Kansai (Himeji, Kobe, Arima)", brl: 180, sub: "~¥5.000–6.000 por pessoa", perPerson: true, status: "estimado" },
-  { id: "b-diario", label: "Alimentação e gastos diários", brl: 3900, sub: "R$ 300/pessoa/dia × 13 dias", perPerson: true, status: "estimado" },
-  { id: "b-teamlab", label: "teamLab Biovortex Kyoto", brl: 150, sub: "~¥3.600–5.600 por pessoa", perPerson: true, status: "estimado" },
-  { id: "b-disney", label: "DisneySea (se incluído)", brl: 331, sub: "~¥9.400–10.900 por pessoa", perPerson: true, status: "opcional" },
+  { id: "b-voos", label: "Passagens aéreas (2 pessoas, ida e volta)", brl: 19358, group: "aereo", status: "pago" },
+  { id: "b-tokyo", label: "Comfort Hotel Tóquio (5 noites, 2 pessoas)", brl: 2579, group: "hospedagem", status: "pago" },
+  { id: "b-kyoto", label: "MYSTAYS Kyoto Shijo (3 noites, 2 pessoas)", brl: 653, group: "hospedagem", status: "pago" },
+  { id: "b-osaka", label: "Travelodge Honmachi Osaka (4 noites, 2 pessoas)", brl: 1098, group: "hospedagem", status: "pago" },
+  { id: "b-narita", label: "Cápsula 9h Narita (1 noite, 2 pessoas)", brl: 427, sub: "¥13.110", group: "hospedagem", status: "pago" },
+  { id: "b-trens", label: "Trens entre cidades (por pessoa, ida)", brl: 1075, sub: "~¥30.000–35.000 (~R$ 1.000–1.150)", perPerson: true, group: "transporte", status: "estimado" },
+  { id: "b-batevolta", label: "Bate-voltas do Kansai (Himeji, Kobe, Arima)", brl: 180, sub: "~¥5.000–6.000 por pessoa", perPerson: true, group: "transporte", status: "estimado" },
+  { id: "b-diario", label: "Alimentação e gastos diários", brl: 3900, sub: "R$ 300/pessoa/dia × 13 dias", perPerson: true, group: "diario", status: "estimado" },
+  { id: "b-teamlab", label: "teamLab Biovortex Kyoto", brl: 150, sub: "~¥3.600–5.600 por pessoa", perPerson: true, group: "passeios", status: "estimado" },
+  { id: "b-disney", label: "DisneySea (se incluído)", brl: 331, sub: "~¥9.400–10.900 por pessoa", perPerson: true, group: "passeios", status: "opcional" },
 ];
 
 // ===== 12. CHECKLIST =====

@@ -10,7 +10,7 @@ import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
 import { AGENCY_PACKAGES, COVERAGE, coverageCount } from "./agencyPackages.js";
 import {
-  BUDGET_LINES, CHECKLIST, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
+  BUDGET_CAP, BUDGET_LINES, CHECKLIST, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
   LOGISTICS, LOGISTICS_NOTES, OPEN_DECISIONS, OSAKA_DAYS, PACE,
   PERSON_PROFILES, PRACTICAL, PREFERENCES, SETTLED, STAYS, TOKYO_VARIANTS,
   TRIP,
@@ -195,10 +195,29 @@ export default function JapanApp() {
     })),
     openDecisions: OPEN_DECISIONS,
     checklist: CHECKLIST.map((c) => ({ ...c, done: done.has(c.id) })),
-    budget: BUDGET_LINES,
+    budget: { cap: BUDGET_CAP, totals: budgetTotals(), lines: BUDGET_LINES },
   });
 
+  const budgetTotals = () => {
+    const f = (fn) =>
+      BUDGET_LINES.filter(fn).reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * TRIP.people : b.brl || 0), 0);
+    const paid = f((b) => b.status === "pago");
+    const estimated = f((b) => b.status === "estimado");
+    return {
+      cap: BUDGET_CAP,
+      flights: f((b) => b.group === "aereo"),
+      lodging: f((b) => b.group === "hospedagem"),
+      paid,
+      estimated,
+      optional: f((b) => b.status === "opcional"),
+      projected: paid + estimated,
+      remaining: BUDGET_CAP - paid,
+      slack: BUDGET_CAP - paid - estimated,
+    };
+  };
+
   const buildText = () => {
+    const B = budgetTotals();
     const L = [];
     L.push("🇯🇵 ROTEIRO JAPÃO — PEDRO & GIO");
     L.push(`${TRIP.arriveLabel} → ${TRIP.departLabel}`);
@@ -212,6 +231,14 @@ export default function JapanApp() {
       const tag = s.status === "confirmada" ? "✅" : "⏳";
       L.push(`  ${tag} ${s.name} — ${s.nights}n${s.totalBRL ? ` · ${formatBRL(s.totalBRL)}` : " · A RESERVAR"}`);
     });
+    L.push("");
+    L.push("💰 ORÇAMENTO");
+    L.push(`  ✈️ Passagens: ${formatBRL(B.flights)}`);
+    L.push(`  🏨 Hospedagens (${TRIP.nights} noites): ${formatBRL(B.lodging)}`);
+    L.push(`  = Já pago: ${formatBRL(B.paid)}`);
+    L.push(`  Teto: ${formatBRL(B.cap)} → ainda disponível ${formatBRL(B.remaining)}`);
+    L.push(`  A gastar lá (estimado): ${formatBRL(B.estimated)}`);
+    L.push(`  Projeção final: ${formatBRL(B.projected)} → ${B.slack >= 0 ? `folga de ${formatBRL(B.slack)}` : `ESTOURO de ${formatBRL(Math.abs(B.slack))}`}`);
     L.push("");
     L.push(`🗼 TÓQUIO — versão ${TOKYO_VARIANTS[tokyoVariant].label}`);
     TOKYO_VARIANTS[tokyoVariant].days.forEach((d) =>
@@ -345,8 +372,8 @@ export default function JapanApp() {
       </main>
 
       <footer className="mt-10 border-t border-white/10 pt-5 text-xs text-slate-400">
-        Source of truth da viagem. Voos e hotéis de Tóquio e Narita estão confirmados; Kyoto e
-        Osaka seguem em aberto. Valores em iene são estimativas ao câmbio de referência
+        Source of truth da viagem. Passagens e as quatro hospedagens estão confirmadas e pagas.
+        Valores em iene são estimativas ao câmbio de referência
         (1 BRL ≈ ¥30,7) e mudam com a data — conferir antes de reservar.
       </footer>
     </div>
@@ -398,7 +425,7 @@ function Hero({ daysLeft, onPdf, onHelp }) {
           </div>
           <div className="flex flex-wrap gap-1.5">
             <span className="chip backdrop-blur-md">✈️ voos confirmados</span>
-            <span className="chip backdrop-blur-md">🏨 2 de 4 hotéis</span>
+            <span className="chip backdrop-blur-md">🏨 4 de 4 hotéis</span>
             <span className="chip backdrop-blur-md">🗺️ {JAPAN_POIS.length} lugares</span>
           </div>
         </div>
@@ -530,13 +557,41 @@ function MatchBadge({ match, level }) {
   );
 }
 
+function BudgetBar({ paid, estimated, cap }) {
+  const pct = (v) => Math.max(0, Math.min(100, (v / cap) * 100));
+  const over = paid + estimated > cap;
+  return (
+    <div>
+      <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/10" title={`Teto ${formatBRL(cap)}`}>
+        <div className="bg-emerald-400/80" style={{ width: `${pct(paid)}%` }} />
+        <div
+          className={over ? "bg-rose-400/70" : "bg-amber-400/60"}
+          style={{ width: `${pct(estimated)}%` }}
+        />
+      </div>
+      <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-400">
+        <span><span className="mr-1 inline-block h-2 w-2 rounded-full bg-emerald-400/80" />pago</span>
+        <span><span className={`mr-1 inline-block h-2 w-2 rounded-full ${over ? "bg-rose-400/70" : "bg-amber-400/60"}`} />a gastar</span>
+        <span><span className="mr-1 inline-block h-2 w-2 rounded-full bg-white/20" />folga</span>
+      </div>
+    </div>
+  );
+}
+
 // ==================== VISÃO GERAL ====================
 function Overview({ daysLeft, tokyoVariant, chosenActs, done, onGo }) {
   const confirmed = STAYS.filter((s) => s.status === "confirmada");
   const pendingStays = STAYS.filter((s) => s.status === "pendente");
-  const paid = BUDGET_LINES.filter((b) => b.status === "pago").reduce((s, b) => s + (b.brl || 0), 0);
-  const estimated = BUDGET_LINES.filter((b) => b.status === "estimado")
-    .reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * TRIP.people : b.brl || 0), 0);
+  const sum = (fn) =>
+    BUDGET_LINES.filter(fn).reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * TRIP.people : b.brl || 0), 0);
+  const paid = sum((b) => b.status === "pago");
+  const estimated = sum((b) => b.status === "estimado");
+  const optional = sum((b) => b.status === "opcional");
+  const flights = sum((b) => b.group === "aereo");
+  const lodging = sum((b) => b.group === "hospedagem");
+  const left = BUDGET_CAP - paid;
+  const projected = paid + estimated;
+  const slack = BUDGET_CAP - projected;
 
   return (
     <section className="space-y-4">
@@ -569,21 +624,47 @@ function Overview({ daysLeft, tokyoVariant, chosenActs, done, onGo }) {
         </div>
 
         <div className="card p-5">
-          <SectionTitle icon={Wallet} sub="Estimativa consolidada">Orçamento</SectionTitle>
-          <div className="space-y-2 text-sm">
+          <SectionTitle icon={Wallet} sub={`Teto de ${formatBRL(BUDGET_CAP)} para os dois`}>
+            Orçamento
+          </SectionTitle>
+
+          <BudgetBar paid={paid} estimated={estimated} cap={BUDGET_CAP} />
+
+          <div className="mt-3 space-y-1.5 text-sm">
             <div className="flex justify-between">
-              <span className="text-slate-300">Já pago (hotéis)</span>
-              <span className="font-bold text-emerald-300">{formatBRL(paid)}</span>
+              <span className="text-slate-300">✈️ Passagens</span>
+              <span className="font-bold text-emerald-300 tabular-nums">{formatBRL(flights)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-300">Estimado (2 pessoas)</span>
-              <span className="font-bold text-white">{formatBRL(estimated)}</span>
+              <span className="text-slate-300">🏨 Hospedagens (13 noites)</span>
+              <span className="font-bold text-emerald-300 tabular-nums">{formatBRL(lodging)}</span>
             </div>
-            <div className="flex justify-between border-t border-white/10 pt-2">
-              <span className="text-slate-300">Hotéis Kyoto + Osaka</span>
-              <span className="font-bold text-amber-300">em aberto</span>
+            <div className="flex justify-between border-t border-white/10 pt-1.5">
+              <span className="font-semibold text-white">Já comprometido</span>
+              <span className="font-extrabold text-white tabular-nums">{formatBRL(paid)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-300">Ainda disponível</span>
+              <span className="font-extrabold text-sky-300 tabular-nums">{formatBRL(left)}</span>
             </div>
           </div>
+
+          <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.04] p-3 text-xs">
+            <div className="flex justify-between">
+              <span className="text-slate-300">A gastar lá (estimado)</span>
+              <span className="font-bold text-amber-200 tabular-nums">{formatBRL(estimated)}</span>
+            </div>
+            <div className="mt-1 flex justify-between">
+              <span className="text-slate-300">Projeção final</span>
+              <span className="font-bold text-white tabular-nums">{formatBRL(projected)}</span>
+            </div>
+            <p className={`mt-2 leading-relaxed ${slack >= 0 ? "text-emerald-200" : "text-rose-200"}`}>
+              {slack >= 0
+                ? `Sobra de ${formatBRL(slack)} dentro do teto. Com o DisneySea, a folga cai para ${formatBRL(slack - optional)}.`
+                : `Estouro projetado de ${formatBRL(Math.abs(slack))}. Precisa cortar em algum lugar.`}
+            </p>
+          </div>
+
           <button type="button" className="btn-ghost mt-3 w-full no-print" onClick={() => onGo("plano")}>
             Ver detalhamento
           </button>
@@ -630,7 +711,7 @@ function Overview({ daysLeft, tokyoVariant, chosenActs, done, onGo }) {
             <ul className="space-y-1.5 text-xs text-slate-200">
               <li>🗼 Tóquio na versão <strong>{TOKYO_VARIANTS[tokyoVariant].label}</strong></li>
               <li>✨ {chosenActs.length} passeio(s) extra(s) escolhido(s)</li>
-              <li>🏨 {confirmed.length} hotéis confirmados, {pendingStays.length} a reservar</li>
+              <li>🏨 {confirmed.length} hotéis confirmados{pendingStays.length > 0 ? `, ${pendingStays.length} a reservar` : " — nada pendente"}</li>
               <li>☑️ {done.size}/{CHECKLIST.length} itens do checklist feitos</li>
             </ul>
           </div>
@@ -1042,7 +1123,13 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
     }
   };
 
-  const paid = BUDGET_LINES.filter((b) => b.status === "pago").reduce((s, b) => s + (b.brl || 0), 0);
+  const sumB = (fn) =>
+    BUDGET_LINES.filter(fn).reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * TRIP.people : b.brl || 0), 0);
+  const paid = sumB((b) => b.status === "pago");
+  const estimated = sumB((b) => b.status === "estimado");
+  const optional = sumB((b) => b.status === "opcional");
+  const projected = paid + estimated;
+  const slack = BUDGET_CAP - projected;
 
   return (
     <section className="space-y-4">
@@ -1076,25 +1163,50 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
               <div className="min-w-0">
                 <div className="font-semibold text-slate-100">{b.label}</div>
                 {b.sub && <div className="text-[10px] text-slate-400">{b.sub}</div>}
+                {b.perPerson && <div className="text-[10px] text-slate-500">valor já somado para as 2 pessoas</div>}
               </div>
               <div className="flex items-center gap-2">
                 {b.status === "pago" && <span className="badge-ok">pago</span>}
                 {b.status === "aberto" && <span className="badge-warn">em aberto</span>}
+                {b.status === "estimado" && (
+                  <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-200">
+                    estimado
+                  </span>
+                )}
                 {b.status === "opcional" && (
                   <span className="rounded-full bg-slate-500/20 px-2 py-0.5 text-[10px] font-semibold text-slate-300">
                     opcional
                   </span>
                 )}
-                <span className="w-24 text-right font-bold text-white">
-                  {b.brl ? formatBRL(b.brl) : "—"}
+                <span className="w-24 text-right font-bold text-white tabular-nums">
+                  {b.brl ? formatBRL(b.perPerson ? b.brl * TRIP.people : b.brl) : "—"}
                 </span>
               </div>
             </li>
           ))}
         </ul>
-        <div className="mt-3 flex justify-between border-t border-white/10 pt-3 text-sm">
-          <span className="font-semibold text-slate-200">Já pago em hospedagem</span>
-          <span className="text-lg font-bold text-emerald-300">{formatBRL(paid)}</span>
+        <div className="mt-3 space-y-1.5 border-t border-white/10 pt-3 text-sm">
+          <div className="flex justify-between">
+            <span className="font-semibold text-slate-200">Já pago (passagens + hospedagem)</span>
+            <span className="font-extrabold text-emerald-300 tabular-nums">{formatBRL(paid)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-300">A gastar lá (estimado, 2 pessoas)</span>
+            <span className="font-bold text-amber-200 tabular-nums">{formatBRL(estimated)}</span>
+          </div>
+          <div className="flex justify-between border-t border-white/10 pt-1.5">
+            <span className="font-semibold text-white">Projeção final</span>
+            <span className="text-lg font-extrabold text-white tabular-nums">{formatBRL(projected)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-300">Teto definido</span>
+            <span className="font-bold text-slate-200 tabular-nums">{formatBRL(BUDGET_CAP)}</span>
+          </div>
+          <p className={`pt-1 text-xs leading-relaxed ${slack >= 0 ? "text-emerald-200" : "text-rose-200"}`}>
+            {slack >= 0
+              ? `Folga de ${formatBRL(slack)}. Incluindo o DisneySea (${formatBRL(optional)}), a folga fica em ${formatBRL(slack - optional)}.`
+              : `Estouro projetado de ${formatBRL(Math.abs(slack))}.`}
+          </p>
         </div>
       </div>
 
