@@ -544,8 +544,7 @@ export const BUDGET_LINES = [
 
 // ===== 12. CHECKLIST =====
 export const CHECKLIST = [
-  { id: "c-kyoto", label: "Reservar hotel em Kyoto" },
-  { id: "c-osaka", label: "Reservar hotel em Osaka" },
+  { id: "c-ghibli", label: "Museu Ghibli: ingressos de dezembro saem 10/11 às 10h do Japão (22h de 09/11 no Brasil), pela Lawson" },
   { id: "c-teamlab", label: "Comprar ingresso do teamLab Biovortex Kyoto" },
   { id: "c-disney", label: "Decidir DisneySea e comprar ingresso, se for o caso" },
   { id: "c-arima", label: "Reservar banho privativo em Arima" },
