@@ -35,7 +35,7 @@ export const POI_CATEGORIES = [
   { id: "onsen",    label: "Onsen tattoo-OK",    emoji: "♨️", color: "#14b8a6" },
   { id: "extensao", label: "Extensão (Kansai)",  emoji: "🗾", color: "#94a3b8" },
   { id: "passeio",  label: "Passeios e cultura", emoji: "🎡", color: "#8b5cf6" },
-  { id: "roteiro",  label: "Já no roteiro",      emoji: "📌", color: "#fb7185" },
+  { id: "roteiro",  label: "Na proposta",        emoji: "📌", color: "#fb7185" },
   { id: "base",     label: "Bases (hotéis)",     emoji: "🏨", color: "#38bdf8" },
 ];
 
@@ -710,7 +710,7 @@ export const JAPAN_POIS = [
     transport: "Ônibus direto de Osaka, ~50–70min (~¥1.100–1.400)", tip: "Dia 19/12. RESERVAR COM ANTECEDÊNCIA — cai num sábado. Mais frio que Osaka por estar na montanha.",
     howToBuy: "Reserva direta no ryokan/casa de banho (Taiko-no-Yu, Gin-no-Yu têm kashikiri)" },
   { id: "uji", name: "Uji — capital do matcha", cat: "roteiro", lat: 34.8914, lng: 135.8073, costBRL: 0, spendBRL: 180, duration: "meio dia",
-    desc: "Cidade do melhor chá verde do Japão + templo Byodo-in (o da moeda de ¥10). Pedido do Pedro que ficou fora do roteiro-base.",
+    desc: "Cidade do melhor chá verde do Japão + templo Byodo-in (o da moeda de ¥10). Pedido do Pedro que ficou fora do roteiro proposto.",
     transport: "JR Nara Line de Kyoto, ~30min (¥240)", tip: "Encaixa no lugar da tarde de compras do dia 16. Byodo-in ¥600. Nakamura Tokichi p/ sobremesa de matcha.",
     howToBuy: "Cidade livre; cerimônia de chá formal precisa reserva (Taihoan ¥1.000)" },
   { id: "teamlab-kyoto", name: "teamLab Biovortex Kyoto", cat: "roteiro", lat: 34.9880, lng: 135.7590, costBRL: brlOf(4500), spendBRL: 0, duration: "2–3h",

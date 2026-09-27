@@ -4,6 +4,9 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Check, Clock, Plus, Train } from "lucide-react";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
+import { TRIP } from "./tripData.js";
+
+const P = TRIP.people;
 import { formatBRL } from "../lib/format.js";
 
 function catOf(id) {
@@ -128,8 +131,9 @@ export default function JapanMap({ selectedIds, onToggle, bases = [] }) {
                     <strong style={{ fontSize: 14 }}>{cat.emoji} {p.name}</strong>
                     <div style={{ margin: "6px 0" }}>{p.desc}</div>
                     <div style={{ fontSize: 12, color: "#555" }}>
-                      🎟️ Entrada: <strong>{p.costBRL > 0 ? formatBRL(p.costBRL) + "/pessoa" : "Grátis"}</strong>
-                      {p.spendBRL > 0 && <> · gasto típico ~{formatBRL(p.spendBRL)}</>}
+                      🎟️ Entrada: <strong>{p.costBRL > 0 ? `${formatBRL(p.costBRL * P)} p/ os ${P}` : "Grátis"}</strong>
+                      {p.costBRL > 0 && <> ({formatBRL(p.costBRL)} cada)</>}
+                      {p.spendBRL > 0 && <> · gasto típico ~{formatBRL(p.spendBRL * P)} p/ os {P}</>}
                       <br />⏱ {p.duration}
                       <br />🚇 {p.transport}
                     </div>
@@ -159,7 +163,7 @@ export default function JapanMap({ selectedIds, onToggle, bases = [] }) {
 
       <div className="border-t border-white/10 p-3">
         <div className="mb-2 text-sm text-slate-400">
-          {visible.length} lugares · toque num marcador para ver preço, transporte e dica, ou toque na lista para salvar no plano
+          {visible.length} lugares · preços de entrada para os {P} · toque num marcador para ver transporte e dica, ou na lista para salvar no plano
         </div>
         <ul className="grid max-h-64 grid-cols-1 gap-1 overflow-auto sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((p) => {
@@ -179,7 +183,7 @@ export default function JapanMap({ selectedIds, onToggle, bases = [] }) {
                   <span>{cat.emoji}</span>
                   <span className="flex-1 truncate">{p.name}</span>
                   <span className="flex-none font-semibold">
-                    {p.costBRL > 0 ? formatBRL(p.costBRL) : "Grátis"}
+                    {p.costBRL > 0 ? formatBRL(p.costBRL * P) : "Grátis"}
                   </span>
                   {isSel ? (
                     <Check size={12} className="flex-none text-emerald-300" />

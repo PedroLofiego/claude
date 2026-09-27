@@ -4,7 +4,7 @@
  * ============================================================
  * Dois roteiros prontos de agência, dia a dia, com cada atração
  * classificada pelo que o site já tem:
- *   roteiro  — já está no roteiro-base de vocês
+ *   roteiro  — já está no roteiro proposto
  *   catalogo — está em "Explorar e montar" (dá pra marcar)   → actId
  *   mapa     — está só no Mapa (dá pra salvar no plano)      → poiId
  *   fora     — não existe no site
@@ -13,7 +13,7 @@
  */
 
 export const COVERAGE = {
-  roteiro: { label: "No seu roteiro", short: "No roteiro", emoji: "✅", cls: "bg-emerald-500/20 text-emerald-100 ring-emerald-400/40" },
+  roteiro: { label: "Na proposta de roteiro", short: "Na proposta", emoji: "✅", cls: "bg-emerald-500/20 text-emerald-100 ring-emerald-400/40" },
   catalogo: { label: "No catálogo (dá pra incluir)", short: "No catálogo", emoji: "📚", cls: "bg-sky-500/20 text-sky-100 ring-sky-400/40" },
   mapa: { label: "Só no mapa", short: "No mapa", emoji: "📍", cls: "bg-violet-500/20 text-violet-100 ring-violet-400/40" },
   fora: { label: "Não está no site", short: "Fora", emoji: "➖", cls: "bg-slate-500/20 text-slate-300 ring-slate-400/30" },
