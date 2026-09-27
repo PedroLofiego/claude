@@ -10,7 +10,7 @@ import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
 import { AGENCY_PACKAGES, COVERAGE, coverageCount } from "./agencyPackages.js";
 import {
-  BUDGET_CAP, BUDGET_LINES, CHECKLIST, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
+  BUDGET_CAP, BUDGET_LINES, CHECKLIST, JPY_PER_BRL, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
   LOGISTICS, LOGISTICS_NOTES, OPEN_DECISIONS, OSAKA_DAYS, PACE,
   PERSON_PROFILES, PRACTICAL, PREFERENCES, SETTLED, STAYS, TOKYO_VARIANTS,
   TRIP,
@@ -27,8 +27,8 @@ const STORAGE_KEY = "voaja:japan:v4";
 const SECTIONS = [
   { id: "inicio", label: "Início", icon: HomeIcon },
   { id: "roteiro", label: "Roteiro", icon: CalendarDays,
-    title: "Roteiro dia a dia",
-    desc: "Os 14 dias da viagem em ordem. Toque num dia na faixa abaixo para ir direto a ele." },
+    title: "Proposta de roteiro dia a dia",
+    desc: "Uma sugestão para os 14 dias — ainda não decidida. Cidades e hotéis estão fechados; o que fazer em cada dia vocês escolhem em Passeios." },
   { id: "passeios", label: "Passeios", icon: Compass,
     title: "Passeios",
     desc: "Procure o que fazer e toque em “Adicionar” para colocar no plano.",
@@ -239,7 +239,7 @@ export default function JapanApp() {
     })),
     openDecisions: OPEN_DECISIONS,
     checklist: CHECKLIST.map((c) => ({ ...c, done: done.has(c.id) })),
-    budget: { cap: BUDGET_CAP, totals: budgetTotals(), lines: BUDGET_LINES },
+    budget: { cap: BUDGET_CAP, people: TRIP.people, note: "Todos os valores em BRL são para as 2 pessoas; costBRL das atividades e lugares é por pessoa.", totals: budgetTotals(chosenActs, chosenPois), lines: BUDGET_LINES },
   });
 
   const buildText = () => {
@@ -260,19 +260,21 @@ export default function JapanApp() {
       L.push(`  ${tag} ${s.name} — ${s.nights} noite(s)${s.totalBRL ? ` · ${formatBRL(s.totalBRL)}` : " · A RESERVAR"}`);
     });
     L.push("");
-    const B = budgetTotals();
-    L.push("💰 ORÇAMENTO");
+    const B = budgetTotals(chosenActs, chosenPois);
+    L.push("💰 ORÇAMENTO (tudo para as 2 pessoas)");
     L.push(`  ✈️ Passagens: ${formatBRL(B.flights)}`);
     L.push(`  🏨 Hospedagens (${TRIP.nights} noites): ${formatBRL(B.lodging)}`);
     L.push(`  = Já pago: ${formatBRL(B.paid)}`);
-    L.push(`  Teto: ${formatBRL(B.cap)} → ainda disponível ${formatBRL(B.remaining)}`);
-    L.push(`  A gastar lá (estimado): ${formatBRL(B.estimated)}`);
-    L.push(`  Projeção final: ${formatBRL(B.projected)} → ${B.slack >= 0 ? `folga de ${formatBRL(B.slack)}` : `ESTOURO de ${formatBRL(Math.abs(B.slack))}`}`);
+    L.push(`  🍜 Comida, gastos do dia e trens (estimado): ${formatBRL(B.fixed)}`);
+    L.push(`  Sobra para passeios e compras: ${formatBRL(B.forPasseios)} (teto ${formatBRL(B.cap)})`);
+    L.push(`  🎟️ Passeios escolhidos: ${B.chosen ? formatBRL(B.chosen) : "nenhum ainda"}`);
+    L.push(`  ${B.slack >= 0 ? `Livre: ${formatBRL(B.slack)}` : `ESTOURO: ${formatBRL(-B.slack)}`}`);
+    L.push("  (Roteiro ainda não decidido — os passeios entram quando forem escolhidos.)");
     if (chosenActs.length) {
       L.push("");
       L.push(`✨ PASSEIOS EXTRAS ESCOLHIDOS (${chosenActs.length})`);
       chosenActs.forEach((a) => {
-        L.push(`  • [${CITY[a.city]?.label ?? a.city}] ${a.name} — ${a.hours}h · ${a.costBRL > 0 ? formatBRL(a.costBRL) : "grátis"}`);
+        L.push(`  • [${CITY[a.city]?.label ?? a.city}] ${a.name} — ${a.hours}h · ${forTwoText(a.costBRL)}`);
         if (a.tickets?.where) L.push(`     🎫 ${a.tickets.where}`);
       });
     }
@@ -301,7 +303,8 @@ export default function JapanApp() {
           )}
 
           {route.section === "inicio" && (
-            <Home daysLeft={daysLeft} extrasCount={extras.size} todo={todo} go={go} />
+            <Home daysLeft={daysLeft} extrasCount={extras.size} todo={todo} go={go}
+              chosenActs={chosenActs} chosenPois={chosenPois} />
           )}
           {route.section === "roteiro" && (
             <Itinerary tokyoVariant={tokyoVariant} setTokyoVariant={setTokyoVariant}
@@ -518,46 +521,115 @@ function LinkButton({ onClick, children }) {
   );
 }
 
-// Totais do orçamento: linhas por pessoa já multiplicadas pelo número de viajantes.
-function budgetTotals() {
+// Totais do orçamento. Tudo é para as duas pessoas: linhas "por pessoa" e
+// ingressos (costBRL, sempre por pessoa) são multiplicados por TRIP.people.
+// Os passeios não entram como estimativa fixa porque o roteiro ainda não foi
+// decidido — entram só os que forem escolhidos no catálogo ou salvos no mapa.
+function budgetTotals(chosenActs = [], chosenPois = []) {
+  const P = TRIP.people;
   const f = (fn) =>
-    BUDGET_LINES.filter(fn).reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * TRIP.people : b.brl || 0), 0);
+    BUDGET_LINES.filter(fn).reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * P : b.brl || 0), 0);
   const paid = f((b) => b.status === "pago");
-  const estimated = f((b) => b.status === "estimado");
+  const fixed = f((b) => b.status === "estimado");
+  const chosen = [...chosenActs, ...chosenPois].reduce((s, x) => s + (x.costBRL || 0), 0) * P;
+  const forPasseios = BUDGET_CAP - paid - fixed;
   return {
     cap: BUDGET_CAP,
+    people: P,
     flights: f((b) => b.group === "aereo"),
     lodging: f((b) => b.group === "hospedagem"),
     paid,
-    estimated,
-    optional: f((b) => b.status === "opcional"),
-    projected: paid + estimated,
+    fixed,
+    chosen,
+    forPasseios,
+    projected: paid + fixed + chosen,
     remaining: BUDGET_CAP - paid,
-    slack: BUDGET_CAP - paid - estimated,
+    slack: forPasseios - chosen,
+    proposal: ACTIVITIES.filter((a) => a.inBase).reduce((s, a) => s + (a.costBRL || 0), 0) * P,
   };
 }
 
-function BudgetBar({ paid, estimated, cap }) {
-  const pct = (v) => Math.max(0, Math.min(100, (v / cap) * 100));
-  const over = paid + estimated > cap;
+// Valor por pessoa mostrado sempre como total dos dois, com o por pessoa ao lado.
+function ForTwo({ brl, className = "" }) {
+  if (!brl) return <span className={className}>grátis</span>;
+  return (
+    <span className={className}>
+      {formatBRL(brl * TRIP.people)} <span className="font-normal text-slate-400">p/ os {TRIP.people} ({formatBRL(brl)} cada)</span>
+    </span>
+  );
+}
+const forTwoText = (brl) => (brl ? `${formatBRL(brl * TRIP.people)} p/ os ${TRIP.people}` : "grátis");
+
+function BudgetBar({ B }) {
+  const pct = (v) => Math.max(0, Math.min(100, (v / B.cap) * 100));
+  const over = B.slack < 0;
   return (
     <div>
       <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/10">
-        <div className="bg-emerald-400/80" style={{ width: `${pct(paid)}%` }} />
-        <div className={over ? "bg-rose-400/70" : "bg-amber-400/60"} style={{ width: `${pct(estimated)}%` }} />
+        <div className="bg-emerald-400/80" style={{ width: `${pct(B.paid)}%` }} />
+        <div className="bg-amber-400/60" style={{ width: `${pct(B.fixed)}%` }} />
+        <div className={over ? "bg-rose-400/80" : "bg-sky-400/70"} style={{ width: `${pct(B.chosen)}%` }} />
       </div>
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-emerald-400/80" />já pago</span>
-        <span><span className={`mr-1.5 inline-block h-2.5 w-2.5 rounded-full ${over ? "bg-rose-400/70" : "bg-amber-400/60"}`} />a gastar lá</span>
-        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-white/20" />folga</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-amber-400/60" />comida e trens</span>
+        <span><span className={`mr-1.5 inline-block h-2.5 w-2.5 rounded-full ${over ? "bg-rose-400/80" : "bg-sky-400/70"}`} />passeios escolhidos</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-white/20" />livre</span>
       </div>
     </div>
   );
 }
 
+// Bloco de orçamento usado no Início e no Meu plano.
+function BudgetSummary({ B }) {
+  return (
+    <>
+      <BudgetBar B={B} />
+      <dl className="mt-4 space-y-2 text-sm">
+        <div className="flex justify-between gap-3">
+          <dt className="text-slate-300">✈️ Passagens</dt>
+          <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.flights)}</dd>
+        </div>
+        <div className="flex justify-between gap-3">
+          <dt className="text-slate-300">🏨 Hospedagens ({TRIP.nights} noites)</dt>
+          <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.lodging)}</dd>
+        </div>
+        <div className="flex justify-between gap-3 border-t border-white/10 pt-2">
+          <dt className="font-semibold text-white">Já pago</dt>
+          <dd className="text-lg font-extrabold text-white tabular-nums">{formatBRL(B.paid)}</dd>
+        </div>
+        <div className="flex justify-between gap-3">
+          <dt className="text-slate-300">🍜 Comida, gastos do dia e trens entre cidades (estimado)</dt>
+          <dd className="font-bold text-amber-200 tabular-nums">{formatBRL(B.fixed)}</dd>
+        </div>
+        <div className="flex justify-between gap-3 border-t border-white/10 pt-2">
+          <dt className="font-semibold text-white">Sobra para passeios e compras</dt>
+          <dd className="text-lg font-extrabold text-sky-300 tabular-nums">{formatBRL(B.forPasseios)}</dd>
+        </div>
+        <div className="flex justify-between gap-3">
+          <dt className="text-slate-300">🎟️ Passeios escolhidos até agora</dt>
+          <dd className="font-bold text-sky-200 tabular-nums">{B.chosen ? `− ${formatBRL(B.chosen)}` : "nenhum"}</dd>
+        </div>
+      </dl>
+      <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] p-3 text-sm leading-relaxed">
+        <p className={B.slack >= 0 ? "text-emerald-200" : "text-rose-200"}>
+          {B.slack >= 0
+            ? <>Ainda livre dentro do teto de {formatBRL(B.cap)}: <strong className="tabular-nums">{formatBRL(B.slack)}</strong> para os dois ({formatBRL(B.slack / B.people)} cada).</>
+            : <>Estouro de <strong className="tabular-nums">{formatBRL(-B.slack)}</strong> sobre o teto de {formatBRL(B.cap)}.</>}
+        </p>
+        <p className="mt-1.5 text-xs text-slate-400">
+          O roteiro ainda não foi decidido, então os passeios só entram na conta quando vocês escolhem.
+          Todos os valores são para as {B.people} pessoas. Referência: os ingressos da proposta de roteiro
+          atual somam cerca de {formatBRL(B.proposal)} para os dois.
+        </p>
+      </div>
+    </>
+  );
+}
+
 // ==================== INÍCIO ====================
-function Home({ daysLeft, extrasCount, todo, go }) {
-  const B = budgetTotals();
+function Home({ daysLeft, extrasCount, todo, go, chosenActs, chosenPois }) {
+  const B = budgetTotals(chosenActs, chosenPois);
   const urgent = OPEN_DECISIONS.filter((d) => d.severity === "alta");
 
   const actions = [
@@ -640,42 +712,7 @@ function Home({ daysLeft, extrasCount, todo, go }) {
 
         <Box className="lg:col-span-2" title="Orçamento" icon={Wallet}
           action={<LinkButton onClick={() => go("plano")}>Detalhes</LinkButton>}>
-          <BudgetBar paid={B.paid} estimated={B.estimated} cap={B.cap} />
-
-          <dl className="mt-4 space-y-2 text-sm">
-            <div className="flex justify-between gap-3">
-              <dt className="text-slate-300">✈️ Passagens</dt>
-              <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.flights)}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-slate-300">🏨 Hospedagens ({TRIP.nights} noites)</dt>
-              <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.lodging)}</dd>
-            </div>
-            <div className="flex justify-between gap-3 border-t border-white/10 pt-2">
-              <dt className="font-semibold text-white">Já comprometido</dt>
-              <dd className="text-lg font-extrabold text-white tabular-nums">{formatBRL(B.paid)}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-slate-300">Ainda disponível do teto de {formatBRL(B.cap)}</dt>
-              <dd className="text-lg font-extrabold text-sky-300 tabular-nums">{formatBRL(B.remaining)}</dd>
-            </div>
-          </dl>
-
-          <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.04] p-3 text-sm">
-            <div className="flex justify-between gap-3">
-              <span className="text-slate-300">A gastar lá (estimado)</span>
-              <span className="font-bold text-amber-200 tabular-nums">{formatBRL(B.estimated)}</span>
-            </div>
-            <div className="mt-1.5 flex justify-between gap-3">
-              <span className="text-slate-300">Projeção final da viagem</span>
-              <span className="font-bold text-white tabular-nums">{formatBRL(B.projected)}</span>
-            </div>
-            <p className={`mt-2 text-xs leading-relaxed ${B.slack >= 0 ? "text-emerald-200" : "text-rose-200"}`}>
-              {B.slack >= 0
-                ? `Sobra de ${formatBRL(B.slack)} dentro do teto. Incluindo o DisneySea, a folga cai para ${formatBRL(B.slack - B.optional)}.`
-                : `Estouro projetado de ${formatBRL(Math.abs(B.slack))}. Precisa cortar em algum lugar.`}
-            </p>
-          </div>
+          <BudgetSummary B={B} />
         </Box>
       </div>
 
@@ -844,7 +881,7 @@ function ExtrasForCity({ city, list, onRemove, go }) {
               <li key={a.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
                 <span className="min-w-0 text-slate-100">
                   <strong>{a.name}</strong>
-                  <span className="text-slate-400"> · {a.hours}h · {a.costBRL > 0 ? formatBRL(a.costBRL) : "grátis"}</span>
+                  <span className="text-slate-400"> · {a.hours}h · {forTwoText(a.costBRL)}</span>
                 </span>
                 <button type="button" onClick={() => onRemove(a.id)} aria-label={`Tirar ${a.name}`}
                   className="flex-none rounded-lg p-1 text-slate-400 hover:bg-white/10 hover:text-white no-print">
@@ -880,7 +917,7 @@ function ActivityCatalog({ chosen, onToggle }) {
   const [city, setCity] = useState("todas");
   const [cat, setCat] = useState("todas");
   const [match, setMatch] = useState("todos");
-  const [showInBase, setShowInBase] = useState(false);
+  const [showInBase, setShowInBase] = useState(true);
   const [moreOpen, setMoreOpen] = useState(false);
   const [openId, setOpenId] = useState(null);
   const [q, setQ] = useState("");
@@ -904,7 +941,7 @@ function ActivityCatalog({ chosen, onToggle }) {
   }, [city, cat, match, showInBase, q, chosen]);
 
   const chosenList = ACTIVITIES.filter((a) => chosen.has(a.id));
-  const totalCost = chosenList.reduce((s, a) => s + (a.costBRL || 0), 0) * 2;
+  const totalCost = chosenList.reduce((s, a) => s + (a.costBRL || 0), 0) * TRIP.people;
 
   return (
     <div className="space-y-4">
@@ -945,7 +982,7 @@ function ActivityCatalog({ chosen, onToggle }) {
             <label className="flex cursor-pointer items-center gap-2.5 text-sm text-slate-200">
               <input type="checkbox" checked={showInBase} onChange={(e) => setShowInBase(e.target.checked)}
                 className="h-4 w-4 accent-rose-500" />
-              Mostrar também o que já está no roteiro
+              Mostrar também o que está na proposta de roteiro
             </label>
           </div>
         )}
@@ -1010,8 +1047,8 @@ function FilterGroup({ label, children }) {
 function ActivityCard({ a, chosen, onToggle, open, onOpen }) {
   const cat = ACT_CATEGORIES.find((c) => c.id === a.cat);
   const eff = EFFORT[a.effort];
-  const note = a.priority ? "Pedido que ficou sem lugar no roteiro"
-    : a.inBase ? "Já está no roteiro"
+  const note = a.priority ? "Pedido que ficou sem lugar na proposta"
+    : a.inBase ? "Está na proposta de roteiro"
     : a.cutByBoth ? "Vocês dois cortaram"
     : a.solo ? `Programa só ${a.solo === "pedro" ? "do Pedro" : "da Gio"}` : null;
 
@@ -1022,7 +1059,7 @@ function ActivityCard({ a, chosen, onToggle, open, onOpen }) {
       <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-slate-400">
         <span>{CITY[a.city]?.emoji} {a.area}</span>
         <span>⏱ {a.hours}h</span>
-        <span className="font-semibold text-slate-200">{a.costBRL > 0 ? `${formatBRL(a.costBRL)}/pessoa` : "grátis"}</span>
+        <ForTwo brl={a.costBRL} className="font-semibold text-slate-200" />
         {a.rating && <span>⭐ {a.rating.toFixed(1)}</span>}
       </div>
       <p className="mt-2 text-sm leading-relaxed text-slate-300">{a.what}</p>
@@ -1047,8 +1084,8 @@ function ActivityCard({ a, chosen, onToggle, open, onOpen }) {
               {a.says.bad.map((b, i) => <li key={`b${i}`} className="text-rose-200">− {b}</li>)}
             </ul>
           </Detail>
-          {a.swapFor && <Detail title="↔️ O que muda no roteiro">{a.swapFor}</Detail>}
-          {a.spendBRL > 0 && <Detail title="💸 Gasto típico no local">~{formatBRL(a.spendBRL)} por pessoa além da entrada</Detail>}
+          {a.swapFor && <Detail title="↔️ O que muda na proposta de roteiro">{a.swapFor}</Detail>}
+          {a.spendBRL > 0 && <Detail title="💸 Gasto típico no local">~{formatBRL(a.spendBRL * TRIP.people)} para os dois além da entrada ({formatBRL(a.spendBRL)} cada)</Detail>}
         </div>
       )}
 
@@ -1102,7 +1139,7 @@ function AgencyCompare({ extras, onToggleExtra, poiIds, onTogglePoi }) {
               <div className="text-base font-bold text-white">{p.name}</div>
               <div className="text-sm text-slate-400">{p.agency}</div>
               <div className="mt-1 text-sm text-slate-200">{p.dates} · {p.season.split(" — ")[0]}</div>
-              <div className="mt-2 text-sm font-semibold text-emerald-200">{c.roteiro} de {n} atrações já estão no roteiro</div>
+              <div className="mt-2 text-sm font-semibold text-emerald-200">{c.roteiro} de {n} atrações já estão na proposta de roteiro</div>
             </button>
           );
         })}
@@ -1158,7 +1195,7 @@ function AgencyCompare({ extras, onToggleExtra, poiIds, onTogglePoi }) {
                         <div className="min-w-0 flex-1">
                           <div className="text-sm font-semibold text-slate-100">{it.name}</div>
                           <div className="text-sm text-slate-400">
-                            {it.where && <>No roteiro: <span className="text-slate-200">{it.where}</span></>}
+                            {it.where && <>Na proposta: <span className="text-slate-200">{it.where}</span></>}
                             {link && <>No site como: <span className="text-slate-200">{link}</span></>}
                             {it.note && <>{(it.where || link) && " · "}{it.note}</>}
                           </div>
@@ -1288,7 +1325,7 @@ function Lodging() {
 function Transport() {
   return (
     <div className="space-y-4">
-      <Box title="Trechos entre cidades" icon={Train} sub="Preço aproximado por pessoa, só ida.">
+      <Box title="Trechos entre cidades" icon={Train} sub="Preço por pessoa em iene e o total em reais para os dois, só ida.">
         <ul className="divide-y divide-white/5">
           {LOGISTICS.map((l) => (
             <li key={`${l.from}-${l.to}`} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm">
@@ -1296,7 +1333,10 @@ function Transport() {
                 <div className="font-semibold text-white">{l.from} → {l.to}</div>
                 <div className="text-slate-400">{l.mode} · {l.time}</div>
               </div>
-              <div className="font-bold text-white">{l.yen}</div>
+              <div className="text-right">
+                <div className="font-bold text-white tabular-nums">{l.yenMid ? formatBRL((l.yenMid * TRIP.people) / JPY_PER_BRL) : l.yen} <span className="font-normal text-slate-400">p/ os {TRIP.people}</span></div>
+                <div className="text-xs text-slate-400">{l.yen} por pessoa</div>
+              </div>
             </li>
           ))}
         </ul>
@@ -1390,7 +1430,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
     }
   };
 
-  const B = budgetTotals();
+  const B = budgetTotals(chosenActs, chosenPois);
   const statusLabel = { pago: ["badge-ok", "pago"], aberto: ["badge-warn", "falta"], estimado: [null, "estimado"], opcional: [null, "opcional"] };
 
   return (
@@ -1435,7 +1475,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
                 <li key={p.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
                   <span className="min-w-0 truncate text-white">{p.name}</span>
                   <span className="flex flex-none items-center gap-2">
-                    <span className="text-slate-300">{p.costBRL > 0 ? formatBRL(p.costBRL) : "Grátis"}</span>
+                    <span className="text-slate-300">{forTwoText(p.costBRL)}</span>
                     <button type="button" onClick={() => onRemovePoi(p.id)} aria-label={`Tirar ${p.name}`}
                       className="rounded-lg p-1 text-slate-400 hover:bg-white/10 hover:text-white no-print"><X size={16} /></button>
                   </span>
@@ -1468,30 +1508,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
           })}
         </ul>
         <div className="mt-4 border-t border-white/10 pt-4">
-          <BudgetBar paid={B.paid} estimated={B.estimated} cap={B.cap} />
-          <dl className="mt-4 space-y-2 text-sm">
-            <div className="flex justify-between gap-3">
-              <dt className="font-semibold text-slate-200">Já pago (passagens + hospedagem)</dt>
-              <dd className="text-lg font-extrabold text-emerald-300 tabular-nums">{formatBRL(B.paid)}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-slate-300">A gastar lá (estimado, {TRIP.people} pessoas)</dt>
-              <dd className="font-bold text-amber-200 tabular-nums">{formatBRL(B.estimated)}</dd>
-            </div>
-            <div className="flex justify-between gap-3 border-t border-white/10 pt-2">
-              <dt className="font-semibold text-white">Projeção final</dt>
-              <dd className="text-lg font-extrabold text-white tabular-nums">{formatBRL(B.projected)}</dd>
-            </div>
-            <div className="flex justify-between gap-3">
-              <dt className="text-slate-300">Teto definido</dt>
-              <dd className="font-bold text-slate-200 tabular-nums">{formatBRL(B.cap)}</dd>
-            </div>
-          </dl>
-          <p className={`mt-3 text-sm leading-relaxed ${B.slack >= 0 ? "text-emerald-200" : "text-rose-200"}`}>
-            {B.slack >= 0
-              ? `Folga de ${formatBRL(B.slack)}. Incluindo o DisneySea (${formatBRL(B.optional)}), a folga fica em ${formatBRL(B.slack - B.optional)}.`
-              : `Estouro projetado de ${formatBRL(Math.abs(B.slack))}.`}
-          </p>
+          <BudgetSummary B={B} />
         </div>
       </Box>
 

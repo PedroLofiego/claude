@@ -4,7 +4,7 @@
  * ============================================================
  * Seções 1-5 do documento: dados fixos (voos, hospedagens
  * confirmadas, perfis, conflitos resolvidos, logística).
- * Seções 6-8: roteiro-base + catálogo de passeios selecionáveis.
+ * Seções 6-8: roteiro proposto + catálogo de passeios selecionáveis.
  * Seções 9-12: pendências, itens práticos, orçamento, checklist.
  */
 
@@ -197,7 +197,7 @@ export const CONFLICTS = [
   },
   {
     conflict: "Nenhum dos dois marcou Nara nem Universal Studios",
-    resolution: "Cortados do roteiro-base, mantidos como opção no catálogo",
+    resolution: "Cortados do roteiro proposto, mantidos como opção no catálogo",
     status: "resolvido",
   },
 ];
@@ -406,7 +406,7 @@ export const EXTRAS = [
     id: "x-cha-uji", city: "kyoto", name: "Cerimônia do chá ou Uji (matcha)",
     category: "Cultura", duration: "Meia manhã (Uji: dia inteiro com deslocamento)",
     match: "pedro", level: "alto", priority: true,
-    note: "Marcado por Pedro no questionário e ficou de fora do roteiro-base por falta de tempo. Se quiserem incluir, tirar de outro bloco — Uji fica a 30 min, dá pra fazer no lugar da tarde de compras do dia 16.",
+    note: "Marcado por Pedro no questionário e ficou de fora do roteiro proposto por falta de tempo. Se quiserem incluir, tirar de outro bloco — Uji fica a 30 min, dá pra fazer no lugar da tarde de compras do dia 16.",
     lat: 34.8914, lng: 135.8073,
   },
   {
@@ -453,7 +453,7 @@ export const EXTRAS = [
     id: "x-museu-habitacao", city: "osaka", name: "Museu da Habitação e Vida de Osaka",
     category: "Museu", duration: "1,5–2h", match: "gio", level: "medio", priority: true,
     solo: "gio",
-    note: "Não entrou no roteiro-base — é a categoria em que a preferência dos dois mais diverge (Gio 4, Pedro 7), então serve bem como 'programa individual' dela, no mesmo espírito da divisão do Fushimi Inari.",
+    note: "Não entrou no roteiro proposto — é a categoria em que a preferência dos dois mais diverge (Gio 4, Pedro 7), então serve bem como 'programa individual' dela, no mesmo espírito da divisão do Fushimi Inari.",
     lat: 34.7033, lng: 135.5188,
   },
   {
@@ -504,12 +504,13 @@ export const EXTRAS = [
 
 // ===== 9. PENDÊNCIAS =====
 export const OPEN_DECISIONS = [
+  { id: "d-roteiro", label: "Fechar o roteiro dia a dia", detail: "As cidades e os hotéis estão fechados; o que fazer em cada dia ainda não. O roteiro do site é uma proposta — escolham os passeios e o orçamento mostra quanto sobra.", severity: "alta" },
   { id: "d-disneysea", label: "DisneySea: incluir ou não", detail: "Depende de qual dos dois roteiros de Tóquio vocês escolherem.", severity: "alta" },
   { id: "d-teamlab", label: "Reserva do teamLab Biovortex Kyoto", detail: "Fazer com 2–3 semanas de antecedência.", severity: "alta" },
   { id: "d-arima", label: "Reserva do banho privativo em Arima", detail: "Fazer com antecedência, principalmente por cair num sábado.", severity: "alta" },
-  { id: "d-himeji-kobe", label: "Himeji + Kobe no mesmo dia ou separados", detail: "O roteiro-base junta os dois; se quiserem mais tempo no castelo, dá para separar tirando uma manhã do dia do Arima.", severity: "media" },
+  { id: "d-himeji-kobe", label: "Himeji + Kobe no mesmo dia ou separados", detail: "O roteiro proposto junta os dois; se quiserem mais tempo no castelo, dá para separar tirando uma manhã do dia do Arima.", severity: "media" },
   { id: "d-tiktok", label: "Restaurantes virais do TikTok (pedido da Gio)", detail: "Não travar agora: pesquisar perto da data, porque esse tipo de lista muda mês a mês.", severity: "baixa" },
-  { id: "d-uji", label: "Uji / cerimônia do chá (pedido do Pedro)", detail: "Ficou de fora do roteiro-base; decidir se substitui algo no dia 16 em Kyoto.", severity: "media" },
+  { id: "d-uji", label: "Uji / cerimônia do chá (pedido do Pedro)", detail: "Ficou de fora do roteiro proposto; decidir se substitui algo no dia 16 em Kyoto.", severity: "media" },
 ];
 
 // ===== 10. ITENS PRÁTICOS =====
@@ -526,8 +527,8 @@ export const PRACTICAL = [
 ];
 
 // ===== 11. ORÇAMENTO =====
-// Teto combinado da viagem, definido pelo Pedro: R$ 40.000 para os dois, tudo incluso.
-export const BUDGET_CAP = 40000;
+// Teto combinado da viagem, definido pelo Pedro: R$ 42.000 para os dois, tudo incluso.
+export const BUDGET_CAP = 42000;
 
 export const BUDGET_LINES = [
   { id: "b-voos", label: "Passagens aéreas (2 pessoas, ida e volta)", brl: 19358, group: "aereo", status: "pago" },
@@ -535,11 +536,8 @@ export const BUDGET_LINES = [
   { id: "b-kyoto", label: "MYSTAYS Kyoto Shijo (3 noites, 2 pessoas)", brl: 653, group: "hospedagem", status: "pago" },
   { id: "b-osaka", label: "Travelodge Honmachi Osaka (4 noites, 2 pessoas)", brl: 1098, group: "hospedagem", status: "pago" },
   { id: "b-narita", label: "Cápsula 9h Narita (1 noite, 2 pessoas)", brl: 427, sub: "¥13.110", group: "hospedagem", status: "pago" },
-  { id: "b-trens", label: "Trens entre cidades (por pessoa, ida)", brl: 1075, sub: "~¥30.000–35.000 (~R$ 1.000–1.150)", perPerson: true, group: "transporte", status: "estimado" },
-  { id: "b-batevolta", label: "Bate-voltas do Kansai (Himeji, Kobe, Arima)", brl: 180, sub: "~¥5.000–6.000 por pessoa", perPerson: true, group: "transporte", status: "estimado" },
-  { id: "b-diario", label: "Alimentação e gastos diários", brl: 3900, sub: "R$ 300/pessoa/dia × 13 dias", perPerson: true, group: "diario", status: "estimado" },
-  { id: "b-teamlab", label: "teamLab Biovortex Kyoto", brl: 150, sub: "~¥3.600–5.600 por pessoa", perPerson: true, group: "passeios", status: "estimado" },
-  { id: "b-disney", label: "DisneySea (se incluído)", brl: 331, sub: "~¥9.400–10.900 por pessoa", perPerson: true, group: "passeios", status: "opcional" },
+  { id: "b-trens", label: "Trens entre as cidades (Tóquio → Kyoto → Osaka → Narita)", brl: 1075, sub: "~¥30.000–35.000 por pessoa (~R$ 1.075)", perPerson: true, group: "transporte", status: "estimado" },
+  { id: "b-diario", label: "Alimentação e gastos diários", brl: 3900, sub: "R$ 300 por pessoa por dia × 13 dias", perPerson: true, group: "diario", status: "estimado" },
 ];
 
 // ===== 12. CHECKLIST =====
