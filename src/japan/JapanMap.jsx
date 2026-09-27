@@ -93,7 +93,7 @@ export default function JapanMap({ selectedIds, onToggle, bases = [] }) {
         </button>
       </div>
 
-      <div className="h-[520px] w-full">
+      <div className="h-[60vh] min-h-[340px] w-full lg:h-[520px]">
         <MapContainer
           center={[35.68, 139.75]}
           zoom={12}
@@ -158,8 +158,8 @@ export default function JapanMap({ selectedIds, onToggle, bases = [] }) {
       </div>
 
       <div className="border-t border-white/10 p-3">
-        <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-          {visible.length} lugares no mapa · clique no marcador p/ preço, transporte e dica
+        <div className="mb-2 text-sm text-slate-400">
+          {visible.length} lugares · toque num marcador para ver preço, transporte e dica, ou toque na lista para salvar no plano
         </div>
         <ul className="grid max-h-64 grid-cols-1 gap-1 overflow-auto sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((p) => {
