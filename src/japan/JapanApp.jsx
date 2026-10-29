@@ -3,9 +3,10 @@ import {
   AlertTriangle, BedDouble, CalendarDays, Check, ChevronDown, ChevronRight,
   ClipboardCopy, Compass, ExternalLink, FileDown, FileJson, HelpCircle, Home as HomeIcon,
   ListChecks, Map as MapIcon, PackageCheck, Plane, Plus, Scale, Search,
-  SlidersHorizontal, Train, Users, Wallet, X,
+  ShoppingCart, SlidersHorizontal, Train, Users, Wallet, X,
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
+import KlookPicker from "./KlookPicker.jsx";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
 import { AGENCY_PACKAGES, COVERAGE, coverageCount } from "./agencyPackages.js";
@@ -31,8 +32,9 @@ const SECTIONS = [
     desc: "Uma sugestão para os 14 dias — ainda não decidida. Cidades e hotéis estão fechados; o que fazer em cada dia vocês escolhem em Passeios." },
   { id: "passeios", label: "Passeios", icon: Compass,
     title: "Passeios",
-    desc: "Procure o que fazer e toque em “Adicionar” para colocar no plano.",
+    desc: "Em “Klook · escolher” estão os passeios já no carrinho, com data e horário — marquem o que querem. Em “Lista” tem todo o resto.",
     subs: [
+      { id: "klook", label: "Klook · escolher", icon: ShoppingCart },
       { id: "catalogo", label: "Lista", icon: Compass },
       { id: "mapa", label: "Mapa", icon: MapIcon },
       { id: "pacotes", label: "Pacotes de agência", icon: Scale },
@@ -60,7 +62,7 @@ const LEGACY = {
 };
 
 function routeFromHash() {
-  const parts = window.location.hash.replace(/^#\/?(japao\/?)?/, "").split("/").filter(Boolean);
+  const parts = window.location.hash.split("?")[0].replace(/^#\/?(japao\/?)?/, "").split("/").filter(Boolean);
   let [section, sub] = LEGACY[parts[0]] ?? parts;
   const s = SECTIONS.find((x) => x.id === section) ?? SECTIONS[0];
   const validSub = s.subs?.find((x) => x.id === sub) ? sub : s.subs?.[0].id;
@@ -310,6 +312,7 @@ export default function JapanApp() {
             <Itinerary tokyoVariant={tokyoVariant} setTokyoVariant={setTokyoVariant}
               chosenActs={chosenActs} onRemove={toggleExtra} go={go} />
           )}
+          {route.section === "passeios" && route.sub === "klook" && <KlookPicker />}
           {route.section === "passeios" && route.sub === "catalogo" && (
             <ActivityCatalog chosen={extras} onToggle={toggleExtra} />
           )}
