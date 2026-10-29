@@ -117,7 +117,7 @@ export default function KlookPicker() {
       {/* Como funciona */}
       <section className="card p-5">
         <div className="flex flex-wrap items-start gap-4">
-          <div className="min-w-0 flex-1">
+          <div className="w-full min-w-0 sm:w-auto sm:flex-1">
             <h2 className="flex items-center gap-2 text-base font-bold text-white">
               <ShoppingCart size={18} className="text-rose-300" /> {KLOOK_ITEMS.filter((i) => i.status !== "sem-venda").length} passeios já estão no carrinho da Klook
             </h2>
