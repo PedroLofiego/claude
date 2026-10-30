@@ -93,7 +93,7 @@ export default function KlookPicker() {
   const talk = KLOOK_ITEMS.filter((i) => verdict(i, votes).key === "talk");
   const out = KLOOK_ITEMS.filter((i) => verdict(i, votes).key === "out");
   const totalClosed = closed.reduce((s, i) => s + i.priceBRL, 0);
-  const counts = PEOPLE.map((p) => Object.keys(votes[p.id]).length);
+  const counts = PEOPLE.map((p) => KLOOK_ITEMS.filter((i) => votes[p.id][i.id]).length);
 
   const shareLink = () => {
     const base = window.location.href.split("#")[0];
@@ -207,7 +207,7 @@ export default function KlookPicker() {
           </button>
         </div>
         <p className="mt-3 text-xs text-slate-400">
-          Os “tirar do carrinho” o Pedro remove na Klook. Itens sem venda aberta (Shibuya Sky e Kaiyukan) não estão no carrinho — comprar em novembro.
+          Os “tirar do carrinho” o Pedro remove na Klook. Itens sem venda aberta (Shibuya Sky, Kaiyukan e teleférico de Kobe) não estão no carrinho — comprar em novembro.
         </p>
       </section>
     </div>
