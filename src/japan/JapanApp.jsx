@@ -7,13 +7,15 @@ import {
 } from "lucide-react";
 import JapanMap from "./JapanMap.jsx";
 import KlookPicker from "./KlookPicker.jsx";
+import { KyotoTrips, RouteView } from "./RouteView.jsx";
+import { ROUTE_DAYS } from "./routeData.js";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
 import { AGENCY_PACKAGES, COVERAGE, coverageCount } from "./agencyPackages.js";
 import {
-  BUDGET_CAP, BUDGET_LINES, CHECKLIST, JPY_PER_BRL, CITY_BLOCKS, CONFLICTS, KYOTO_DAYS,
-  LOGISTICS, LOGISTICS_NOTES, OPEN_DECISIONS, OSAKA_DAYS, PACE,
-  PERSON_PROFILES, PRACTICAL, PREFERENCES, SETTLED, STAYS, TOKYO_VARIANTS,
+  BUDGET_CAP, BUDGET_LINES, CHECKLIST, JPY_PER_BRL, CITY_BLOCKS, CONFLICTS,
+  LOGISTICS, LOGISTICS_NOTES, OPEN_DECISIONS, PACE,
+  PERSON_PROFILES, PRACTICAL, PREFERENCES, SETTLED, STAYS,
   TRIP,
 } from "./tripData.js";
 import { copyToClipboard, downloadTextFile, formatBRL } from "../lib/format.js";
@@ -28,11 +30,15 @@ const STORAGE_KEY = "voaja:japan:v4";
 const SECTIONS = [
   { id: "inicio", label: "Início", icon: HomeIcon },
   { id: "roteiro", label: "Roteiro", icon: CalendarDays,
-    title: "Proposta de roteiro dia a dia",
-    desc: "Uma sugestão para os 14 dias — ainda não decidida. Cidades e hotéis estão fechados; o que fazer em cada dia vocês escolhem em Passeios." },
+    title: "Roteiro dia a dia",
+    desc: "A rota ideal com os passeios escolhidos e lugares para bater perna em volta, sem correria. Em “Bate-volta de Kyoto”, as opções para o dia 15.",
+    subs: [
+      { id: "rota", label: "Rota ideal", icon: CalendarDays },
+      { id: "batevolta", label: "Bate-volta de Kyoto", icon: Train },
+    ] },
   { id: "passeios", label: "Passeios", icon: Compass,
     title: "Passeios",
-    desc: "Em “Klook · escolher” estão os passeios já no carrinho, com data e horário — marquem o que querem. Em “Lista” tem todo o resto.",
+    desc: "Em “Klook · escolher” estão os passeios escolhidos, já no carrinho com data e horário. Em “Lista” tem todo o resto.",
     subs: [
       { id: "klook", label: "Klook · escolher", icon: ShoppingCart },
       { id: "catalogo", label: "Lista", icon: Compass },
@@ -103,51 +109,13 @@ function daysUntil(iso) {
 }
 
 // "Asakusa (Senso-ji, Nakamise)" → "Asakusa"
-const firstPlace = (s) => (s || "").split(/\s*[(,/]\s*/)[0].trim();
-
-/*
- * Junta Tóquio (manhã/tarde/noite), Kyoto e Osaka (por horário) num
- * formato só, do dia 1 ao 14, com chegada e volta incluídas.
- */
-function buildDays(tokyoVariant) {
-  const arrival = {
-    city: "toquio", date: "Qua 09/12", title: "Chegada",
-    slots: [
-      { time: "11:45", what: "Pouso em Narita (NRT)" },
-      { time: "Tarde", what: "Trem até o hotel em Nihonbashi (Access Express, ~55 min) e descanso" },
-    ],
-  };
-  const tokyo = TOKYO_VARIANTS[tokyoVariant].days.map((d) =>
-    d.fullDay
-      ? { city: "toquio", date: d.date, title: "DisneySea", slots: [{ time: "Dia todo", what: d.morning }], note: d.afternoon }
-      : {
-          city: "toquio", date: d.date,
-          title: [firstPlace(d.morning), firstPlace(d.afternoon)].filter(Boolean).join(" + "),
-          slots: [
-            d.morning && { time: "Manhã", what: d.morning },
-            d.afternoon && { time: "Tarde", what: d.afternoon },
-            d.night && { time: "Noite", what: d.night },
-          ].filter(Boolean),
-        }
-  );
-  const kyoto = KYOTO_DAYS.map((d) => ({ ...d, city: "kyoto", title: d.title === "Chegada" ? "Chegada em Kyoto" : d.title }));
-  const osaka = OSAKA_DAYS.map((d) => ({ ...d, city: "osaka" }));
-  const departure = {
-    city: "narita", date: "Ter 22/12", title: "Volta para casa",
-    slots: [
-      { time: "Manhã", what: "Check-out da cápsula 9h, no Terminal 2 (até 10:00)" },
-      { time: "13:35", what: "Voo de volta saindo de Narita" },
-    ],
-  };
-  return [arrival, ...tokyo, ...kyoto, ...osaka, departure].map((d, i) => ({ ...d, n: i + 1 }));
-}
 
 export default function JapanApp() {
   const saved = useMemo(loadState, []);
   const [route, setRoute] = useState(routeFromHash);
   const [helpOpen, setHelpOpen] = useState(false);
   const [extras, setExtras] = useState(() => new Set(saved?.extras ?? []));
-  const [tokyoVariant, setTokyoVariant] = useState(saved?.tokyoVariant ?? "sem");
+  const [tokyoVariant] = useState(saved?.tokyoVariant ?? "sem");
   const [done, setDone] = useState(() => new Set(saved?.done ?? []));
   const [poiIds, setPoiIds] = useState(() => new Set(saved?.poiIds ?? []));
 
@@ -220,12 +188,7 @@ export default function JapanApp() {
       checkIn: s.checkIn, checkOut: s.checkOut, totalBRL: s.totalBRL,
       coordinates: s.lat ? { lat: s.lat, lng: s.lng } : null,
     })),
-    tokyoVariant: {
-      chosen: tokyoVariant,
-      label: TOKYO_VARIANTS[tokyoVariant].label,
-      days: TOKYO_VARIANTS[tokyoVariant].days,
-    },
-    baseItinerary: { kyoto: KYOTO_DAYS, osaka: OSAKA_DAYS },
+    route: ROUTE_DAYS,
     selectedActivities: chosenActs.map((a) => ({
       id: a.id, city: a.city, area: a.area, name: a.name,
       category: ACT_CATEGORIES.find((c) => c.id === a.cat)?.label,
@@ -250,8 +213,8 @@ export default function JapanApp() {
     L.push(`${TRIP.arriveLabel} → ${TRIP.departLabel}`);
     L.push(`${TRIP.days} dias / ${TRIP.nights} noites · faltam ${daysLeft} dias`);
     L.push("");
-    L.push(`🗓️ DIA A DIA (Tóquio: ${TOKYO_VARIANTS[tokyoVariant].label})`);
-    buildDays(tokyoVariant).forEach((d) => {
+    L.push("🗓️ DIA A DIA (rota ideal)");
+    ROUTE_DAYS.forEach((d) => {
       L.push(`Dia ${d.n} · ${d.date} · ${CITY[d.city].emoji} ${d.title}`);
       d.slots.forEach((sl) => L.push(`   ${sl.time} — ${sl.what}`));
     });
@@ -308,10 +271,8 @@ export default function JapanApp() {
             <Home daysLeft={daysLeft} extrasCount={extras.size} todo={todo} go={go}
               chosenActs={chosenActs} chosenPois={chosenPois} />
           )}
-          {route.section === "roteiro" && (
-            <Itinerary tokyoVariant={tokyoVariant} setTokyoVariant={setTokyoVariant}
-              chosenActs={chosenActs} onRemove={toggleExtra} go={go} />
-          )}
+          {route.section === "roteiro" && route.sub === "rota" && <RouteView />}
+          {route.section === "roteiro" && route.sub === "batevolta" && <KyotoTrips />}
           {route.section === "passeios" && route.sub === "klook" && <KlookPicker />}
           {route.section === "passeios" && route.sub === "catalogo" && (
             <ActivityCatalog chosen={extras} onToggle={toggleExtra} />
@@ -337,7 +298,7 @@ export default function JapanApp() {
         </main>
 
         <footer className="mt-12 border-t border-white/10 pt-5 text-xs leading-relaxed text-slate-400">
-          Voos e hotéis de Tóquio e Narita estão confirmados; Kyoto e Osaka seguem em aberto. Valores em
+          Voos e os 4 hotéis estão confirmados. Valores em
           iene são estimativas (1 BRL ≈ ¥30,7) — conferir antes de reservar. O que vocês marcam fica salvo
           neste aparelho.
         </footer>
@@ -753,148 +714,6 @@ function CityBar() {
           </li>
         ))}
       </ul>
-    </div>
-  );
-}
-
-// ==================== ROTEIRO ====================
-function Itinerary({ tokyoVariant, setTokyoVariant, chosenActs, onRemove, go }) {
-  const [city, setCity] = useState("todas");
-  const days = buildDays(tokyoVariant);
-  const shown = days.filter((d) => city === "todas" || d.city === city || (city === "osaka" && d.city === "narita"));
-  const variant = TOKYO_VARIANTS[tokyoVariant];
-
-  const jump = (n) => document.getElementById(`dia-${n}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-
-  // Extras escolhidos aparecem depois do último dia da cidade.
-  const lastOfCity = {};
-  shown.forEach((d) => (lastOfCity[d.city] = d.n));
-
-  return (
-    <div className="space-y-4">
-      <div className="no-print space-y-3">
-        <div className="flex flex-wrap gap-2">
-          {[["todas", "Todos os dias"], ["toquio", "🗼 Tóquio"], ["kyoto", "🎎 Kyoto"], ["osaka", "🐙 Osaka"]].map(([id, label]) => (
-            <Pill key={id} on={city === id} onClick={() => setCity(id)}>{label}</Pill>
-          ))}
-        </div>
-        <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:thin]" aria-label="Ir para o dia">
-          {shown.map((d) => (
-            <button key={d.n} type="button" onClick={() => jump(d.n)}
-              className="filter-pill flex flex-none flex-col items-center rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-1.5 hover:bg-white/10">
-              <span className="text-[11px] text-slate-400">Dia</span>
-              <span className="text-base font-extrabold text-white">{d.n}</span>
-              <span className="mt-0.5 h-1 w-5 rounded-full" style={{ background: CITY[d.city].color }} />
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {(city === "todas" || city === "toquio") && (
-        <div className="card border-rose-400/30 p-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <div className="text-sm font-bold text-white">Decisão em aberto: DisneySea em Tóquio?</div>
-              <div className="text-sm text-slate-400">Troque para ver como fica cada versão.</div>
-            </div>
-            <div className="flex gap-1 rounded-xl bg-white/5 p-1 no-print" role="group" aria-label="Versão de Tóquio">
-              {Object.values(TOKYO_VARIANTS).map((v) => (
-                <button key={v.id} type="button" onClick={() => setTokyoVariant(v.id)} aria-pressed={tokyoVariant === v.id}
-                  className={`filter-pill rounded-lg px-3.5 py-2 text-sm font-semibold ${
-                    tokyoVariant === v.id ? "bg-white text-slate-900" : "text-slate-300"
-                  }`}>
-                  {v.label}
-                </button>
-              ))}
-            </div>
-          </div>
-          {variant.cost && <p className="mt-3 rounded-lg bg-amber-500/10 p-3 text-sm text-amber-100">⚠️ {variant.cost}</p>}
-        </div>
-      )}
-
-      <ol className="space-y-3">
-        {shown.map((d) => (
-          <li key={d.n} id={`dia-${d.n}`} className="scroll-mt-24">
-            <DayCard d={d} />
-            {lastOfCity[d.city] === d.n && (
-              <ExtrasForCity city={d.city} list={chosenActs.filter((a) => a.city === d.city)} onRemove={onRemove} go={go} />
-            )}
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-function DayCard({ d }) {
-  const c = CITY[d.city];
-  return (
-    <article className="card overflow-hidden">
-      <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3" style={{ boxShadow: `inset 4px 0 0 ${c.color}` }}>
-        <div className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-white/[0.06] text-center">
-          <span className="text-[10px] leading-none text-slate-400">DIA</span>
-          <span className="text-lg font-extrabold leading-none text-white">{d.n}</span>
-        </div>
-        <div className="min-w-0">
-          <div className="text-sm text-slate-400">{d.date} · {c.emoji} {c.label}</div>
-          <h3 className="truncate text-base font-bold text-white">{d.title}</h3>
-        </div>
-      </div>
-      <ul className="divide-y divide-white/5 px-4">
-        {d.slots.map((sl, j) => (
-          <li key={j} className="flex gap-3 py-2.5 text-sm">
-            <span className="w-16 flex-none font-semibold text-slate-400">{sl.time}</span>
-            <span className="text-slate-100">
-              {sl.what}
-              {sl.split && <Tag cls="bg-indigo-500/25 text-indigo-100">cada um faz um programa</Tag>}
-              {sl.booking && <Tag cls="bg-amber-500/25 text-amber-100">reservar antes</Tag>}
-            </span>
-          </li>
-        ))}
-      </ul>
-      {d.note && <p className="px-4 pb-3 text-sm text-slate-400">{d.note}</p>}
-    </article>
-  );
-}
-
-function Tag({ cls, children }) {
-  return <span className={`ml-2 inline-block rounded-md px-1.5 py-0.5 text-xs font-semibold ${cls}`}>{children}</span>;
-}
-
-function ExtrasForCity({ city, list, onRemove, go }) {
-  if (city === "narita") return null;
-  const c = CITY[city];
-  return (
-    <div className="mt-3 rounded-2xl border border-dashed border-emerald-400/30 bg-emerald-500/[0.05] p-4">
-      <div className="text-sm font-bold text-emerald-100">
-        ✨ Passeios extras em {c.label} {list.length > 0 && `(${list.length})`}
-      </div>
-      {list.length === 0 ? (
-        <p className="mt-1 text-sm text-slate-400">
-          Nenhum ainda.{" "}
-          <button type="button" className="font-semibold text-sky-300 hover:text-sky-200 no-print" onClick={() => go("passeios")}>
-            Procurar passeios →
-          </button>
-        </p>
-      ) : (
-        <>
-          <p className="mt-0.5 text-sm text-slate-400">Encaixem num dos dias acima.</p>
-          <ul className="mt-2 space-y-1.5">
-            {list.map((a) => (
-              <li key={a.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
-                <span className="min-w-0 text-slate-100">
-                  <strong>{a.name}</strong>
-                  <span className="text-slate-400"> · {a.hours}h · {forTwoText(a.costBRL)}</span>
-                </span>
-                <button type="button" onClick={() => onRemove(a.id)} aria-label={`Tirar ${a.name}`}
-                  className="flex-none rounded-lg p-1 text-slate-400 hover:bg-white/10 hover:text-white no-print">
-                  <X size={16} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
     </div>
   );
 }
@@ -1448,7 +1267,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <Box title={`Passeios extras (${chosenActs.length})`} sub={`Tóquio na versão ${TOKYO_VARIANTS[tokyoVariant].label}`}>
+        <Box title={`Passeios extras (${chosenActs.length})`} sub="Ideias soltas da Lista, fora da rota">
           {chosenActs.length === 0 ? (
             <p className="text-sm text-slate-400">
               Nenhum ainda. <button type="button" className="font-semibold text-sky-300" onClick={() => go("passeios")}>Escolher passeios →</button>

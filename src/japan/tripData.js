@@ -187,17 +187,17 @@ export const CONFLICTS = [
   {
     conflict:
       "Pedro quer onsen; tem tatuagem (barrada na maioria dos banhos públicos); além disso são irmãos, e num onsen comum ficariam em alas separadas de qualquer forma",
-    resolution: "Banho privativo reservado (kashikiri-buro) em Arima — resolve os dois problemas ao mesmo tempo",
+    resolution: "Cortado: os dois têm tatuagem e a maioria dos banhos barra. A excursão Himeji + Arima saiu do carrinho junto",
     status: "resolvido",
   },
   {
     conflict: "Pedro quer DisneySea; consome um dia inteiro dos 4,5 dias de Tóquio",
-    resolution: "Duas versões de roteiro de Tóquio foram montadas — decisão ainda em aberto",
-    status: "aberto",
+    resolution: "DisneySea saiu; o parque temático virou o Universal Studios Japan + Super Nintendo World, no sábado 19/12 em Osaka",
+    status: "resolvido",
   },
   {
     conflict: "Nenhum dos dois marcou Nara nem Universal Studios",
-    resolution: "Cortados do roteiro proposto, mantidos como opção no catálogo",
+    resolution: "Universal entrou depois, a pedido do Pedro (19/12). Nara virou opção de bate-volta saindo de Kyoto",
     status: "resolvido",
   },
 ];
@@ -504,13 +504,10 @@ export const EXTRAS = [
 
 // ===== 9. PENDÊNCIAS =====
 export const OPEN_DECISIONS = [
-  { id: "d-roteiro", label: "Fechar o roteiro dia a dia", detail: "As cidades e os hotéis estão fechados; o que fazer em cada dia ainda não. O roteiro do site é uma proposta — escolham os passeios e o orçamento mostra quanto sobra.", severity: "alta" },
-  { id: "d-disneysea", label: "DisneySea: incluir ou não", detail: "Depende de qual dos dois roteiros de Tóquio vocês escolherem.", severity: "alta" },
-  { id: "d-teamlab", label: "Reserva do teamLab Biovortex Kyoto", detail: "Fazer com 2–3 semanas de antecedência.", severity: "alta" },
-  { id: "d-arima", label: "Reserva do banho privativo em Arima", detail: "Fazer com antecedência, principalmente por cair num sábado.", severity: "alta" },
-  { id: "d-himeji-kobe", label: "Himeji + Kobe no mesmo dia ou separados", detail: "O roteiro proposto junta os dois; se quiserem mais tempo no castelo, dá para separar tirando uma manhã do dia do Arima.", severity: "media" },
+  { id: "d-batevolta", label: "Bate-volta de Kyoto (15/12)", detail: "O dia está livre na rota. Opções na aba Roteiro → Bate-volta de Kyoto; as mais indicadas são Himeji (castelo, desejo da Gio) e Uji + Nara.", severity: "alta" },
+  { id: "d-mirante", label: "Umeda Sky ou Harukas 300", detail: "Os dois estão no carrinho e na rota (20/12 e 21/12). Quando decidirem, tirar o outro do carrinho.", severity: "media" },
   { id: "d-tiktok", label: "Restaurantes virais do TikTok (pedido da Gio)", detail: "Não travar agora: pesquisar perto da data, porque esse tipo de lista muda mês a mês.", severity: "baixa" },
-  { id: "d-uji", label: "Uji / cerimônia do chá (pedido do Pedro)", detail: "Ficou de fora do roteiro proposto; decidir se substitui algo no dia 16 em Kyoto.", severity: "media" },
+  { id: "d-uji", label: "Uji (pedido do Pedro)", detail: "A cerimônia do chá saiu; Uji continua como opção de bate-volta, junto com Nara, no dia 15. A aula de matcha em Osaka (20/12) já cobre o chá.", severity: "baixa" },
 ];
 
 // ===== 10. ITENS PRÁTICOS =====
@@ -543,9 +540,11 @@ export const BUDGET_LINES = [
 // ===== 12. CHECKLIST =====
 export const CHECKLIST = [
   { id: "c-ghibli", label: "Museu Ghibli: ingressos de dezembro saem 10/11 às 10h do Japão (22h de 09/11 no Brasil), pela Lawson" },
-  { id: "c-teamlab", label: "Comprar ingresso do teamLab Biovortex Kyoto" },
-  { id: "c-disney", label: "Decidir DisneySea e comprar ingresso, se for o caso" },
-  { id: "c-arima", label: "Reservar banho privativo em Arima" },
+  { id: "c-klook", label: "Pagar o carrinho da Klook (teamLab, Universal, iluminações e os outros passeios escolhidos)" },
+  { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 (a venda de dezembro abre por volta de 11/11)" },
+  { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
+  { id: "c-mirante", label: "Decidir entre Umeda Sky (20/12) e Harukas 300 (21/12) e tirar o outro do carrinho" },
+  { id: "c-batevolta", label: "Escolher o bate-volta de Kyoto do dia 15/12" },
   { id: "c-esim", label: "Configurar eSIM ou reservar Wi-Fi portátil" },
   { id: "c-seguro", label: "Contratar seguro viagem" },
   { id: "c-suica", label: "Configurar Suica/ICOCA no celular (ou comprar cartão físico na chegada)" },
