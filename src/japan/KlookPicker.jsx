@@ -187,7 +187,7 @@ export default function KlookPicker() {
             {closed.map((i) => (
               <li key={i.id} className="flex justify-between gap-3">
                 <span>{i.day} · {i.time.split(" ")[0]} — {i.name}</span>
-                <span className="flex-none text-slate-400">{formatBRL(i.priceBRL)}</span>
+                <span className="flex-none text-slate-400">{i.priceBRL ? formatBRL(i.priceBRL) : "Grátis"}</span>
               </li>
             ))}
           </ul>
@@ -247,7 +247,7 @@ function KlookCard({ item: i, votes, onVote }) {
           </div>
           <div className="rounded-xl bg-black/55 px-3 py-1.5 text-right backdrop-blur">
             <div className="text-xs text-slate-300">para os dois</div>
-            <div className="text-lg font-extrabold leading-tight text-white">≈ {formatBRL(i.priceBRL)}</div>
+            <div className="text-lg font-extrabold leading-tight text-white">{i.priceBRL ? `≈ ${formatBRL(i.priceBRL)}` : "Grátis"}</div>
           </div>
         </div>
       </div>
@@ -270,7 +270,7 @@ function KlookCard({ item: i, votes, onVote }) {
 
         <dl className="grid grid-cols-1 gap-x-4 gap-y-1.5 text-sm sm:grid-cols-2">
           <Info icon={Clock} label="Duração" value={i.duration} />
-          <Info icon={Star} label="Nota" value={`${i.rating} · ${i.reviews}`} />
+          {i.rating ? <Info icon={Star} label="Nota" value={`${i.rating} · ${i.reviews}`} /> : <Info icon={Star} label="Nota" value={i.reviews || "Evento novo, ainda sem notas"} />}
           <Info icon={MapPin} label="Onde" value={i.place} wide />
           {i.otherTimes && <Info icon={CalendarDays} label="Outros horários" value={i.otherTimes} wide />}
           {i.cancel && <Info icon={RotateCcw} label="Cancelamento" value={i.cancel} wide />}
