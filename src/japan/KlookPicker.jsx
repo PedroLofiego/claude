@@ -207,7 +207,7 @@ export default function KlookPicker() {
           </button>
         </div>
         <p className="mt-3 text-xs text-slate-400">
-          Os “tirar do carrinho” o Pedro remove na Klook. Itens sem venda aberta (Shibuya Sky, Kaiyukan e teleférico de Kobe) não estão no carrinho — comprar em novembro.
+          Os “tirar do carrinho” o Pedro remove na Klook. Itens sem venda aberta (Shibuya Sky e teleférico de Kobe) não estão no carrinho — comprar em novembro.
         </p>
       </section>
     </div>
