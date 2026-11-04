@@ -5,9 +5,8 @@ import {
   ListChecks, Map as MapIcon, PackageCheck, Plane, Plus, Scale, Search,
   ShoppingCart, SlidersHorizontal, Train, Users, Wallet, X,
 } from "lucide-react";
-import JapanMap from "./JapanMap.jsx";
-import KlookPicker from "./KlookPicker.jsx";
-import { KyotoTrips, RouteView } from "./RouteView.jsx";
+import { KyotoTrips, RouteView, TicketsView } from "./RouteView.jsx";
+import { KLOOK_ITEMS } from "./klookData.js";
 import { ROUTE_DAYS } from "./routeData.js";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
 import { ACT_CATEGORIES, ACTIVITIES, DAY_TRIPS, EFFORT } from "./activities.js";
@@ -31,19 +30,11 @@ const SECTIONS = [
   { id: "inicio", label: "Início", icon: HomeIcon },
   { id: "roteiro", label: "Roteiro", icon: CalendarDays,
     title: "Roteiro dia a dia",
-    desc: "A rota ideal com os passeios escolhidos e lugares para bater perna em volta, sem correria. Em “Bate-volta de Kyoto”, as opções para o dia 15.",
+    desc: "A rota ideal com os passeios escolhidos e lugares para bater perna em volta, sem correria — cada dia abre direto no Google Maps. Em “Ingressos”, o que já está no carrinho; em “Bate-volta de Kyoto”, as opções para o dia 15.",
     subs: [
       { id: "rota", label: "Rota ideal", icon: CalendarDays },
+      { id: "ingressos", label: "Ingressos", icon: ShoppingCart },
       { id: "batevolta", label: "Bate-volta de Kyoto", icon: Train },
-    ] },
-  { id: "passeios", label: "Passeios", icon: Compass,
-    title: "Passeios",
-    desc: "Em “Klook · escolher” estão os passeios escolhidos, já no carrinho com data e horário. Em “Lista” tem todo o resto.",
-    subs: [
-      { id: "klook", label: "Klook · escolher", icon: ShoppingCart },
-      { id: "catalogo", label: "Lista", icon: Compass },
-      { id: "mapa", label: "Mapa", icon: MapIcon },
-      { id: "pacotes", label: "Pacotes de agência", icon: Scale },
     ] },
   { id: "organizar", label: "Organizar", icon: ListChecks,
     title: "Organizar a viagem",
@@ -62,7 +53,7 @@ const SECTIONS = [
 
 // Endereços antigos continuam funcionando (links já compartilhados).
 const LEGACY = {
-  geral: ["inicio"], pacotes: ["passeios", "pacotes"], mapa: ["passeios", "mapa"],
+  geral: ["inicio"], pacotes: ["roteiro", "rota"], mapa: ["roteiro", "rota"], passeios: ["roteiro", "ingressos"],
   hospedagem: ["organizar", "hoteis"], transporte: ["organizar", "transporte"],
   perfis: ["organizar", "perfis"], pratico: ["organizar", "checklist"],
 };
@@ -232,9 +223,11 @@ export default function JapanApp() {
     L.push(`  = Já pago: ${formatBRL(B.paid)}`);
     L.push(`  🍜 Comida, gastos do dia e trens (estimado): ${formatBRL(B.fixed)}`);
     L.push(`  Sobra para passeios e compras: ${formatBRL(B.forPasseios)} (teto ${formatBRL(B.cap)})`);
-    L.push(`  🎟️ Passeios escolhidos: ${B.chosen ? formatBRL(B.chosen) : "nenhum ainda"}`);
+    L.push(`  🎟️ Ingressos escolhidos (Klook): ${formatBRL(B.chosen)}`);
     L.push(`  ${B.slack >= 0 ? `Livre: ${formatBRL(B.slack)}` : `ESTOURO: ${formatBRL(-B.slack)}`}`);
-    L.push("  (Roteiro ainda não decidido — os passeios entram quando forem escolhidos.)");
+    L.push("");
+    L.push("🎟️ INGRESSOS");
+    KLOOK_ITEMS.forEach((i) => L.push(`  ${i.status === "carrinho" ? "🛒" : "⏳"} ${i.day} ${i.time.split(" ")[0]} — ${i.name}`));
     if (chosenActs.length) {
       L.push("");
       L.push(`✨ PASSEIOS EXTRAS ESCOLHIDOS (${chosenActs.length})`);
@@ -255,7 +248,7 @@ export default function JapanApp() {
   };
 
   const section = SECTIONS.find((s) => s.id === route.section);
-  const badges = { passeios: extras.size, organizar: todo };
+  const badges = { organizar: todo };
 
   return (
     <div className="min-h-full pb-28 lg:pb-10">
@@ -272,17 +265,8 @@ export default function JapanApp() {
               chosenActs={chosenActs} chosenPois={chosenPois} />
           )}
           {route.section === "roteiro" && route.sub === "rota" && <RouteView />}
+          {route.section === "roteiro" && route.sub === "ingressos" && <TicketsView />}
           {route.section === "roteiro" && route.sub === "batevolta" && <KyotoTrips />}
-          {route.section === "passeios" && route.sub === "klook" && <KlookPicker />}
-          {route.section === "passeios" && route.sub === "catalogo" && (
-            <ActivityCatalog chosen={extras} onToggle={toggleExtra} />
-          )}
-          {route.section === "passeios" && route.sub === "mapa" && (
-            <JapanMap selectedIds={poiIds} onToggle={togglePoi} bases={mapBases} />
-          )}
-          {route.section === "passeios" && route.sub === "pacotes" && (
-            <AgencyCompare extras={extras} onToggleExtra={toggleExtra} poiIds={poiIds} onTogglePoi={togglePoi} />
-          )}
           {route.section === "organizar" && route.sub === "checklist" && (
             <ChecklistView done={done} onToggle={toggleDone} />
           )}
@@ -421,7 +405,7 @@ function HelpDialog({ onClose, go }) {
   }, [onClose]);
   const steps = [
     ["roteiro", "Roteiro", "Veja o que vocês fazem em cada um dos 14 dias."],
-    ["passeios", "Passeios", "Procure atividades e toque em “Adicionar” no que quiserem fazer."],
+    ["roteiro", "Ingressos", "Dentro do Roteiro: os passeios escolhidos, o que está no carrinho e o que falta comprar."],
     ["organizar", "Organizar", "Marque o que já foi resolvido: hotéis, ingressos, seguro…"],
     ["plano", "Meu plano", "Veja tudo o que escolheram e mande o resumo no WhatsApp ou baixe o PDF."],
   ];
@@ -495,7 +479,8 @@ function budgetTotals(chosenActs = [], chosenPois = []) {
     BUDGET_LINES.filter(fn).reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * P : b.brl || 0), 0);
   const paid = f((b) => b.status === "pago");
   const fixed = f((b) => b.status === "estimado");
-  const chosen = [...chosenActs, ...chosenPois].reduce((s, x) => s + (x.costBRL || 0), 0) * P;
+  // Ingressos escolhidos na Klook (priceBRL já é para os dois).
+  const chosen = KLOOK_ITEMS.reduce((s, x) => s + (x.priceBRL || 0), 0);
   const forPasseios = BUDGET_CAP - paid - fixed;
   return {
     cap: BUDGET_CAP,
@@ -537,7 +522,7 @@ function BudgetBar({ B }) {
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-emerald-400/80" />já pago</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-amber-400/60" />comida e trens</span>
-        <span><span className={`mr-1.5 inline-block h-2.5 w-2.5 rounded-full ${over ? "bg-rose-400/80" : "bg-sky-400/70"}`} />passeios escolhidos</span>
+        <span><span className={`mr-1.5 inline-block h-2.5 w-2.5 rounded-full ${over ? "bg-rose-400/80" : "bg-sky-400/70"}`} />ingressos escolhidos</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-white/20" />livre</span>
       </div>
     </div>
@@ -571,7 +556,7 @@ function BudgetSummary({ B }) {
           <dd className="text-lg font-extrabold text-sky-300 tabular-nums">{formatBRL(B.forPasseios)}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className="text-slate-300">🎟️ Passeios escolhidos até agora</dt>
+          <dt className="text-slate-300">🎟️ Ingressos escolhidos (Klook, com os dois mirantes)</dt>
           <dd className="font-bold text-sky-200 tabular-nums">{B.chosen ? `− ${formatBRL(B.chosen)}` : "nenhum"}</dd>
         </div>
       </dl>
@@ -582,9 +567,8 @@ function BudgetSummary({ B }) {
             : <>Estouro de <strong className="tabular-nums">{formatBRL(-B.slack)}</strong> sobre o teto de {formatBRL(B.cap)}.</>}
         </p>
         <p className="mt-1.5 text-xs text-slate-400">
-          O roteiro ainda não foi decidido, então os passeios só entram na conta quando vocês escolhem.
-          Todos os valores são para as {B.people} pessoas. Referência: os ingressos da proposta de roteiro
-          atual somam cerca de {formatBRL(B.proposal)} para os dois.
+          Os ingressos são os passeios escolhidos na Klook (no carrinho + os que faltam abrir venda).
+          Todos os valores são para as {B.people} pessoas.
         </p>
       </div>
     </>
@@ -598,7 +582,7 @@ function Home({ daysLeft, extrasCount, todo, go, chosenActs, chosenPois }) {
 
   const actions = [
     { id: "roteiro", icon: CalendarDays, title: "Ver o roteiro", body: "Dia a dia, do pouso à volta" },
-    { id: "passeios", icon: Compass, title: "Escolher passeios", body: extrasCount ? `${extrasCount} escolhido(s) até agora` : "Nenhum escolhido ainda" },
+    { id: "roteiro", sub: "ingressos", icon: ShoppingCart, title: "Ingressos", body: `${KLOOK_ITEMS.filter((i) => i.status === "carrinho").length} no carrinho da Klook` },
     { id: "organizar", icon: ListChecks, title: "O que falta resolver", body: `${todo} ${todo === 1 ? "item" : "itens"} no checklist` },
     { id: "plano", icon: PackageCheck, title: "Compartilhar", body: "Resumo no WhatsApp ou PDF" },
   ];
@@ -629,7 +613,7 @@ function Home({ daysLeft, extrasCount, todo, go, chosenActs, chosenPois }) {
           {actions.map((a) => {
             const Icon = a.icon;
             return (
-              <button key={a.id} type="button" onClick={() => go(a.id)}
+              <button key={a.title} type="button" onClick={() => go(a.id, a.sub)}
                 className="card card-hover flex flex-col items-start gap-2 p-4 text-left">
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-rose-500/15 text-rose-300">
                   <Icon size={20} />
@@ -1266,47 +1250,17 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <Box title={`Passeios extras (${chosenActs.length})`} sub="Ideias soltas da Lista, fora da rota">
-          {chosenActs.length === 0 ? (
-            <p className="text-sm text-slate-400">
-              Nenhum ainda. <button type="button" className="font-semibold text-sky-300" onClick={() => go("passeios")}>Escolher passeios →</button>
-            </p>
-          ) : (
-            <ul className="space-y-1.5">
-              {chosenActs.map((e) => (
-                <li key={e.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
-                  <span className="min-w-0"><span className="font-semibold text-white">{e.name}</span>
-                    <span className="text-slate-400"> · {CITY[e.city]?.label} · {e.hours}h</span></span>
-                  <button type="button" onClick={() => onRemoveAct(e.id)} aria-label={`Tirar ${e.name}`}
-                    className="flex-none rounded-lg p-1 text-slate-400 hover:bg-white/10 hover:text-white no-print"><X size={16} /></button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Box>
-
-        <Box title={`Lugares salvos no mapa (${chosenPois.length})`}>
-          {chosenPois.length === 0 ? (
-            <p className="text-sm text-slate-400">
-              Nenhum ainda. <button type="button" className="font-semibold text-sky-300" onClick={() => go("passeios", "mapa")}>Abrir o mapa →</button>
-            </p>
-          ) : (
-            <ul className="space-y-1.5">
-              {chosenPois.map((p) => (
-                <li key={p.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
-                  <span className="min-w-0 truncate text-white">{p.name}</span>
-                  <span className="flex flex-none items-center gap-2">
-                    <span className="text-slate-300">{forTwoText(p.costBRL)}</span>
-                    <button type="button" onClick={() => onRemovePoi(p.id)} aria-label={`Tirar ${p.name}`}
-                      className="rounded-lg p-1 text-slate-400 hover:bg-white/10 hover:text-white no-print"><X size={16} /></button>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Box>
-      </div>
+      <Box title={`Ingressos escolhidos (${KLOOK_ITEMS.length})`} sub="No carrinho da Klook ou para comprar quando abrir a venda">
+        <ul className="space-y-1.5">
+          {KLOOK_ITEMS.map((e) => (
+            <li key={e.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
+              <span className="min-w-0"><span className="font-semibold text-white">{e.name}</span>
+                <span className="text-slate-400"> · {e.day}{e.status === "sem-venda" ? " · comprar quando abrir" : ""}</span></span>
+              <span className="flex-none text-slate-300">{e.priceBRL ? formatBRL(e.priceBRL) : "grátis"}</span>
+            </li>
+          ))}
+        </ul>
+      </Box>
 
       <Box title="Orçamento" icon={Wallet} sub="Valores em iene são estimativas — conferir antes de reservar.">
         <ul className="divide-y divide-white/5">

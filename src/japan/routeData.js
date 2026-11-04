@@ -5,7 +5,8 @@
  *
  * kind: "klook" (já no carrinho) | "comprar" (escolhido, venda ainda não abriu)
  *       | "perna" (andar/explorar, grátis) | "comida" | "transp" | "livre"
- * map: texto para busca no Google Maps.
+ * map: texto para busca no Google Maps. from/end: onde a rota do dia começa e termina
+ * (hotel), usados no botão "Rota do dia no Google Maps".
  */
 
 export const ROUTE_UPDATED = "03/11/2026";
@@ -22,6 +23,7 @@ export const ROUTE_KINDS = {
 export const ROUTE_DAYS = [
   {
     n: 1, date: "Qua 09/12", city: "toquio", title: "Chegada + Tóquio iluminada", pace: "leve",
+    from: "Comfort Hotel Tokyo Higashi Nihombashi", end: "Comfort Hotel Tokyo Higashi Nihombashi",
     sleep: "Comfort Hotel Higashi Nihombashi",
     slots: [
       { time: "11:45", kind: "transp", what: "Pouso em Narita. Trem Access Express direto até Higashi-Nihombashi (~55 min)." },
@@ -33,6 +35,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 2, date: "Qui 10/12", city: "toquio", title: "Asakusa + Akihabara", pace: "médio",
+    from: "Comfort Hotel Tokyo Higashi Nihombashi", end: "Comfort Hotel Tokyo Higashi Nihombashi",
     sleep: "Comfort Hotel Higashi Nihombashi",
     slots: [
       { time: "09:30", kind: "perna", what: "Templo Senso-ji e a rua Nakamise cedo, antes da multidão.", map: "Senso-ji" },
@@ -42,11 +45,12 @@ export const ROUTE_DAYS = [
       { time: "15:00", kind: "perna", what: "Beira do rio Sumida e ponte Azuma — a melhor vista do Skytree de graça. Café e pausa.", map: "Sumida Park" },
       { time: "16:45", kind: "transp", what: "Metrô Ginza até Suehirocho (10 min)." },
       { time: "17:00", kind: "perna", what: "Akihabara: fliperamas (GiGO, Taito Station), lojas de games retrô (Super Potato), Yodobashi e Bic Camera.", map: "Akihabara Electric Town" },
-      { time: "19:30", kind: "comida", what: "Jantar nos izakayas debaixo dos trilhos de Kanda — a 10 min do hotel.", map: "Kanda Station izakaya" },
+      { time: "19:30", kind: "comida", what: "Jantar nos izakayas debaixo dos trilhos de Kanda — a 10 min do hotel.", map: "Kanda Station" },
     ],
   },
   {
     n: 3, date: "Sex 11/12", city: "toquio", title: "Harajuku + Shibuya", pace: "médio",
+    from: "Comfort Hotel Tokyo Higashi Nihombashi", end: "Comfort Hotel Tokyo Higashi Nihombashi",
     sleep: "Comfort Hotel Higashi Nihombashi",
     slots: [
       { time: "10:00", kind: "perna", what: "Santuário Meiji Jingu — floresta no meio da cidade, caminhada tranquila (~45 min).", map: "Meiji Jingu" },
@@ -61,6 +65,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 4, date: "Sáb 12/12", city: "toquio", title: "Tsukiji + Ginza + Tokyo Tower", pace: "médio",
+    from: "Comfort Hotel Tokyo Higashi Nihombashi", end: "Comfort Hotel Tokyo Higashi Nihombashi",
     sleep: "Comfort Hotel Higashi Nihombashi",
     slots: [
       { time: "08:30", kind: "comida", what: "Café da manhã no Mercado de Tsukiji por conta própria: omelete tamagoyaki, sushi, ostras.", map: "Tsukiji Outer Market" },
@@ -74,6 +79,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 5, date: "Dom 13/12", city: "toquio", title: "Shimokitazawa + Shinjuku + Yomiuriland", pace: "médio",
+    from: "Comfort Hotel Tokyo Higashi Nihombashi", end: "Comfort Hotel Tokyo Higashi Nihombashi",
     sleep: "Comfort Hotel Higashi Nihombashi",
     slots: [
       { time: "Manhã", kind: "livre", what: "Manhã devagar (a Gio rende mais à tarde). Deixar a mala grande pronta para o takkyubin." },
@@ -87,6 +93,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 6, date: "Seg 14/12", city: "kyoto", title: "Chegada em Kyoto: Kinkaku-ji + Nishiki + Gion", pace: "médio",
+    from: "Kyoto Station", end: "HOTEL MYSTAYS Kyoto Shijo",
     sleep: "MYSTAYS Kyoto Shijo",
     slots: [
       { time: "10:00", kind: "transp", what: "Trem-bala Tóquio → Kyoto (2h15). Sentem no lado direito (assento E) para ver o Monte Fuji." },
@@ -107,6 +114,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 8, date: "Qua 16/12", city: "kyoto", title: "Fushimi Inari + teamLab + Kiyomizu", pace: "cheio",
+    from: "HOTEL MYSTAYS Kyoto Shijo", end: "HOTEL MYSTAYS Kyoto Shijo",
     sleep: "MYSTAYS Kyoto Shijo",
     slots: [
       { time: "07:00", kind: "perna", what: "Fushimi Inari vazio. Pedro sobe a montanha inteira (2–2h30); a Gio chega às 9:00 e vê os portões de baixo (sem trilha).", map: "Fushimi Inari Taisha", split: true },
@@ -122,6 +130,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 9, date: "Qui 17/12", city: "osaka", title: "Chegada em Osaka + castelo iluminado + Dotonbori", pace: "médio",
+    from: "HOTEL MYSTAYS Kyoto Shijo", end: "Travelodge Honmachi Osaka",
     sleep: "Travelodge Honmachi",
     slots: [
       { time: "10:00", kind: "transp", what: "Linha Hankyu direto do hotel (Omiya → Osaka-Umeda, ~45 min) e metrô até Honmachi. Deixar a mala." },
@@ -134,6 +143,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 10, date: "Sex 18/12", city: "osaka", title: "Dia de Kobe", pace: "médio",
+    from: "Travelodge Honmachi Osaka", end: "Travelodge Honmachi Osaka",
     sleep: "Travelodge Honmachi",
     slots: [
       { time: "09:30", kind: "transp", what: "JR de Osaka até Sannomiya (~25 min) e metrô até Shin-Kobe." },
@@ -148,17 +158,19 @@ export const ROUTE_DAYS = [
   },
   {
     n: 11, date: "Sáb 19/12", city: "osaka", title: "Universal Studios Japan", pace: "cheio",
+    from: "Travelodge Honmachi Osaka", end: "Travelodge Honmachi Osaka",
     sleep: "Travelodge Honmachi",
     slots: [
       { time: "07:45", kind: "transp", what: "Metrô Chuo até Bentencho e linha JR Yumesaki até Universal City (~30 min). Cheguem antes de abrir." },
-      { time: "08:30", kind: "klook", what: "Universal: comecem pelos brinquedos de fila maior (Harry Potter, Flying Dinosaur).", klookId: "usj", map: "Universal Studios Japan" },
-      { time: "12:00", kind: "klook", what: "Super Nintendo World (entrada garantida): Mario Kart, Yoshi e Donkey Kong." },
-      { time: "Tarde", kind: "perna", what: "Resto do parque, árvore de Natal e o show de Natal ao anoitecer." },
+      { time: "08:30", kind: "klook", what: "Universal com Express Pass 4: fura-fila em Harry Potter e JAWS (a qualquer hora) e em Mario Kart e Donkey Kong (horário marcado no voucher).", klookId: "usj", map: "Universal Studios Japan" },
+      { time: "No voucher", kind: "klook", what: "Super Nintendo World: Mario Kart e Mine-Cart Madness (Donkey Kong) nos horários do Express. Yoshi e as pulseiras Power-Up sem pressa, que a entrada na área já está garantida." },
+      { time: "Tarde", kind: "perna", what: "Com as filas grandes resolvidas: resto do parque, árvore de Natal e o show de Natal ao anoitecer." },
       { time: "19:30", kind: "comida", what: "Jantar no CityWalk, na saída do parque, ou perto do hotel. Noite de descanso." },
     ],
   },
   {
     n: 12, date: "Dom 20/12", city: "osaka", title: "Umeda + compras + Dotonbori", pace: "médio",
+    from: "Travelodge Honmachi Osaka", end: "Travelodge Honmachi Osaka",
     sleep: "Travelodge Honmachi",
     slots: [
       { time: "10:30", kind: "perna", what: "Nakazakicho: casinhas antigas com cafés e brechós, a 10 min a pé de Umeda.", map: "Nakazakicho" },
@@ -172,6 +184,7 @@ export const ROUTE_DAYS = [
   },
   {
     n: 13, date: "Seg 21/12", city: "osaka", title: "Tennoji + Shinsekai → Narita", pace: "médio",
+    from: "Travelodge Honmachi Osaka", end: "9h nine hours Narita Airport",
     sleep: "9h nine hours Narita (cápsula)",
     slots: [
       { time: "09:00", kind: "transp", what: "Check-out e deixar a mala no hotel." },
