@@ -147,7 +147,7 @@ export const PERSON_PROFILES = [
       "Subir o Fushimi Inari inteiro",
       "Noite de bar em Dotonbori",
       "Iluminações de Natal",
-      "DisneySea",
+      "Parque temático (virou o Universal Studios Japan)",
       "Onsen (tem tatuagem)",
     ],
     cuts: ["Nara"],
@@ -191,8 +191,8 @@ export const CONFLICTS = [
     status: "resolvido",
   },
   {
-    conflict: "Pedro quer DisneySea; consome um dia inteiro dos 4,5 dias de Tóquio",
-    resolution: "DisneySea saiu; o parque temático virou o Universal Studios Japan + Super Nintendo World, no sábado 19/12 em Osaka",
+    conflict: "Pedro queria um parque temático (DisneySea); consumiria um dia inteiro de Tóquio",
+    resolution: "Não vão ao DisneySea; o parque temático virou o Universal Studios Japan + Super Nintendo World, no sábado 19/12 em Osaka",
     status: "resolvido",
   },
   {
@@ -241,33 +241,6 @@ export const LOGISTICS_NOTES = [
 ];
 
 // ===== 6-8. ROTEIRO BASE =====
-// Tóquio tem duas versões (com e sem DisneySea)
-export const TOKYO_VARIANTS = {
-  sem: {
-    id: "sem",
-    label: "Sem DisneySea",
-    days: [
-      { date: "Qui 10/12", morning: "Asakusa (Senso-ji, Nakamise)", afternoon: "Skytree", night: "Akihabara, jantar em Kanda" },
-      { date: "Sex 11/12", morning: "Shibuya (cruzamento, Hachiko)", afternoon: "Harajuku, Meiji Jingu, Omotesando", night: "Shinjuku (Omoide Yokocho)" },
-      { date: "Sáb 12/12", morning: "Tsukiji Outer Market (café da manhã)", afternoon: "Ginza, Jardim Imperial", night: "Roppongi Hills / Tokyo Tower, vista noturna" },
-      { date: "Dom 13/12", morning: "Ueno, Ameyoko", afternoon: "Compras / depachika", night: "Jantar de despedida de Tóquio" },
-    ],
-    cost: null,
-  },
-  com: {
-    id: "com",
-    label: "Com DisneySea",
-    days: [
-      { date: "Qui 10/12", morning: "Asakusa (Senso-ji, Nakamise)", afternoon: "Skytree", night: "Akihabara" },
-      { date: "Sex 11/12", morning: "DisneySea — dia inteiro", afternoon: "(escolhido por ser sexta, dia de semana com menos fila)", night: "", fullDay: true },
-      { date: "Sáb 12/12", morning: "Shibuya, Harajuku", afternoon: "Ginza, Tsukiji", night: "Shinjuku" },
-      { date: "Dom 13/12", morning: "Ueno, Ameyoko", afternoon: "Compras", night: "Jantar de despedida" },
-    ],
-    cost:
-      "Sobram só 3 dias para o que eram 4 blocos de bairro. Algo vai precisar ser cortado — Ginza ou o segundo bairro de compras são os candidatos naturais, por aparecerem menos nos dois questionários. Comprar o ingresso com antecedência: dezembro é temporada de eventos de Natal e esgota por horário/data.",
-  },
-};
-
 export const KYOTO_DAYS = [
   {
     date: "Seg 14/12",
@@ -355,7 +328,7 @@ export const EXTRAS = [
   {
     id: "x-teamlab-tokyo", city: "toquio", name: "teamLab Planets (Toyosu) ou Borderless (Azabudai)",
     category: "Cultura/arte", duration: "2–4h", match: "ambos", level: "medio",
-    note: "Redundante com o teamLab de Kyoto já no plano — só incluir se sobrar tempo, principalmente na versão sem DisneySea.",
+    note: "Redundante com o teamLab de Kyoto já no plano — só incluir se sobrar tempo.",
     lat: 35.6491, lng: 139.7897,
   },
   {

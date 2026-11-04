@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { BedDouble, ExternalLink, MapPin, Train } from "lucide-react";
-import { KLOOK_ITEMS } from "./klookData.js";
+import { BedDouble, ExternalLink, MapPin, Navigation, Route as RouteIcon, Train } from "lucide-react";
+import { KLOOK_ITEMS, KLOOK_STATUS } from "./klookData.js";
 import { KYOTO_TRIPS, ROUTE_DAYS, ROUTE_KINDS, ROUTE_UPDATED } from "./routeData.js";
 
 const CITY = {
@@ -21,6 +21,14 @@ const WHO = { pedro: "🧑 Pedro", gio: "👩 Gio", ambos: "👥 Os dois" };
 
 const mapUrl = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 const klookById = Object.fromEntries(KLOOK_ITEMS.map((i) => [i.id, i]));
+const enc = (q) => encodeURIComponent(q);
+// Rota com várias paradas (o Google abre todas em ordem; trem com várias paradas ele não monta).
+const dayRouteUrl = (stops) => `https://www.google.com/maps/dir/${stops.map((q) => enc(q).replace(/%20/g, "+")).join("/")}/`;
+// Trecho único em transporte público, da parada anterior até esta.
+const transitUrl = (from, to) =>
+  `https://www.google.com/maps/dir/?api=1&origin=${enc(from)}&destination=${enc(to)}&travelmode=transit`;
+const dayStops = (d) => [d.from, ...d.slots.filter((s) => s.map).map((s) => s.map), d.end].filter(Boolean)
+  .filter((q, i, a) => q !== a[i - 1]);
 
 // ==================== ROTA IDEAL ====================
 export function RouteView() {
@@ -41,6 +49,8 @@ export function RouteView() {
             <span key={k} className={`rounded-md px-2 py-0.5 text-xs font-semibold ${v.cls}`}>{v.label}</span>
           ))}
         </div>
+        <p className="mt-2 flex gap-1.5 text-slate-300"><RouteIcon size={15} className="mt-0.5 flex-none text-sky-300" />
+          <span>Cada dia tem o botão <b className="text-white">Rota do dia no Google Maps</b>, com todas as paradas na ordem, saindo do hotel. Em cada lugar, <b className="text-white">Como chegar</b> abre o trajeto de trem e metrô desde a parada anterior.</span></p>
         <p className="mt-2 text-xs text-slate-400">Montada em {ROUTE_UPDATED}. Horários de pôr do sol e de funcionamento podem mudar — conferir perto da data.</p>
       </section>
 
@@ -80,6 +90,8 @@ export function RouteView() {
 
 function RouteDay({ d }) {
   const c = CITY[d.city];
+  const stops = dayStops(d);
+  let prev = d.from;
   return (
     <article className="card overflow-hidden">
       <header className="flex items-center gap-3 border-b border-white/10 px-4 py-3" style={{ boxShadow: `inset 4px 0 0 ${c.color}` }}>
@@ -101,6 +113,8 @@ function RouteDay({ d }) {
         {d.slots.map((sl, j) => {
           const k = ROUTE_KINDS[sl.kind] ?? ROUTE_KINDS.livre;
           const item = sl.klookId && klookById[sl.klookId];
+          const from = prev;
+          if (sl.map) prev = sl.map;
           return (
             <li key={j} className="flex gap-3 py-2.5 text-sm">
               <span className="w-14 flex-none pt-0.5 font-semibold text-slate-400">{sl.time}</span>
@@ -116,6 +130,11 @@ function RouteDay({ d }) {
                         <MapPin size={12} /> Mapa
                       </a>
                     )}
+                    {sl.map && from && from !== sl.map && (
+                      <a href={transitUrl(from, sl.map)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-violet-300 hover:text-violet-200">
+                        <Navigation size={12} /> Como chegar
+                      </a>
+                    )}
                     {item && (
                       <a href={item.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-300 hover:text-emerald-200">
                         <ExternalLink size={12} /> Klook{item.priceBRL ? ` · ≈ R$ ${item.priceBRL.toLocaleString("pt-BR")} os dois` : ""}
@@ -128,6 +147,14 @@ function RouteDay({ d }) {
           );
         })}
       </ul>
+      {stops.length > 2 && (
+        <div className="px-4 pb-1 pt-2 no-print">
+          <a href={dayRouteUrl(stops)} target="_blank" rel="noreferrer"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-sky-500/15 px-3 py-2.5 text-sm font-semibold text-sky-100 hover:bg-sky-500/25">
+            <RouteIcon size={16} /> Rota do dia no Google Maps <span className="font-normal text-sky-200/80">· {stops.length} paradas</span>
+          </a>
+        </div>
+      )}
       {(d.tip || d.sleep) && (
         <footer className="space-y-1 border-t border-white/5 px-4 py-2.5 text-xs text-slate-400">
           {d.tip && <p className="text-slate-300">💡 {d.tip}</p>}
@@ -194,5 +221,56 @@ function TripCard({ t }) {
         </a>
       </div>
     </article>
+  );
+}
+
+// ==================== INGRESSOS ESCOLHIDOS ====================
+export function TicketsView() {
+  const items = [...KLOOK_ITEMS].sort((a, b) => a.dateISO.localeCompare(b.dateISO) || a.time.localeCompare(b.time));
+  const inCart = items.filter((i) => i.status === "carrinho");
+  const toBuy = items.filter((i) => i.status === "sem-venda");
+  const total = inCart.reduce((s, i) => s + (i.priceBRL || 0), 0);
+  const brl = (v) => `R$ ${v.toLocaleString("pt-BR")}`;
+  return (
+    <div className="space-y-4">
+      <section className="card p-4 text-sm leading-relaxed text-slate-300">
+        <p>
+          Os passeios que vocês escolheram. <b className="text-white">{inCart.length} estão no carrinho da Klook</b> com 2 ingressos cada
+          (≈ <b className="text-white">{brl(total)}</b> para os dois, ainda não pago) e <b className="text-amber-200">{toBuy.length} ainda não abriram venda</b> para dezembro.
+        </p>
+        <p className="mt-1.5 text-xs text-slate-400">
+          Umeda Sky e Harukas 300 estão os dois no carrinho até vocês decidirem. Preços convertidos para real — podem mudar até a compra.
+        </p>
+      </section>
+      <ul className="space-y-2">
+        {items.map((i) => {
+          const st = KLOOK_STATUS[i.status];
+          return (
+            <li key={i.id} className="card flex gap-3 p-3">
+              {i.img && <img src={i.img} alt="" loading="lazy" className="h-16 w-20 flex-none rounded-lg object-cover sm:h-20 sm:w-28" />}
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                  <span className="font-semibold text-slate-300">{i.day} · {i.time}</span>
+                  <span className={`rounded-md border px-1.5 py-0.5 font-semibold ${st.cls}`}>{st.label}</span>
+                </div>
+                <h3 className="mt-0.5 text-sm font-bold leading-snug text-white">{i.name}</h3>
+                {i.salesNote && <p className="mt-0.5 text-xs text-amber-200">{i.salesNote}</p>}
+                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                  <span className="font-semibold text-slate-200">{i.priceBRL ? `≈ ${brl(i.priceBRL)} os dois` : "Grátis"}</span>
+                  <a href={i.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-300 hover:text-emerald-200">
+                    <ExternalLink size={12} /> Klook
+                  </a>
+                  {i.lat && (
+                    <a href={mapUrl(`${i.lat},${i.lng}`)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-sky-300 hover:text-sky-200">
+                      <MapPin size={12} /> Mapa
+                    </a>
+                  )}
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
