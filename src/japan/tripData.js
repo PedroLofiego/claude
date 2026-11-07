@@ -513,7 +513,7 @@ export const BUDGET_LINES = [
 // ===== 12. CHECKLIST =====
 export const CHECKLIST = [
   { id: "c-ghibli", label: "Museu Ghibli: ingressos de dezembro saem 10/11 às 10h do Japão (22h de 09/11 no Brasil), pela Lawson" },
-  { id: "c-klook-resto", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12), aula de matcha e barco em Dotonbori (20/12) — os outros 10 já estão pagos" },
+  { id: "c-klook-resto2", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12) e aula de matcha (20/12, agora às 18:00)" },
   { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 (a venda de dezembro abre por volta de 11/11)" },
   { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
   { id: "c-mirante", label: "Harukas 300 já está pago — decidir se o Umeda Sky (20/12) também vai ou sai do carrinho" },

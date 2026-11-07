@@ -174,12 +174,13 @@ export const ROUTE_DAYS = [
     sleep: "Travelodge Honmachi",
     slots: [
       { time: "10:30", kind: "perna", what: "Nakazakicho: casinhas antigas com cafés e brechós, a 10 min a pé de Umeda.", map: "Nakazakicho" },
-      { time: "13:00", kind: "klook", what: "Aula de matcha e doces japoneses (~1h). Endereço no voucher — conferir antes.", klookId: "matcha-osaka" },
-      { time: "14:30", kind: "perna", what: "Compras em Umeda: Yodobashi, Grand Front e o depachika da Hankyu.", map: "Yodobashi Umeda" },
-      { time: "16:00", kind: "klook", what: "Umeda Sky Building, pôr do sol às 16:51. Embaixo tem o mercado de Natal alemão (grátis).", klookId: "umeda-sky", map: "Umeda Sky Building", note: "O Harukas (dia 21) já está pago — decidir se o Umeda também vai" },
-      { time: "18:00", kind: "perna", what: "Shinsaibashi-suji e Amerikamura: últimas compras.", map: "Shinsaibashi-suji" },
+      { time: "12:30", kind: "comida", what: "Almoço em Umeda (andares de restaurante das lojas de departamento)." },
+      { time: "13:30", kind: "perna", what: "Compras em Umeda: Yodobashi, Grand Front e o depachika da Hankyu.", map: "Yodobashi Umeda" },
+      { time: "16:00", kind: "klook", what: "Umeda Sky Building, pôr do sol às 16:51. Embaixo tem o mercado de Natal alemão (grátis).", klookId: "umeda-sky", map: "Umeda Sky Building", note: "O Harukas (dia 21) já está pago — se o Umeda não for, usem a tarde em Shinsaibashi-suji e Amerikamura" },
+      { time: "17:15", kind: "transp", what: "Metrô Midosuji para o sul (Shinsaibashi/Namba) — conferir no voucher o endereço da aula." },
+      { time: "18:00", kind: "klook", what: "Aula de matcha e doces japoneses (~1h).", klookId: "matcha-osaka" },
       { time: "19:30", kind: "klook", what: "Barquinho no canal de Dotonbori (20 min).", klookId: "dotonbori-boat", map: "Tazaemonbashi pier" },
-      { time: "20:30", kind: "comida", what: "Jantar de despedida e bar em Dotonbori." },
+      { time: "20:00", kind: "comida", what: "Jantar de despedida e bar em Dotonbori; Shinsaibashi-suji fica aberta até ~21h para as últimas compras." },
     ],
   },
   {
