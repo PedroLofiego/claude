@@ -1,3 +1,5 @@
+import { KLOOK_ITEMS, KLOOK_IOF, KLOOK_USD_BRL, klookPaidUSD } from "./klookData.js";
+
 /*
  * ============================================================
  * SOURCE OF TRUTH — Roteiro Japão, dezembro 2026 (Pedro & Gio)
@@ -499,12 +501,20 @@ export const PRACTICAL = [
 // Teto combinado da viagem, definido pelo Pedro: R$ 42.000 para os dois, tudo incluso.
 export const BUDGET_CAP = 42000;
 
+const TICKETS_PAID_USD = klookPaidUSD(KLOOK_ITEMS);
+const TICKETS_PAID_BRL = Math.round(TICKETS_PAID_USD * KLOOK_USD_BRL * (1 + KLOOK_IOF));
+const TICKETS_OPEN = KLOOK_ITEMS.filter((i) => i.status !== "pago");
+const TICKETS_OPEN_BRL = TICKETS_OPEN.reduce((s, i) => s + (i.priceBRL || 0), 0);
+const usd = (v) => v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 export const BUDGET_LINES = [
   { id: "b-voos", label: "Passagens aéreas (2 pessoas, ida e volta)", brl: 19358, group: "aereo", status: "pago" },
   { id: "b-tokyo", label: "Comfort Hotel Tóquio (5 noites, 2 pessoas)", brl: 2579, group: "hospedagem", status: "pago" },
   { id: "b-kyoto", label: "MYSTAYS Kyoto Shijo (3 noites, 2 pessoas)", brl: 653, group: "hospedagem", status: "pago" },
   { id: "b-osaka", label: "Travelodge Honmachi Osaka (4 noites, 2 pessoas)", brl: 1098, group: "hospedagem", status: "pago" },
   { id: "b-narita", label: "Cápsula 9h Narita (1 noite, 2 pessoas)", brl: 427, sub: "¥13.110", group: "hospedagem", status: "pago" },
+  { id: "b-ingressos-pagos", label: "Ingressos pagos na Klook (11 reservas, 2 pessoas)", brl: TICKETS_PAID_BRL, sub: `US$ ${usd(TICKETS_PAID_USD)} · cotação ~R$ ${KLOOK_USD_BRL.toLocaleString("pt-BR")} + IOF 3,5% — o valor exato vem na fatura do cartão`, group: "passeios", status: "pago" },
+  { id: "b-ingressos-faltam", label: `Ingressos que faltam (${TICKETS_OPEN.length}: ${TICKETS_OPEN.map((i) => i.name.split(" — ")[0]).join(", ")})`, brl: TICKETS_OPEN_BRL, sub: "Estimado pelo preço da Klook — uns no carrinho, outros esperando a venda abrir", group: "passeios", status: "aberto" },
   { id: "b-trens", label: "Trens entre as cidades (Tóquio → Kyoto → Osaka → Narita)", brl: 1075, sub: "~¥30.000–35.000 por pessoa (~R$ 1.075)", perPerson: true, group: "transporte", status: "estimado" },
   { id: "b-diario", label: "Alimentação e gastos diários", brl: 3900, sub: "R$ 300 por pessoa por dia × 13 dias", perPerson: true, group: "diario", status: "estimado" },
 ];

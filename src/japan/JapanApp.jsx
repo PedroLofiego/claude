@@ -220,10 +220,11 @@ export default function JapanApp() {
     L.push("💰 ORÇAMENTO (tudo para as 2 pessoas)");
     L.push(`  ✈️ Passagens: ${formatBRL(B.flights)}`);
     L.push(`  🏨 Hospedagens (${TRIP.nights} noites): ${formatBRL(B.lodging)}`);
+    L.push(`  🎟️ Ingressos pagos (Klook): ${formatBRL(B.tickets)}`);
     L.push(`  = Já pago: ${formatBRL(B.paid)}`);
     L.push(`  🍜 Comida, gastos do dia e trens (estimado): ${formatBRL(B.fixed)}`);
-    L.push(`  Sobra para passeios e compras: ${formatBRL(B.forPasseios)} (teto ${formatBRL(B.cap)})`);
-    L.push(`  🎟️ Ingressos escolhidos (Klook): ${formatBRL(B.chosen)}`);
+    L.push(`  Sobra para ingressos que faltam, compras e extras: ${formatBRL(B.forPasseios)} (teto ${formatBRL(B.cap)})`);
+    L.push(`  🎟️ Ingressos que faltam: ${formatBRL(B.chosen)}`);
     L.push(`  ${B.slack >= 0 ? `Livre: ${formatBRL(B.slack)}` : `ESTOURO: ${formatBRL(-B.slack)}`}`);
     L.push("");
     L.push("🎟️ INGRESSOS");
@@ -479,14 +480,15 @@ function budgetTotals(chosenActs = [], chosenPois = []) {
     BUDGET_LINES.filter(fn).reduce((s, b) => s + (b.perPerson ? (b.brl || 0) * P : b.brl || 0), 0);
   const paid = f((b) => b.status === "pago");
   const fixed = f((b) => b.status === "estimado");
-  // Ingressos escolhidos na Klook (priceBRL já é para os dois).
-  const chosen = KLOOK_ITEMS.reduce((s, x) => s + (x.priceBRL || 0), 0);
+  // Ingressos que ainda faltam pagar/comprar (os pagos já estão em "paid").
+  const chosen = f((b) => b.status === "aberto");
   const forPasseios = BUDGET_CAP - paid - fixed;
   return {
     cap: BUDGET_CAP,
     people: P,
     flights: f((b) => b.group === "aereo"),
     lodging: f((b) => b.group === "hospedagem"),
+    tickets: f((b) => b.group === "passeios" && b.status === "pago"),
     paid,
     fixed,
     chosen,
@@ -522,7 +524,7 @@ function BudgetBar({ B }) {
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-emerald-400/80" />já pago</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-amber-400/60" />comida e trens</span>
-        <span><span className={`mr-1.5 inline-block h-2.5 w-2.5 rounded-full ${over ? "bg-rose-400/80" : "bg-sky-400/70"}`} />ingressos escolhidos</span>
+        <span><span className={`mr-1.5 inline-block h-2.5 w-2.5 rounded-full ${over ? "bg-rose-400/80" : "bg-sky-400/70"}`} />ingressos que faltam</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-white/20" />livre</span>
       </div>
     </div>
@@ -543,6 +545,10 @@ function BudgetSummary({ B }) {
           <dt className="text-slate-300">🏨 Hospedagens ({TRIP.nights} noites)</dt>
           <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.lodging)}</dd>
         </div>
+        <div className="flex justify-between gap-3">
+          <dt className="text-slate-300">🎟️ Ingressos pagos (Klook)</dt>
+          <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.tickets)}</dd>
+        </div>
         <div className="flex justify-between gap-3 border-t border-white/10 pt-2">
           <dt className="font-semibold text-white">Já pago</dt>
           <dd className="text-lg font-extrabold text-white tabular-nums">{formatBRL(B.paid)}</dd>
@@ -552,11 +558,11 @@ function BudgetSummary({ B }) {
           <dd className="font-bold text-amber-200 tabular-nums">{formatBRL(B.fixed)}</dd>
         </div>
         <div className="flex justify-between gap-3 border-t border-white/10 pt-2">
-          <dt className="font-semibold text-white">Sobra para passeios e compras</dt>
+          <dt className="font-semibold text-white">Sobra para ingressos que faltam, compras e extras</dt>
           <dd className="text-lg font-extrabold text-sky-300 tabular-nums">{formatBRL(B.forPasseios)}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className="text-slate-300">🎟️ Ingressos escolhidos (Klook)</dt>
+          <dt className="text-slate-300">🎟️ Ingressos que faltam pagar ou comprar</dt>
           <dd className="font-bold text-sky-200 tabular-nums">{B.chosen ? `− ${formatBRL(B.chosen)}` : "nenhum"}</dd>
         </div>
       </dl>
@@ -567,7 +573,7 @@ function BudgetSummary({ B }) {
             : <>Estouro de <strong className="tabular-nums">{formatBRL(-B.slack)}</strong> sobre o teto de {formatBRL(B.cap)}.</>}
         </p>
         <p className="mt-1.5 text-xs text-slate-400">
-          Os ingressos são os passeios escolhidos na Klook (no carrinho + os que faltam abrir venda).
+          Os ingressos pagos já entram em “Já pago” (a Klook cobra em dólar: convertido com IOF; o valor exato vem na fatura). “Faltam” são os que estão no carrinho ou esperando a venda abrir.
           Todos os valores são para as {B.people} pessoas.
         </p>
       </div>
@@ -1256,7 +1262,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
             <li key={e.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
               <span className="min-w-0"><span className="font-semibold text-white">{e.name}</span>
                 <span className="text-slate-400"> · {e.day} · {e.status === "pago" ? "pago ✓" : e.status === "sem-venda" ? "comprar quando abrir" : "falta pagar"}</span></span>
-              <span className="flex-none text-slate-300">{e.priceBRL ? formatBRL(e.priceBRL) : "grátis"}</span>
+              <span className="flex-none text-slate-300">{e.status === "pago" ? (e.paidUSD ? `US$ ${e.paidUSD.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "grátis") : e.priceBRL ? `≈ ${formatBRL(e.priceBRL)}` : "grátis"}</span>
             </li>
           ))}
         </ul>

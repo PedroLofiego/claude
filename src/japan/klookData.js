@@ -309,6 +309,11 @@ export const KLOOK_ITEMS = [
 ];
 
 export const KLOOK_PAID_ON = "07/11/2026";
+// A Klook cobrou em dólar. Para o orçamento: cotação aproximada + IOF de cartão
+// internacional (3,5%). O valor exato em reais vem na fatura do cartão.
+export const KLOOK_USD_BRL = 5.32;
+export const KLOOK_IOF = 0.035;
+export const klookPaidUSD = (items) => items.filter((i) => i.status === "pago").reduce((s, i) => s + (i.paidUSD || 0), 0);
 
 export const KLOOK_STATUS = {
   pago: { label: "Pago ✓", cls: "bg-emerald-500/20 text-emerald-100 border-emerald-400/40" },
