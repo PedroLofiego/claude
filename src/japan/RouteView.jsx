@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { BedDouble, ExternalLink, FileText, MapPin, Navigation, Route as RouteIcon, Train } from "lucide-react";
+import { useEffect, useState } from "react";
+import { BedDouble, CalendarCheck, CalendarPlus, Clock, Download, ExternalLink, FileText, MapPin, Navigation, Route as RouteIcon, Smartphone, Ticket, Train } from "lucide-react";
 import { KLOOK_ITEMS, KLOOK_PAID_ON, KLOOK_STATUS } from "./klookData.js";
 import { KYOTO_TRIPS, ROUTE_DAYS, ROUTE_KINDS, ROUTE_UPDATED } from "./routeData.js";
 
@@ -36,11 +36,17 @@ export function RouteView() {
   const [city, setCity] = useState("todas");
   const shown = ROUTE_DAYS.filter((d) => city === "todas" || d.city === city || (city === "osaka" && d.city === "narita"));
   const jump = (n) => document.getElementById(`rota-${n}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const todayN = todayDayN();
+  // Durante a viagem, a aba já abre no dia de hoje.
+  useEffect(() => {
+    if (todayN) setTimeout(() => jump(todayN), 300);
+  }, [todayN]);
 
   return (
     <div className="space-y-4">
-      <section className="card p-4 text-sm leading-relaxed text-slate-300">
-        <p>
+      <details className="card p-4 text-sm leading-relaxed text-slate-300">
+        <summary className="cursor-pointer font-semibold text-white">ℹ️ Como usar esta página</summary>
+        <p className="mt-2">
           Os passeios que vocês escolheram na Klook são os <b className="text-emerald-300">pontos fixos</b> do dia. Em volta deles
           entram bairros para <b className="text-sky-300">bater perna</b>, sempre perto um do outro e com folga entre um e outro:
           2 ou 3 lugares por dia, sem correria.
@@ -52,10 +58,20 @@ export function RouteView() {
         </div>
         <p className="mt-2 flex gap-1.5 text-slate-300"><RouteIcon size={15} className="mt-0.5 flex-none text-sky-300" />
           <span>Cada dia tem o botão <b className="text-white">Rota do dia no Google Maps</b>, com todas as paradas na ordem, saindo do hotel. Em cada lugar, <b className="text-white">Como chegar</b> abre o trajeto de trem e metrô desde a parada anterior.</span></p>
+        <p className="mt-2 flex gap-1.5 text-slate-300"><Ticket size={15} className="mt-0.5 flex-none text-amber-300" />
+          <span>Os <b className="text-white">ingressos</b> estão dentro de cada dia: o botão amarelo abre o voucher, e “Na entrada” diz como usar. Durante a viagem, a página abre direto no dia de hoje.</span></p>
         <p className="mt-2 text-xs text-slate-400">Montada em {ROUTE_UPDATED}. Horários de pôr do sol e de funcionamento podem mudar — conferir perto da data.</p>
-      </section>
+      </details>
+
+      <ExportCard />
 
       <div className="no-print space-y-3">
+        {todayN && (
+          <button type="button" onClick={() => { setCity("todas"); setTimeout(() => jump(todayN), 50); }}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-rose-500 px-3 py-3 text-base font-bold text-white shadow hover:bg-rose-400">
+            <CalendarCheck size={18} /> Ir para hoje · Dia {todayN}
+          </button>
+        )}
         <div className="flex flex-wrap gap-2">
           {[["todas", "Todos os dias"], ["toquio", "🗼 Tóquio"], ["kyoto", "🎎 Kyoto"], ["osaka", "🐙 Osaka"]].map(([id, label]) => (
             <button key={id} type="button" onClick={() => setCity(id)} aria-pressed={city === id}
@@ -69,7 +85,8 @@ export function RouteView() {
         <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:thin]" aria-label="Ir para o dia">
           {shown.map((d) => (
             <button key={d.n} type="button" onClick={() => jump(d.n)}
-              className="filter-pill flex flex-none flex-col items-center rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-1.5 hover:bg-white/10">
+              className={`filter-pill flex flex-none flex-col items-center rounded-xl border px-2.5 py-1.5 hover:bg-white/10 ${
+                d.n === todayN ? "border-rose-400 bg-rose-500/20" : "border-white/10 bg-white/[0.04]"}`}>
               <span className="text-[11px] text-slate-400">{d.date.split(" ")[1]}</span>
               <span className="text-base font-extrabold text-white">{d.n}</span>
               <span className="mt-0.5 h-1 w-5 rounded-full" style={{ background: CITY[d.city].color }} />
@@ -81,7 +98,7 @@ export function RouteView() {
       <ol className="space-y-3">
         {shown.map((d) => (
           <li key={d.n} id={`rota-${d.n}`} className="scroll-mt-24">
-            <RouteDay d={d} />
+            <RouteDay d={d} isToday={d.n === todayN} />
           </li>
         ))}
       </ol>
@@ -89,26 +106,32 @@ export function RouteView() {
   );
 }
 
-function RouteDay({ d }) {
+function RouteDay({ d, isToday }) {
   const c = CITY[d.city];
   const stops = dayStops(d);
+  const tickets = d.slots.filter((s) => s.klookId).map((s) => klookById[s.klookId]).filter(Boolean);
   let prev = d.from;
   return (
-    <article className="card overflow-hidden">
+    <article className={`card overflow-hidden ${isToday ? "ring-2 ring-rose-400" : ""}`}>
       <header className="flex items-center gap-3 border-b border-white/10 px-4 py-3" style={{ boxShadow: `inset 4px 0 0 ${c.color}` }}>
         <div className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-white/[0.06] text-center">
           <span className="text-[10px] leading-none text-slate-400">DIA</span>
           <span className="text-lg font-extrabold leading-none text-white">{d.n}</span>
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-sm text-slate-400">{d.date} · {c.emoji} {c.label}</div>
+          <div className="text-sm text-slate-400">{isToday && <b className="text-rose-300">HOJE · </b>}{d.date} · {c.emoji} {c.label}</div>
           <h3 className="text-base font-bold leading-snug text-white">{d.title}</h3>
         </div>
-        {d.pace && (
-          <span className={`flex-none rounded-md px-2 py-0.5 text-xs font-semibold ${PACE[d.pace] ?? PACE.médio}`}>
-            ritmo {d.pace}
-          </span>
-        )}
+        <div className="flex flex-none flex-col items-end gap-1">
+          {d.pace && (
+            <span className={`rounded-md px-2 py-0.5 text-xs font-semibold ${PACE[d.pace] ?? PACE.médio}`}>ritmo {d.pace}</span>
+          )}
+          {tickets.length > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-2 py-0.5 text-xs font-semibold text-amber-200">
+              <Ticket size={12} /> {tickets.length} {tickets.length > 1 ? "ingressos" : "ingresso"}
+            </span>
+          )}
+        </div>
       </header>
       <ul className="divide-y divide-white/5 px-4">
         {d.slots.map((sl, j) => {
@@ -119,14 +142,15 @@ function RouteDay({ d }) {
           const from = prev;
           if (sl.map) prev = sl.map;
           return (
-            <li key={j} className="flex gap-3 py-2.5 text-sm">
+            <li key={j} className="py-2.5 text-sm">
+             <div className="flex gap-3">
               <span className="w-14 flex-none pt-0.5 font-semibold text-slate-400">{sl.time}</span>
               <div className="min-w-0 flex-1">
-                <span className={`mr-1.5 inline-block rounded-md px-1.5 py-0.5 align-middle text-[11px] font-semibold ${k.cls}`}>{k.label}</span>
-                <span className="text-slate-100">{sl.what}</span>
+                {!item && <span className={`mr-1.5 inline-block rounded-md px-1.5 py-0.5 align-middle text-[11px] font-semibold ${k.cls}`}>{k.label}</span>}
+                <span className={item ? "font-semibold text-white" : "text-slate-100"}>{sl.what}</span>
                 {sl.split && <span className="ml-1.5 inline-block rounded-md bg-indigo-500/25 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-100">cada um faz um programa</span>}
                 {sl.note && <div className="mt-1 text-xs text-amber-200">⚖️ {sl.note}</div>}
-                {(sl.map || item) && (
+                {sl.map && !item && (
                   <div className="mt-1 flex flex-wrap gap-3 text-xs no-print">
                     {sl.map && (
                       <a href={mapUrl(sl.map)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-sky-300 hover:text-sky-200">
@@ -138,19 +162,11 @@ function RouteDay({ d }) {
                         <Navigation size={12} /> Como chegar
                       </a>
                     )}
-                    {item && (
-                      <a href={item.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-300 hover:text-emerald-200">
-                        <ExternalLink size={12} /> Klook{item.status !== "pago" && item.priceBRL ? ` · ≈ R$ ${item.priceBRL.toLocaleString("pt-BR")} os dois` : ""}
-                      </a>
-                    )}
-                    {item?.vouchers?.map((v) => (
-                      <a key={v.file} href={voucherUrl(v.file)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-amber-300 hover:text-amber-200">
-                        <FileText size={12} /> {item.vouchers.length > 1 ? v.label : "Voucher (PDF)"}
-                      </a>
-                    ))}
                   </div>
                 )}
               </div>
+             </div>
+             {item && <TicketCard item={item} map={sl.map} from={from} />}
             </li>
           );
         })}
@@ -170,6 +186,128 @@ function RouteDay({ d }) {
         </footer>
       )}
     </article>
+  );
+}
+
+// "Levar para o celular": calendário (.ics) e lugares para o Google My Maps (.csv),
+// gerados no build por scripts/export-trip.mjs.
+function ExportCard() {
+  const base = import.meta.env.BASE_URL;
+  return (
+    <section className="card no-print border-sky-400/30 p-4">
+      <h3 className="flex items-center gap-2 text-base font-bold text-white"><Smartphone size={18} className="text-sky-300" /> Levar para o celular</h3>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+        <a href={`${base}export/japao-pedro-gio.ics`}
+          className="flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-3 py-3 text-sm font-bold text-white hover:bg-sky-400">
+          <CalendarPlus size={18} /> Adicionar ao calendário
+        </a>
+        <a href={`${base}export/japao-lugares.csv`} download
+          className="flex items-center justify-center gap-2 rounded-xl bg-white/10 px-3 py-3 text-sm font-bold text-white hover:bg-white/15">
+          <Download size={18} /> Lugares para o Google Maps
+        </a>
+      </div>
+      <details className="mt-3 text-sm text-slate-300">
+        <summary className="cursor-pointer font-semibold text-sky-200">Como colocar no iPhone (passo a passo)</summary>
+        <div className="mt-2 space-y-3 leading-relaxed">
+          <div>
+            <b className="text-white">📅 Calendário — 1 toque, cada um no seu iPhone</b>
+            <ol className="mt-1 list-decimal space-y-0.5 pl-5">
+              <li>Abram este site no Safari do iPhone e toquem em <b>Adicionar ao calendário</b>.</li>
+              <li>Aparece a lista de eventos: toquem em <b>Adicionar todos</b>.</li>
+              <li>Cada dia vira um evento com o plano inteiro e a rota do Google Maps; cada ingresso vira um evento no horário, com endereço, reserva, “na entrada” e o link do voucher (e aviso 1h antes).</li>
+            </ol>
+            <p className="mt-1 text-xs text-slate-400">Se a rota mudar depois, apaguem os eventos antigos antes de importar de novo, para não duplicar.</p>
+          </div>
+          <div>
+            <b className="text-white">🗺️ Google Maps — uma vez no computador, aparece nos dois iPhones</b>
+            <ol className="mt-1 list-decimal space-y-0.5 pl-5">
+              <li>Baixem o arquivo <b>Lugares para o Google Maps</b>.</li>
+              <li>Abram <a className="text-sky-300 underline" href="https://www.google.com/maps/d/" target="_blank" rel="noreferrer">Google My Maps</a> → <b>Criar novo mapa</b> → <b>Importar</b> → escolham o arquivo.</li>
+              <li>Local: coluna <b>Endereço</b>. Título: coluna <b>Nome</b>.</li>
+              <li>Em “Estilo”, agrupem por <b>Dia</b> — cada dia ganha uma cor.</li>
+              <li><b>Compartilhar</b> → coloquem o e-mail da Gio.</li>
+              <li>No iPhone: Google Maps → <b>Você</b> → <b>Salvos</b> → <b>Mapas</b> → o mapa da viagem.</li>
+            </ol>
+            <p className="mt-1 text-xs text-slate-400">O Google não deixa importar uma lista de lugares direto por link no app — esse é o jeito oficial.</p>
+          </div>
+          <div>
+            <b className="text-white">🎟️ Vouchers sem internet</b>
+            <p className="mt-1">Abram cada voucher (botão amarelo) → <b>Compartilhar</b> → <b>Salvar em Arquivos</b>. Ficam disponíveis mesmo sem sinal.</p>
+          </div>
+          <div>
+            <b className="text-white">📱 O site como app</b>
+            <p className="mt-1">No Safari: <b>Compartilhar</b> → <b>Adicionar à Tela de Início</b>. Abre direto no roteiro, com o dia de hoje.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+  );
+}
+
+// Data de cada dia da rota (2026) para o botão "Hoje".
+function todayDayN() {
+  const now = new Date();
+  const iso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const d = ROUTE_DAYS.find((x) => {
+    const [dd, mm] = x.date.split(" ")[1].split("/");
+    return `2026-${mm}-${dd}` === iso;
+  });
+  return d?.n ?? null;
+}
+
+// Cartão do ingresso dentro do dia: tudo o que precisa na hora, num lugar só.
+function TicketCard({ item: i, map, from }) {
+  const st = KLOOK_STATUS[i.status];
+  const paid = i.status === "pago";
+  return (
+    <div className={`mt-2 overflow-hidden rounded-xl border ${paid ? "border-emerald-400/30 bg-emerald-500/[0.06]" : "border-amber-400/30 bg-amber-500/[0.06]"}`}>
+      <div className="flex gap-3 p-3">
+        {i.img && <img src={i.img} alt="" loading="lazy" className="h-16 w-16 flex-none rounded-lg object-cover sm:h-20 sm:w-24" />}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className={`rounded-md border px-1.5 py-0.5 text-[11px] font-semibold ${st.cls}`}>{st.label}</span>
+            {i.ref && <span className="text-[11px] font-semibold tracking-wide text-slate-400">Reserva {i.ref}</span>}
+          </div>
+          <div className="mt-0.5 text-sm font-bold leading-snug text-white">{i.name}</div>
+          <div className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-slate-300">
+            <span className="inline-flex items-center gap-1"><Clock size={12} /> {i.time}</span>
+            {i.duration && i.duration !== "—" && <span>{i.duration}</span>}
+            <span>2 pessoas</span>
+          </div>
+        </div>
+      </div>
+      {i.vouchers?.length > 0 && (
+        <div className="grid gap-1.5 px-3 pb-2 no-print">
+          {i.vouchers.map((v) => (
+            <a key={v.file} href={voucherUrl(v.file)} target="_blank" rel="noreferrer"
+              className="flex items-center justify-center gap-2 rounded-lg bg-amber-400 px-3 py-2.5 text-sm font-bold text-slate-900 hover:bg-amber-300">
+              <FileText size={16} /> {i.vouchers.length > 1 ? v.label : "Abrir voucher (PDF)"}
+            </a>
+          ))}
+        </div>
+      )}
+      {(i.howTo || i.voucherNote) && (
+        <div className="space-y-1 border-t border-white/5 px-3 py-2 text-xs leading-relaxed">
+          {i.howTo && <p className="text-slate-200"><b className="text-white">Na entrada:</b> {i.howTo}</p>}
+          {i.voucherNote && <p className="text-sky-200">ℹ️ {i.voucherNote}</p>}
+        </div>
+      )}
+      <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-white/5 px-3 py-2 text-xs no-print">
+        {(map || i.lat) && (
+          <a href={mapUrl(map || `${i.lat},${i.lng}`)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-sky-300 hover:text-sky-200">
+            <MapPin size={12} /> Mapa
+          </a>
+        )}
+        {map && from && from !== map && (
+          <a href={transitUrl(from, map)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-violet-300 hover:text-violet-200">
+            <Navigation size={12} /> Como chegar
+          </a>
+        )}
+        <a href={i.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-300 hover:text-emerald-200">
+          <ExternalLink size={12} /> Página na Klook{!paid && i.priceBRL ? ` · ≈ R$ ${i.priceBRL.toLocaleString("pt-BR")} os dois` : ""}
+        </a>
+      </div>
+    </div>
   );
 }
 

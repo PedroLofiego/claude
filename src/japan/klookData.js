@@ -13,6 +13,7 @@ export const KLOOK_ITEMS = [
   // ---------------- TÓQUIO ----------------
   {
     id: "shibuya-sky", city: "toquio", status: "sem-venda",
+    howTo: "Venda de dezembro ainda não abriu — comprar por volta de 11/11 (15:40 do dia 11/12).",
     day: "Sex 11/12", dateISO: "2026-12-11", time: "15:40 (sugestão)", duration: "1h–1h30",
     name: "Shibuya Sky — mirante a céu aberto",
     pkg: "Ingresso com horário",
@@ -30,6 +31,8 @@ export const KLOOK_ITEMS = [
   // ---------------- KYOTO ----------------
   {
     id: "teamlab-kyoto", city: "kyoto", status: "pago",
+    howTo: "Mostrem o QR do voucher na entrada. Horário marcado 11:00 — cheguem 10 min antes. Tem armário para casaco e bolsa.",
+    ref: "[removido]",
     vouchers: [{ label: "Voucher", file: "teamlab.pdf" }],
     paidUSD: 63.9,
     day: "Qua 16/12", dateISO: "2026-12-16", time: "11:00", duration: "1h30–3h",
@@ -50,6 +53,8 @@ export const KLOOK_ITEMS = [
   // ---------------- OSAKA ----------------
   {
     id: "dotonbori-boat", city: "osaka", status: "pago",
+    howTo: "Voucher digital: mostrem o QR no píer Tazaemonbashi (ao lado da roda-gigante do Don Quijote). Cheguem 10 min antes das 19:30.",
+    ref: "[removido]",
     vouchers: [{ label: "Voucher", file: "barco-dotonbori.pdf" }],
     paidUSD: 26.5,
     day: "Dom 20/12", dateISO: "2026-12-20", time: "19:30", duration: "20 min",
@@ -70,6 +75,7 @@ export const KLOOK_ITEMS = [
   // ---------------- TÓQUIO ----------------
   {
     id: "samurai-tokyo", city: "toquio", status: "carrinho",
+    howTo: "Falta pagar no carrinho da Klook — depois de pagar, o voucher aparece aqui.",
     day: "Qui 10/12", dateISO: "2026-12-10", time: "13:30", duration: "~1h",
     name: "Museu Samurai & Ninja com experiência",
     pkg: "Ingresso + aula de espada e arremesso de shuriken",
@@ -86,6 +92,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "tokyo-tower", city: "toquio", status: "carrinho",
+    howTo: "Falta pagar no carrinho da Klook — depois de pagar, o voucher aparece aqui.",
     day: "Sáb 12/12", dateISO: "2026-12-12", time: "16:00 (entrada livre no dia)", duration: "~1h",
     name: "Tokyo Tower — mirante principal (150 m)",
     pkg: "Ingresso válido o dia todo",
@@ -106,6 +113,7 @@ export const KLOOK_ITEMS = [
   // ---------------- OSAKA / KOBE ----------------
   {
     id: "kobe-ropeway", city: "osaka", status: "sem-venda",
+    howTo: "Venda de dezembro ainda não abriu na Klook — comprar no fim de novembro ou na bilheteria, sem fila.",
     day: "Sex 18/12", dateISO: "2026-12-18", time: "10:30 (sugestão)", duration: "~2h",
     name: "Teleférico de Kobe + Jardim de Ervas Nunobiki",
     pkg: "Teleférico ida e volta + entrada no jardim",
@@ -121,6 +129,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "matcha-osaka", city: "osaka", status: "carrinho",
+    howTo: "Falta pagar no carrinho da Klook (20/12 às 18:00) — o endereço da aula vem no voucher.",
     day: "Dom 20/12", dateISO: "2026-12-20", time: "18:00", duration: "~1h",
     name: "Aula de matcha e doces japoneses",
     pkg: "Preparar o matcha + fazer um doce wagashi",
@@ -137,6 +146,8 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "tsutenkaku", city: "osaka", status: "pago",
+    howTo: "Voucher digital: mostrem o QR na entrada da torre. O escorregador (Tower Slider) é no horário marcado, 11:00.",
+    ref: "[removido]",
     vouchers: [{ label: "Voucher", file: "tsutenkaku.pdf" }],
     paidUSD: 32.49,
     day: "Seg 21/12", dateISO: "2026-12-21", time: "11:00", duration: "~1h",
@@ -156,6 +167,8 @@ export const KLOOK_ITEMS = [
   // ================= 3ª RODADA (03/11) — feita a partir dos votos: barato, sem guia, Natal, compras =================
   {
     id: "cupom-donki", city: "toquio", status: "pago",
+    howTo: "Abram o cupom no app da Klook (Reservas) e mostrem no caixa junto com o passaporte.",
+    ref: "[removido]",
     voucherNote: "O cupom do Don Quijote não tem PDF — abre no app da Klook, em Reservas.",
     paidUSD: 0,
     day: "Qua 09/12", dateISO: "2026-12-09", time: "Vale a viagem toda", duration: "—",
@@ -173,6 +186,8 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "cupom-bic", city: "toquio", status: "pago",
+    howTo: "Mostrem o cupom no caixa junto com o passaporte (para o tax-free). Desconto soma com a isenção de imposto.",
+    ref: "[removido]",
     vouchers: [{ label: "Cupom", file: "cupom-bic.pdf" }],
     paidUSD: 0,
     day: "Qua 09/12", dateISO: "2026-12-09", time: "Vale a viagem toda", duration: "—",
@@ -190,6 +205,8 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "yomiuriland", city: "toquio", status: "pago",
+    howTo: "Passe “After Pass”: só entra depois das 15:00. QR do voucher na catraca da entrada principal (depois do teleférico da estação Keio-Yomiuri-Land).",
+    ref: "[removido]",
     vouchers: [{ label: "Voucher", file: "yomiuriland.pdf" }],
     paidUSD: 38.79,
     day: "Dom 13/12", dateISO: "2026-12-13", time: "17:00 (entrada após 15h)", duration: "~3h",
@@ -208,6 +225,8 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "kobe-illuminage", city: "osaka", status: "pago",
+    howTo: "Abram o PDF, toquem em “View ticket” e mostrem a tela ao funcionário — quem valida é ele. Aberto 17:00–22:00 (última entrada 21:15).",
+    ref: "[removido]",
     vouchers: [{ label: "Voucher", file: "iluminacao-kobe.pdf" }],
     paidUSD: 22.77,
     day: "Sex 18/12", dateISO: "2026-12-18", time: "17:30", duration: "~1h30",
@@ -226,6 +245,8 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "osaka-illuminage", city: "osaka", status: "pago",
+    howTo: "Abram o PDF, toquem em “View ticket” e mostrem a tela ao funcionário — quem valida é ele. Entrada pelo Jardim Nishinomaru.",
+    ref: "[removido]",
     vouchers: [{ label: "Voucher", file: "iluminacao-osaka.pdf" }],
     paidUSD: 20.43,
     day: "Qui 17/12", dateISO: "2026-12-17", time: "18:00 (entrada livre à noite)", duration: "~1h",
@@ -244,6 +265,8 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "harukas", city: "osaka", status: "pago",
+    howTo: "E-ticket com QR: a bilheteria/entrada do Harukas 300 fica no 16º andar do Abeno Harukas (elevador direto do térreo). Vale qualquer horário do dia.",
+    ref: "[removido]",
     vouchers: [{ label: "Voucher", file: "harukas.pdf" }],
     paidUSD: 24.75,
     day: "Seg 21/12", dateISO: "2026-12-21", time: "09:30 (entrada livre no dia)", duration: "~1h",
@@ -263,6 +286,8 @@ export const KLOOK_ITEMS = [
   // ================= 03/11 — Universal (pedido do Pedro) =================
   {
     id: "usj", city: "osaka", status: "pago",
+    howTo: "Na catraca do parque: QR do Studio Pass (um por pessoa, no mesmo PDF). Nos brinquedos: QR do Express Pass de cada um (pessoa 1 e pessoa 2). Mario Kart e Donkey Kong têm horário impresso no Express — cheguem no horário. Harry Potter e JAWS: uma vez, a qualquer hora.",
+    ref: "[removido] (Studio Pass) · [removido] (Express)",
     vouchers: [{ label: "Studio Pass (entrada, 2 pessoas)", file: "usj-studio-pass.pdf" }, { label: "Express Pass — pessoa 1", file: "usj-express-pass-pessoa1.pdf" }, { label: "Express Pass — pessoa 2", file: "usj-express-pass-pessoa2.pdf" }, { label: "Express Pass — resumo", file: "usj-express-pass.pdf" }],
     paidUSD: 414.4,
     day: "Sáb 19/12", dateISO: "2026-12-19", time: "Dia todo (horários no voucher)", duration: "Dia inteiro (~8h30–19h)",

@@ -12,7 +12,7 @@
 export const ROUTE_UPDATED = "03/11/2026";
 
 export const ROUTE_KINDS = {
-  klook: { label: "No carrinho Klook", cls: "bg-emerald-500/20 text-emerald-100" },
+  klook: { label: "Ingresso", cls: "bg-emerald-500/20 text-emerald-100" },
   comprar: { label: "Comprar quando abrir", cls: "bg-amber-500/25 text-amber-100" },
   perna: { label: "Bater perna", cls: "bg-sky-500/20 text-sky-100" },
   comida: { label: "Comer", cls: "bg-rose-500/20 text-rose-100" },
@@ -28,10 +28,12 @@ export const ROUTE_DAYS = [
     slots: [
       { time: "11:45", kind: "transp", what: "Pouso em Narita. Trem Access Express direto até Higashi-Nihombashi (~55 min)." },
       { time: "14:30", kind: "livre", what: "Check-in e descanso — dia de voo longo, não tem nada marcado." },
+      { time: "—", kind: "klook", what: "Cupom Don Quijote — vale a viagem toda.", klookId: "cupom-donki" },
+      { time: "—", kind: "klook", what: "Cupom Bic Camera — vale a viagem toda.", klookId: "cupom-bic" },
       { time: "17:00", kind: "perna", what: "Caminhada leve: Nihonbashi → Estação de Tóquio. A avenida Naka-dori de Marunouchi fica toda iluminada em dezembro.", map: "Marunouchi Naka-dori Illumination" },
       { time: "19:00", kind: "comida", what: "Jantar na Tokyo Ramen Street (subsolo da Estação de Tóquio). Voltar cedo.", map: "Tokyo Ramen Street" },
     ],
-    tip: "Baixem no celular os cupons grátis do Don Quijote e da Bic Camera (estão no carrinho) — servem a viagem toda.",
+    tip: "Antes de sair do Brasil: baixem no celular todos os PDFs dos vouchers (botão amarelo em cada ingresso) para abrir sem internet.",
   },
   {
     n: 2, date: "Qui 10/12", city: "toquio", title: "Asakusa + Akihabara", pace: "médio",

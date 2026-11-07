@@ -1,0 +1,584 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//VoaJa//Japao Pedro e Gio//PT
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Japão · Pedro & Gio
+X-WR-TIMEZONE:Asia/Tokyo
+BEGIN:VTIMEZONE
+TZID:Asia/Tokyo
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0900
+TZOFFSETTO:+0900
+TZNAME:JST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-1@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261209
+DTEND;VALUE=DATE:20261210
+SUMMARY:🇯🇵 Dia 1 · Chegada + Tóquio iluminada
+DESCRIPTION:11:45 — Pouso em Narita. Trem Access Express direto até Hig
+ ashi-Nihombashi (~55 min).\n14:30 — Check-in e descanso — dia de voo 
+ longo\, não tem nada marcado.\n• Cupom Don Quijote — vale a viagem t
+ oda.\n• Cupom Bic Camera — vale a viagem toda.\n17:00 — Caminhada l
+ eve: Nihonbashi → Estação de Tóquio. A avenida Naka-dori de Marunouc
+ hi fica toda iluminada em dezembro.\n19:00 — Jantar na Tokyo Ramen Stre
+ et (subsolo da Estação de Tóquio). Voltar cedo.\n\nRota do dia no Goog
+ le Maps: https://www.google.com/maps/dir/Comfort%20Hotel%20Tokyo%20Higash
+ i%20Nihombashi/Marunouchi%20Naka-dori%20Illumination/Tokyo%20Ramen%20Stre
+ et/Comfort%20Hotel%20Tokyo%20Higashi%20Nihombashi/\n\nDorme em: Comfort H
+ otel Higashi Nihombashi\n\nDica: Antes de sair do Brasil: baixem no celul
+ ar todos os PDFs dos vouchers (botão amarelo em cada ingresso) para abri
+ r sem internet.\n\nRoteiro completo: https://pedrolofiego.github.io/claud
+ e/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-2@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261210
+DTEND;VALUE=DATE:20261211
+SUMMARY:🇯🇵 Dia 2 · Asakusa + Akihabara
+DESCRIPTION:09:30 — Templo Senso-ji e a rua Nakamise cedo\, antes da mul
+ tidão.\n11:00 — Kappabashi\, a rua das lojas de cozinha (facas\, prato
+ s\, comida de plástico) — 10 min a pé.\n12:15 — Almoço em Asakusa 
+ (tempurá ou lámen).\n13:30 — Museu Samurai & Ninja com experiência (
+ ~1h).\n15:00 — Beira do rio Sumida e ponte Azuma — a melhor vista do 
+ Skytree de graça. Café e pausa.\n16:45 — Metrô Ginza até Suehirocho
+  (10 min).\n17:00 — Akihabara: fliperamas (GiGO\, Taito Station)\, loja
+ s de games retrô (Super Potato)\, Yodobashi e Bic Camera.\n19:30 — Jan
+ tar nos izakayas debaixo dos trilhos de Kanda — a 10 min do hotel.\n\nR
+ ota do dia no Google Maps: https://www.google.com/maps/dir/Comfort%20Hote
+ l%20Tokyo%20Higashi%20Nihombashi/Senso-ji/Kappabashi%20Dougu%20Street/Sam
+ urai%20Ninja%20Museum%20Tokyo%20Asakusa/Sumida%20Park/Akihabara%20Electri
+ c%20Town/Kanda%20Station/Comfort%20Hotel%20Tokyo%20Higashi%20Nihombashi/\
+ n\nDorme em: Comfort Hotel Higashi Nihombashi\n\nRoteiro completo: https:
+ //pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-samurai-tokyo@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261210T133000
+DTEND;TZID=Asia/Tokyo:20261210T143000
+SUMMARY:🎟️ Museu Samurai & Ninja com experiência
+LOCATION:Samurai Ninja Museum Tokyo Asakusa
+GEO:35.7105;139.7949
+URL:https://www.klook.com/pt-BR/activity/133891-samurai-ninja-museum-tokyo
+ -with-samurai-and-ninja-experience/
+DESCRIPTION:⚠️ Falta pagar · 2 pessoas\n\nNa entrada: Falta pagar no 
+ carrinho da Klook — depois de pagar\, o voucher aparece aqui.\n\nMapa: 
+ https://www.google.com/maps/search/?api=1&query=Samurai%20Ninja%20Museum%
+ 20Tokyo%20Asakusa\nKlook: https://www.klook.com/pt-BR/activity/133891-sam
+ urai-ninja-museum-tokyo-with-samurai-and-ninja-experience/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Museu Samurai & Ninja com experiência
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-3@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261211
+DTEND;VALUE=DATE:20261212
+SUMMARY:🇯🇵 Dia 3 · Harajuku + Shibuya
+DESCRIPTION:10:00 — Santuário Meiji Jingu — floresta no meio da cidad
+ e\, caminhada tranquila (~45 min).\n11:00 — Takeshita Street (Harajuku)
+ : lojinhas e crepe.\n12:30 — Almoço em Omotesando.\n13:30 — Omotesan
+ do e Cat Street a pé até Shibuya — lojas de rua\, sem pressa.\n15:00 
+ — Cruzamento de Shibuya e estátua do Hachiko.\n15:40 — Shibuya Sky 
+ — mirante a céu aberto\, pôr do sol às 16:28.\n17:30 — Shibuya Par
+ co (Nintendo Tokyo e Pokémon Center) e Don Quijote de Shibuya (cupom).\n
+ 19:30 — Jantar em Shibuya. Quem tiver pique: Omoide Yokocho em Shinjuku
+  (2 paradas).\n\nRota do dia no Google Maps: https://www.google.com/maps/
+ dir/Comfort%20Hotel%20Tokyo%20Higashi%20Nihombashi/Meiji%20Jingu/Takeshit
+ a%20Street/Cat%20Street%20Shibuya/Shibuya%20Scramble%20Crossing/Shibuya%2
+ 0Sky/Shibuya%20Parco/Comfort%20Hotel%20Tokyo%20Higashi%20Nihombashi/\n\nD
+ orme em: Comfort Hotel Higashi Nihombashi\n\nRoteiro completo: https://pe
+ drolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-shibuya-sky@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261211T154000
+DTEND;TZID=Asia/Tokyo:20261211T164000
+SUMMARY:🎟️ Shibuya Sky — mirante a céu aberto
+LOCATION:Shibuya Sky
+GEO:35.6584;139.7022
+URL:https://www.klook.com/pt-BR/activity/70672-shibuya-sky-tokyo/
+DESCRIPTION:⏳ Venda ainda não abriu · 2 pessoas\n\nNa entrada: Venda d
+ e dezembro ainda não abriu — comprar por volta de 11/11 (15:40 do dia 
+ 11/12).\n\nMapa: https://www.google.com/maps/search/?api=1&query=Shibuya%
+ 20Sky\nKlook: https://www.klook.com/pt-BR/activity/70672-shibuya-sky-toky
+ o/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Shibuya Sky — mirante a céu aberto
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-4@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261212
+DTEND;VALUE=DATE:20261213
+SUMMARY:🇯🇵 Dia 4 · Tsukiji + Ginza + Tokyo Tower
+DESCRIPTION:08:30 — Café da manhã no Mercado de Tsukiji por conta pró
+ pria: omelete tamagoyaki\, sushi\, ostras.\n10:30 — Jardim Hama-rikyu (
+ 15 min a pé)\, com casa de chá no lago. Opcional.\n12:00 — Ginza: no 
+ sábado a avenida Chuo-dori fecha para carros à tarde. Itoya (papelaria)
+ \, Uniqlo e o depachika (andar de comida) do Mitsukoshi.\n15:30 — Templ
+ o Zojo-ji\, ao pé da Tokyo Tower.\n16:00 — Tokyo Tower — mirante de 
+ 150 m\, pôr do sol às 16:29.\n17:30 — Azabudai Hills e Roppongi Hills
+ : mercado de Natal e a avenida Keyakizaka iluminada.\n19:30 — Jantar em
+  Roppongi e volta ao hotel.\n\nRota do dia no Google Maps: https://www.go
+ ogle.com/maps/dir/Comfort%20Hotel%20Tokyo%20Higashi%20Nihombashi/Tsukiji%
+ 20Outer%20Market/Hamarikyu%20Gardens/Ginza%20Chuo-dori/Zojo-ji/Tokyo%20To
+ wer/Roppongi%20Hills%20Keyakizaka/Comfort%20Hotel%20Tokyo%20Higashi%20Nih
+ ombashi/\n\nDorme em: Comfort Hotel Higashi Nihombashi\n\nRoteiro complet
+ o: https://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-tokyo-tower@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261212T160000
+DTEND;TZID=Asia/Tokyo:20261212T170000
+SUMMARY:🎟️ Tokyo Tower — mirante principal (150 m)
+LOCATION:Tokyo Tower
+GEO:35.6586;139.7454
+URL:https://www.klook.com/pt-BR/activity/4911-tokyo-tower-main-observatory
+ -ticket-tokyo/
+DESCRIPTION:⚠️ Falta pagar · 2 pessoas\n\nNa entrada: Falta pagar no 
+ carrinho da Klook — depois de pagar\, o voucher aparece aqui.\n\nMapa: 
+ https://www.google.com/maps/search/?api=1&query=Tokyo%20Tower\nKlook: htt
+ ps://www.klook.com/pt-BR/activity/4911-tokyo-tower-main-observatory-ticke
+ t-tokyo/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Tokyo Tower — mirante principal (150 m)
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-5@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261213
+DTEND;VALUE=DATE:20261214
+SUMMARY:🇯🇵 Dia 5 · Shimokitazawa + Shinjuku + Yomiuriland
+DESCRIPTION:Manhã — Manhã devagar (a Gio rende mais à tarde). Deixar 
+ a mala grande pronta para o takkyubin.\n11:00 — Shimokitazawa: brechós
+ \, lojas vintage e cafés. Almoço lá (o curry do bairro é famoso).\n14
+ :00 — Shinjuku: depachika da Isetan\, Don Quijote e a cabeça do Godzil
+ la em Kabukicho.\n15:45 — Linha Keio\, de Shinjuku até Keio-Yomiuri-La
+ nd (~40 min)\, e o teleférico do parque.\n17:00 — Yomiuriland + Jewell
+ umination: brinquedos e o show de luzes de Natal (~3h). Jantar no parque.
+ \n20:30 — Volta ao hotel (~1h).\n\nRota do dia no Google Maps: https://
+ www.google.com/maps/dir/Comfort%20Hotel%20Tokyo%20Higashi%20Nihombashi/Sh
+ imokitazawa/Shinjuku%20Isetan/Yomiuriland/Comfort%20Hotel%20Tokyo%20Higas
+ hi%20Nihombashi/\n\nDorme em: Comfort Hotel Higashi Nihombashi\n\nDica: P
+ edir na recepção\, até a noite do dia 13\, o envio da mala grande para
+  o hotel de Kyoto (takkyubin\, ~¥2.500 por mala).\n\nRoteiro completo: h
+ ttps://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-yomiuriland@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261213T170000
+DTEND;TZID=Asia/Tokyo:20261213T200000
+SUMMARY:🎟️ Yomiuriland — parque + iluminação de Natal (Jewellumin
+ ation)
+LOCATION:Yomiuriland
+GEO:35.6257;139.5175
+URL:https://pedrolofiego.github.io/claude/vouchers/yomiuriland.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] · 2 pessoas\n\nNa entrada: Pass
+ e “After Pass”: só entra depois das 15:00. QR do voucher na catraca 
+ da entrada principal (depois do teleférico da estação Keio-Yomiuri-Lan
+ d).\n\n🎟️ Voucher: https://pedrolofiego.github.io/claude/vouchers/yo
+ miuriland.pdf\n\nMapa: https://www.google.com/maps/search/?api=1&query=Yo
+ miuriland\nKlook: https://www.klook.com/pt-BR/activity/20251-yomiuriland-
+ admission-ticket-tokyo/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Yomiuriland — parque + iluminação de Natal (Jewelluminatio
+ n)
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-6@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261214
+DTEND;VALUE=DATE:20261215
+SUMMARY:🇯🇵 Dia 6 · Chegada em Kyoto: Kinkaku-ji + Nishiki + Gion
+DESCRIPTION:10:00 — Trem-bala Tóquio → Kyoto (2h15). Sentem no lado d
+ ireito (assento E) para ver o Monte Fuji.\n12:30 — Deixar mochilas no h
+ otel (Shijo-Omiya) e almoçar por perto.\n14:00 — Kinkaku-ji\, o Pavilh
+ ão Dourado (ônibus 205\, ~30 min\; a visita leva ~45 min).\n16:00 — M
+ ercado Nishiki e galerias Teramachi/Shinkyogoku\, provando o que der vont
+ ade.\n18:30 — Jantar em Pontocho\, o beco à beira do rio.\n20:00 — G
+ ion à noite: Hanamikoji e o canal Shirakawa com lanternas.\n\nRota do di
+ a no Google Maps: https://www.google.com/maps/dir/Kyoto%20Station/Kinkaku
+ -ji/Nishiki%20Market/Pontocho/Gion%20Shirakawa/HOTEL%20MYSTAYS%20Kyoto%20
+ Shijo/\n\nDorme em: MYSTAYS Kyoto Shijo\n\nRoteiro completo: https://pedr
+ olofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-7@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261215
+DTEND;VALUE=DATE:20261216
+SUMMARY:🇯🇵 Dia 7 · Dia de bate-volta
+DESCRIPTION:Dia todo — Bate-volta escolhido na aba “Bate-volta de Kyot
+ o”. Sugestão: Himeji (castelo\, desejo da Gio) ou Uji + Nara (chá do 
+ Pedro + templos da Gio\, na mesma linha de trem).\n19:00 — Volta a Kyot
+ o e jantar perto do hotel (Shijo/Karasuma).\n\nDorme em: MYSTAYS Kyoto Sh
+ ijo\n\nRoteiro completo: https://pedrolofiego.github.io/claude/#/japao/ro
+ teiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-8@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261216
+DTEND;VALUE=DATE:20261217
+SUMMARY:🇯🇵 Dia 8 · Fushimi Inari + teamLab + Kiyomizu
+DESCRIPTION:07:00 — Fushimi Inari vazio. Pedro sobe a montanha inteira (
+ 2–2h30)\; a Gio chega às 9:00 e vê os portões de baixo (sem trilha).
+ \n09:30 — Reencontro na base e café da manhã.\n10:30 — Linha JR Nar
+ a: Inari → Estação de Kyoto (5 min) e 10 min a pé.\n11:00 — teamLa
+ b Biovortex Kyoto (~2h).\n13:15 — Almoço na Kyoto Ramen Koji (10º and
+ ar da Estação de Kyoto).\n14:30 — Ônibus ou táxi até Kiyomizu (~15
+  min).\n15:00 — Kiyomizu-dera e as ladeiras Sannenzaka/Ninenzaka (lojin
+ has\, matcha).\n16:45 — Santuário Yasaka e parque Maruyama no fim da t
+ arde.\n18:00 — Jantar em Gion. Mala grande para Osaka por takkyubin.\n\
+ nRota do dia no Google Maps: https://www.google.com/maps/dir/HOTEL%20MYST
+ AYS%20Kyoto%20Shijo/Fushimi%20Inari%20Taisha/teamLab%20Biovortex%20Kyoto/
+ Kyoto%20Ramen%20Koji/Kiyomizu-dera/Yasaka%20Shrine/HOTEL%20MYSTAYS%20Kyot
+ o%20Shijo/\n\nDorme em: MYSTAYS Kyoto Shijo\n\nRoteiro completo: https://
+ pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-teamlab-kyoto@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261216T110000
+DTEND;TZID=Asia/Tokyo:20261216T123000
+SUMMARY:🎟️ teamLab Biovortex Kyoto
+LOCATION:teamLab Biovortex Kyoto
+GEO:34.9837;135.7649
+URL:https://pedrolofiego.github.io/claude/vouchers/teamlab.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] · 2 pessoas\n\nNa entrada: Most
+ rem o QR do voucher na entrada. Horário marcado 11:00 — cheguem 10 min
+  antes. Tem armário para casaco e bolsa.\n\n🎟️ Voucher: https://ped
+ rolofiego.github.io/claude/vouchers/teamlab.pdf\n\nMapa: https://www.goog
+ le.com/maps/search/?api=1&query=teamLab%20Biovortex%20Kyoto\nKlook: https
+ ://www.klook.com/pt-BR/activity/167098-teamlab-kyoto/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:teamLab Biovortex Kyoto
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-9@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261217
+DTEND;VALUE=DATE:20261218
+SUMMARY:🇯🇵 Dia 9 · Chegada em Osaka + castelo iluminado + Dotonbori
+DESCRIPTION:10:00 — Linha Hankyu direto do hotel (Omiya → Osaka-Umeda\
+ , ~45 min) e metrô até Honmachi. Deixar a mala.\n12:00 — Almoço no M
+ ercado Kuromon: vieira\, espetinho de wagyu\, ouriço.\n13:30 — Den Den
+  Town (games e anime) e Namba.\n15:30 — Check-in e descanso.\n18:00 —
+  Iluminação no Castelo de Osaka (~1h).\n19:30 — Noite de bar em Doton
+ bori — desejo dos dois.\n\nRota do dia no Google Maps: https://www.goog
+ le.com/maps/dir/HOTEL%20MYSTAYS%20Kyoto%20Shijo/Kuromon%20Market/Den%20De
+ n%20Town/Osaka%20Castle%20Nishinomaru%20Garden/Dotonbori/Travelodge%20Hon
+ machi%20Osaka/\n\nDorme em: Travelodge Honmachi\n\nRoteiro completo: http
+ s://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-osaka-illuminage@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261217T180000
+DTEND;TZID=Asia/Tokyo:20261217T190000
+SUMMARY:🎟️ Iluminação no Castelo de Osaka (Illuminage)
+LOCATION:Osaka Castle Nishinomaru Garden
+GEO:34.6855;135.5245
+URL:https://pedrolofiego.github.io/claude/vouchers/iluminacao-osaka.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] · 2 pessoas\n\nNa entrada: Abra
+ m o PDF\, toquem em “View ticket” e mostrem a tela ao funcionário 
+ — quem valida é ele. Entrada pelo Jardim Nishinomaru.\n\n🎟️ Vouch
+ er: https://pedrolofiego.github.io/claude/vouchers/iluminacao-osaka.pdf\n
+ \nMapa: https://www.google.com/maps/search/?api=1&query=Osaka%20Castle%20
+ Nishinomaru%20Garden\nKlook: https://www.klook.com/pt-BR/activity/243763-
+ osaka-castle-illuminage/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Iluminação no Castelo de Osaka (Illuminage)
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-10@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261218
+DTEND;VALUE=DATE:20261219
+SUMMARY:🇯🇵 Dia 10 · Dia de Kobe
+DESCRIPTION:09:30 — JR de Osaka até Sannomiya (~25 min) e metrô até S
+ hin-Kobe.\n10:30 — Teleférico de Kobe + Jardim de Ervas Nunobiki. Des
+ çam a pé pelo jardim.\n12:30 — Kitano: as casas antigas dos estrangei
+ ros\, ladeiras e um Starbucks dentro de uma casa histórica.\n13:30 — A
+ lmoço de carne de Kobe (no almoço é bem mais barato que no jantar)\, e
+ m Sannomiya.\n15:00 — Chinatown de Kobe (Nankinmachi) e o porto (Merike
+ n Park\, Harborland).\n16:15 — Ônibus de Sannomiya até o parque da il
+ uminação\, no norte de Kobe (~45 min). O horário do ônibus vem no vou
+ cher.\n17:30 — Kobe Illuminage: parque inteiro iluminado (aberto 17:00
+ –22:00).\n19:30 — Volta a Osaka (~1h15).\n\nRota do dia no Google Map
+ s: https://www.google.com/maps/dir/Travelodge%20Honmachi%20Osaka/Kobe%20N
+ unobiki%20Herb%20Gardens/Kitano%20Ijinkan/Nankinmachi%20Kobe/Kobe%20Fruit
+ %20Flower%20Park%20Ozawa/Travelodge%20Honmachi%20Osaka/\n\nDorme em: Trav
+ elodge Honmachi\n\nRoteiro completo: https://pedrolofiego.github.io/claud
+ e/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-kobe-ropeway@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261218T103000
+DTEND;TZID=Asia/Tokyo:20261218T123000
+SUMMARY:🎟️ Teleférico de Kobe + Jardim de Ervas Nunobiki
+LOCATION:Kobe Nunobiki Herb Gardens
+GEO:34.7066;135.1955
+URL:https://www.klook.com/pt-BR/activity/37865-kobe-nunobiki-herb-gardens-
+ ticket/
+DESCRIPTION:⏳ Venda ainda não abriu · 2 pessoas\n\nNa entrada: Venda d
+ e dezembro ainda não abriu na Klook — comprar no fim de novembro ou na
+  bilheteria\, sem fila.\n\nMapa: https://www.google.com/maps/search/?api=
+ 1&query=Kobe%20Nunobiki%20Herb%20Gardens\nKlook: https://www.klook.com/pt
+ -BR/activity/37865-kobe-nunobiki-herb-gardens-ticket/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Teleférico de Kobe + Jardim de Ervas Nunobiki
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-kobe-illuminage@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261218T173000
+DTEND;TZID=Asia/Tokyo:20261218T190000
+SUMMARY:🎟️ Kobe Illuminage — iluminação de Natal
+LOCATION:Kobe Fruit Flower Park Ozawa
+GEO:34.6901;135.1955
+URL:https://pedrolofiego.github.io/claude/vouchers/iluminacao-kobe.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] · 2 pessoas\n\nNa entrada: Abra
+ m o PDF\, toquem em “View ticket” e mostrem a tela ao funcionário 
+ — quem valida é ele. Aberto 17:00–22:00 (última entrada 21:15).\n\n
+ 🎟️ Voucher: https://pedrolofiego.github.io/claude/vouchers/iluminaca
+ o-kobe.pdf\n\nMapa: https://www.google.com/maps/search/?api=1&query=Kobe%
+ 20Fruit%20Flower%20Park%20Ozawa\nKlook: https://www.klook.com/pt-BR/activ
+ ity/242548-kobe-illuminage-ticket/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kobe Illuminage — iluminação de Natal
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-11@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261219
+DTEND;VALUE=DATE:20261220
+SUMMARY:🇯🇵 Dia 11 · Universal Studios Japan
+DESCRIPTION:07:45 — Metrô Chuo até Bentencho e linha JR Yumesaki até 
+ Universal City (~30 min). Cheguem antes de abrir.\n08:30 — Universal co
+ m Express Pass 4: fura-fila em Harry Potter e JAWS (a qualquer hora) e em
+  Mario Kart e Donkey Kong (horário marcado no voucher).\nNo voucher — 
+ Super Nintendo World: Mario Kart e Mine-Cart Madness (Donkey Kong) nos ho
+ rários do Express. Yoshi e as pulseiras Power-Up sem pressa\, que a entr
+ ada na área já está garantida.\nTarde — Com as filas grandes resolvi
+ das: resto do parque\, árvore de Natal e o show de Natal ao anoitecer.\n
+ 19:30 — Jantar no CityWalk\, na saída do parque\, ou perto do hotel. N
+ oite de descanso.\n\nRota do dia no Google Maps: https://www.google.com/m
+ aps/dir/Travelodge%20Honmachi%20Osaka/Universal%20Studios%20Japan/Travelo
+ dge%20Honmachi%20Osaka/\n\nDorme em: Travelodge Honmachi\n\nRoteiro compl
+ eto: https://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-usj@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261219T083000
+DTEND;TZID=Asia/Tokyo:20261219T183000
+SUMMARY:🎟️ Universal Studios Japan + Express Pass 4 (Minecart & JAWS)
+LOCATION:Universal Studios Japan
+GEO:34.6654;135.4323
+URL:https://pedrolofiego.github.io/claude/vouchers/usj-studio-pass.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] (Studio Pass) · [removido] (Expr
+ ess) · 2 pessoas\n\nNa entrada: Na catraca do parque: QR do Studio Pass 
+ (um por pessoa\, no mesmo PDF). Nos brinquedos: QR do Express Pass de cad
+ a um (pessoa 1 e pessoa 2). Mario Kart e Donkey Kong têm horário impres
+ so no Express — cheguem no horário. Harry Potter e JAWS: uma vez\, a q
+ ualquer hora.\n\nO Studio Pass avisa que foto ou print de tela não vale:
+  levem o PDF impresso ou o arquivo original no celular.\n\n🎟️ Studio
+  Pass (entrada\, 2 pessoas): https://pedrolofiego.github.io/claude/vouche
+ rs/usj-studio-pass.pdf\n\n🎟️ Express Pass — pessoa 1: https://pedr
+ olofiego.github.io/claude/vouchers/usj-express-pass-pessoa1.pdf\n\n🎟
+ ️ Express Pass — pessoa 2: https://pedrolofiego.github.io/claude/vouc
+ hers/usj-express-pass-pessoa2.pdf\n\n🎟️ Express Pass — resumo: htt
+ ps://pedrolofiego.github.io/claude/vouchers/usj-express-pass.pdf\n\nMapa:
+  https://www.google.com/maps/search/?api=1&query=Universal%20Studios%20Ja
+ pan\nKlook: https://www.klook.com/pt-BR/activity/3407-universal-studios-j
+ apan-express-pass-osaka/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Universal Studios Japan + Express Pass 4 (Minecart & JAWS)
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-12@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261220
+DTEND;VALUE=DATE:20261221
+SUMMARY:🇯🇵 Dia 12 · Umeda + compras + matcha + Dotonbori
+DESCRIPTION:10:30 — Nakazakicho: casinhas antigas com cafés e brechós\
+ , a 10 min a pé de Umeda.\n12:30 — Almoço em Umeda (andares de restau
+ rante das lojas de departamento).\n13:30 — Compras em Umeda: Yodobashi\
+ , Grand Front e o depachika da Hankyu. Na base do Umeda Sky tem o mercado
+  de Natal alemão (grátis\, sem subir no mirante).\n16:00 — Metrô Mid
+ osuji para o sul: Shinsaibashi-suji e Amerikamura\, últimas compras. Con
+ ferir no voucher o endereço da aula de matcha.\n18:00 — Aula de matcha
+  e doces japoneses (~1h).\n19:30 — Barquinho no canal de Dotonbori (20 
+ min).\n20:00 — Jantar de despedida e bar em Dotonbori.\n\nRota do dia n
+ o Google Maps: https://www.google.com/maps/dir/Travelodge%20Honmachi%20Os
+ aka/Nakazakicho/Yodobashi%20Umeda/Shinsaibashi-suji/Tazaemonbashi%20pier/
+ Travelodge%20Honmachi%20Osaka/\n\nDorme em: Travelodge Honmachi\n\nRoteir
+ o completo: https://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-matcha-osaka@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261220T180000
+DTEND;TZID=Asia/Tokyo:20261220T190000
+SUMMARY:🎟️ Aula de matcha e doces japoneses
+LOCATION:Osaka (endereço no voucher)
+GEO:34.6937;135.5023
+URL:https://www.klook.com/pt-BR/activity/144694-matcha-making-osaka-cookin
+ g-class-in-japan/
+DESCRIPTION:⚠️ Falta pagar · 2 pessoas\n\nNa entrada: Falta pagar no 
+ carrinho da Klook (20/12 às 18:00) — o endereço da aula vem no vouche
+ r.\n\nMapa: https://www.google.com/maps/search/?api=1&query=34.6937%2C135
+ .5023\nKlook: https://www.klook.com/pt-BR/activity/144694-matcha-making-o
+ saka-cooking-class-in-japan/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Aula de matcha e doces japoneses
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dotonbori-boat@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261220T193000
+DTEND;TZID=Asia/Tokyo:20261220T195000
+SUMMARY:🎟️ Barquinho no canal de Dotonbori
+LOCATION:Tazaemonbashi pier
+GEO:34.6692;135.4983
+URL:https://pedrolofiego.github.io/claude/vouchers/barco-dotonbori.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] · 2 pessoas\n\nNa entrada: Vouc
+ her digital: mostrem o QR no píer Tazaemonbashi (ao lado da roda-gigante
+  do Don Quijote). Cheguem 10 min antes das 19:30.\n\n🎟️ Voucher: htt
+ ps://pedrolofiego.github.io/claude/vouchers/barco-dotonbori.pdf\n\nMapa: 
+ https://www.google.com/maps/search/?api=1&query=Tazaemonbashi%20pier\nKlo
+ ok: https://www.klook.com/pt-BR/activity/176566-osaka-dotonbori-river-cru
+ ise/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Barquinho no canal de Dotonbori
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-13@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261221
+DTEND;VALUE=DATE:20261222
+SUMMARY:🇯🇵 Dia 13 · Tennoji + Shinsekai → Narita
+DESCRIPTION:09:00 — Check-out e deixar a mala no hotel.\n09:30 — Miran
+ te Harukas 300 (~1h).\n11:00 — Torre Tsutenkaku + escorregador gigante 
+ (15 min a pé do Harukas).\n12:00 — Almoço de kushikatsu (espetinho em
+ panado) em Shinsekai.\n13:30 — Buscar a mala e metrô até Shin-Osaka (
+ 15 min).\n14:30 — Trem-bala até Tóquio (2h30) e trem até Narita (~1h
+ ). Check-in na cápsula ~19:00.\n\nRota do dia no Google Maps: https://ww
+ w.google.com/maps/dir/Travelodge%20Honmachi%20Osaka/Abeno%20Harukas%20300
+ /Tsutenkaku/Shinsekai%20Kushikatsu%20Daruma/9h%20nine%20hours%20Narita%20
+ Airport/\n\nDorme em: 9h nine hours Narita (cápsula)\n\nRoteiro completo
+ : https://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-harukas@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261221T093000
+DTEND;TZID=Asia/Tokyo:20261221T103000
+SUMMARY:🎟️ Mirante Harukas 300 — o mais alto de Osaka
+LOCATION:Abeno Harukas 300
+GEO:34.6459;135.5135
+URL:https://pedrolofiego.github.io/claude/vouchers/harukas.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] · 2 pessoas\n\nNa entrada: E-ti
+ cket com QR: a bilheteria/entrada do Harukas 300 fica no 16º andar do Ab
+ eno Harukas (elevador direto do térreo). Vale qualquer horário do dia.\
+ n\n🎟️ Voucher: https://pedrolofiego.github.io/claude/vouchers/haruka
+ s.pdf\n\nMapa: https://www.google.com/maps/search/?api=1&query=Abeno%20Ha
+ rukas%20300\nKlook: https://www.klook.com/pt-BR/activity/2424-harukas-300
+ -observatory-ticket-osaka/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Mirante Harukas 300 — o mais alto de Osaka
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-tsutenkaku@pedrolofiego.github.io
+DTSTART;TZID=Asia/Tokyo:20261221T110000
+DTEND;TZID=Asia/Tokyo:20261221T120000
+SUMMARY:🎟️ Torre Tsutenkaku + escorregador gigante
+LOCATION:Tsutenkaku
+GEO:34.6525;135.5063
+URL:https://pedrolofiego.github.io/claude/vouchers/tsutenkaku.pdf
+DESCRIPTION:✅ Pago · Reserva [removido] · 2 pessoas\n\nNa entrada: Vouc
+ her digital: mostrem o QR na entrada da torre. O escorregador (Tower Slid
+ er) é no horário marcado\, 11:00.\n\n🎟️ Voucher: https://pedrolofi
+ ego.github.io/claude/vouchers/tsutenkaku.pdf\n\nMapa: https://www.google.
+ com/maps/search/?api=1&query=Tsutenkaku\nKlook: https://www.klook.com/pt-
+ BR/activity/76766-osaka-tsutenkaku-admission-ticket/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Torre Tsutenkaku + escorregador gigante
+TRIGGER:-PT60M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20261107T233506Z
+UID:voaja-japao-dia-14@pedrolofiego.github.io
+DTSTART;VALUE=DATE:20261222
+DTEND;VALUE=DATE:20261223
+SUMMARY:🇯🇵 Dia 14 · Volta para casa
+DESCRIPTION:Manhã — Check-out da cápsula até 10:00\, no Terminal 2.\n
+ 13:35 — Voo de volta saindo de Narita.\n\nRoteiro completo: https://ped
+ rolofiego.github.io/claude/#/japao/roteiro/rota
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR
