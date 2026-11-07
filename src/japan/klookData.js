@@ -48,22 +48,6 @@ export const KLOOK_ITEMS = [
 
   // ---------------- OSAKA ----------------
   {
-    id: "umeda-sky", city: "osaka", status: "carrinho",
-    day: "Dom 20/12", dateISO: "2026-12-20", time: "16:00 (entrada livre no dia)", duration: "~1h",
-    name: "Umeda Sky Building — observatório suspenso",
-    pkg: "Ingresso válido o dia todo",
-    why: "Terraço circular a 173 m, entre duas torres. Pôr do sol às 16:50; embaixo tem um mercadinho retrô de comida.",
-    fits: "Tarde do dia 20, no pôr do sol (16:51), com o mercado de Natal alemão embaixo. O Harukas (21/12) já foi pago; este continua no carrinho, sem pagar — decidam se vai também.",
-    priceBRL: 131, rating: "4.7", reviews: "10 mil avaliações",
-    place: "Umeda, norte de Osaka", lat: 34.7053, lng: 135.4905,
-    otherTimes: "Entra a qualquer hora do dia escolhido (9:30–22:30)",
-    cancel: "Cancelamento condicional",
-    img: "https://res.klook.com/image/upload/activities/a3vplp7hgtwhfrj0wrfe.jpg",
-    url: "https://www.klook.com/pt-BR/activity/35861-umeda-sky-building-kuchu-teien-observatory-ticket/",
-    video: "Umeda Sky Building sunset",
-    match: "ambos",
-  },
-  {
     id: "dotonbori-boat", city: "osaka", status: "pago",
     paidUSD: 26.5,
     day: "Dom 20/12", dateISO: "2026-12-20", time: "19:30", duration: "20 min",
@@ -139,7 +123,7 @@ export const KLOOK_ITEMS = [
     name: "Aula de matcha e doces japoneses",
     pkg: "Preparar o matcha + fazer um doce wagashi",
     why: "Nota 5,0 com 520 avaliações. Vocês batem o próprio matcha e fazem um docinho tradicional. Barato.",
-    fits: "Dia 20 às 18:00 (o horário das 13:00 esgotou). Depois do Umeda Sky e antes do barco das 19:30 em Dotonbori. Endereço no voucher — se for longe de Dotonbori, o barco tem saída de 30 em 30 min até 21:00.",
+    fits: "Dia 20 às 18:00 (o horário das 13:00 esgotou). Depois das compras em Umeda e Shinsaibashi, antes do barco das 19:30 em Dotonbori. Endereço no voucher — se for longe de Dotonbori, o barco tem saída de 30 em 30 min até 21:00.",
     priceBRL: 224, rating: "5.0", reviews: "520 avaliações",
     place: "Osaka (endereço no voucher)", lat: 34.6937, lng: 135.5023,
     otherTimes: "Em 20/12 só restava 18:00",

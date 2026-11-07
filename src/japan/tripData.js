@@ -478,7 +478,6 @@ export const EXTRAS = [
 // ===== 9. PENDÊNCIAS =====
 export const OPEN_DECISIONS = [
   { id: "d-batevolta", label: "Bate-volta de Kyoto (15/12)", detail: "O dia está livre na rota. Opções na aba Roteiro → Bate-volta de Kyoto; as mais indicadas são Himeji (castelo, desejo da Gio) e Uji + Nara.", severity: "alta" },
-  { id: "d-mirante", label: "Umeda Sky: vai ou não?", detail: "O Harukas 300 (21/12) já foi pago. O Umeda Sky (20/12) continua no carrinho, sem pagar — decidir se entra também.", severity: "media" },
   { id: "d-tiktok", label: "Restaurantes virais do TikTok (pedido da Gio)", detail: "Não travar agora: pesquisar perto da data, porque esse tipo de lista muda mês a mês.", severity: "baixa" },
   { id: "d-uji", label: "Uji (pedido do Pedro)", detail: "A cerimônia do chá saiu; Uji continua como opção de bate-volta, junto com Nara, no dia 15. A aula de matcha em Osaka (20/12) já cobre o chá.", severity: "baixa" },
 ];
@@ -516,7 +515,6 @@ export const CHECKLIST = [
   { id: "c-klook-resto2", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12) e aula de matcha (20/12, agora às 18:00)" },
   { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 (a venda de dezembro abre por volta de 11/11)" },
   { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
-  { id: "c-mirante", label: "Harukas 300 já está pago — decidir se o Umeda Sky (20/12) também vai ou sai do carrinho" },
   { id: "c-batevolta", label: "Escolher o bate-volta de Kyoto do dia 15/12" },
   { id: "c-esim", label: "Configurar eSIM ou reservar Wi-Fi portátil" },
   { id: "c-seguro", label: "Contratar seguro viagem" },

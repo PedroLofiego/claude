@@ -556,7 +556,7 @@ function BudgetSummary({ B }) {
           <dd className="text-lg font-extrabold text-sky-300 tabular-nums">{formatBRL(B.forPasseios)}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className="text-slate-300">🎟️ Ingressos escolhidos (Klook, com os dois mirantes)</dt>
+          <dt className="text-slate-300">🎟️ Ingressos escolhidos (Klook)</dt>
           <dd className="font-bold text-sky-200 tabular-nums">{B.chosen ? `− ${formatBRL(B.chosen)}` : "nenhum"}</dd>
         </div>
       </dl>
