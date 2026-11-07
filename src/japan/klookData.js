@@ -30,6 +30,7 @@ export const KLOOK_ITEMS = [
   // ---------------- KYOTO ----------------
   {
     id: "teamlab-kyoto", city: "kyoto", status: "pago",
+    vouchers: [{ label: "Voucher", file: "teamlab.pdf" }],
     paidUSD: 63.9,
     day: "Qua 16/12", dateISO: "2026-12-16", time: "11:00", duration: "1h30–3h",
     name: "teamLab Biovortex Kyoto",
@@ -49,6 +50,7 @@ export const KLOOK_ITEMS = [
   // ---------------- OSAKA ----------------
   {
     id: "dotonbori-boat", city: "osaka", status: "pago",
+    vouchers: [{ label: "Voucher", file: "barco-dotonbori.pdf" }],
     paidUSD: 26.5,
     day: "Dom 20/12", dateISO: "2026-12-20", time: "19:30", duration: "20 min",
     name: "Barquinho no canal de Dotonbori",
@@ -135,6 +137,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "tsutenkaku", city: "osaka", status: "pago",
+    vouchers: [{ label: "Voucher", file: "tsutenkaku.pdf" }],
     paidUSD: 32.49,
     day: "Seg 21/12", dateISO: "2026-12-21", time: "11:00", duration: "~1h",
     name: "Torre Tsutenkaku + escorregador gigante",
@@ -153,6 +156,7 @@ export const KLOOK_ITEMS = [
   // ================= 3ª RODADA (03/11) — feita a partir dos votos: barato, sem guia, Natal, compras =================
   {
     id: "cupom-donki", city: "toquio", status: "pago",
+    voucherNote: "O cupom do Don Quijote não tem PDF — abre no app da Klook, em Reservas.",
     paidUSD: 0,
     day: "Qua 09/12", dateISO: "2026-12-09", time: "Vale a viagem toda", duration: "—",
     name: "Cupom de desconto Don Quijote (grátis)",
@@ -169,6 +173,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "cupom-bic", city: "toquio", status: "pago",
+    vouchers: [{ label: "Cupom", file: "cupom-bic.pdf" }],
     paidUSD: 0,
     day: "Qua 09/12", dateISO: "2026-12-09", time: "Vale a viagem toda", duration: "—",
     name: "Cupom de desconto Bic Camera (grátis)",
@@ -185,6 +190,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "yomiuriland", city: "toquio", status: "pago",
+    vouchers: [{ label: "Voucher", file: "yomiuriland.pdf" }],
     paidUSD: 38.79,
     day: "Dom 13/12", dateISO: "2026-12-13", time: "17:00 (entrada após 15h)", duration: "~3h",
     name: "Yomiuriland — parque + iluminação de Natal (Jewellumination)",
@@ -202,6 +208,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "kobe-illuminage", city: "osaka", status: "pago",
+    vouchers: [{ label: "Voucher", file: "iluminacao-kobe.pdf" }],
     paidUSD: 22.77,
     day: "Sex 18/12", dateISO: "2026-12-18", time: "17:30", duration: "~1h30",
     name: "Kobe Illuminage — iluminação de Natal",
@@ -219,6 +226,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "osaka-illuminage", city: "osaka", status: "pago",
+    vouchers: [{ label: "Voucher", file: "iluminacao-osaka.pdf" }],
     paidUSD: 20.43,
     day: "Qui 17/12", dateISO: "2026-12-17", time: "18:00 (entrada livre à noite)", duration: "~1h",
     name: "Iluminação no Castelo de Osaka (Illuminage)",
@@ -236,6 +244,7 @@ export const KLOOK_ITEMS = [
   },
   {
     id: "harukas", city: "osaka", status: "pago",
+    vouchers: [{ label: "Voucher", file: "harukas.pdf" }],
     paidUSD: 24.75,
     day: "Seg 21/12", dateISO: "2026-12-21", time: "09:30 (entrada livre no dia)", duration: "~1h",
     name: "Mirante Harukas 300 — o mais alto de Osaka",
@@ -254,12 +263,14 @@ export const KLOOK_ITEMS = [
   // ================= 03/11 — Universal (pedido do Pedro) =================
   {
     id: "usj", city: "osaka", status: "pago",
+    vouchers: [{ label: "Studio Pass (entrada, 2 pessoas)", file: "usj-studio-pass.pdf" }, { label: "Express Pass — pessoa 1", file: "usj-express-pass-pessoa1.pdf" }, { label: "Express Pass — pessoa 2", file: "usj-express-pass-pessoa2.pdf" }, { label: "Express Pass — resumo", file: "usj-express-pass.pdf" }],
     paidUSD: 414.4,
     day: "Sáb 19/12", dateISO: "2026-12-19", time: "Dia todo (horários no voucher)", duration: "Dia inteiro (~8h30–19h)",
     name: "Universal Studios Japan + Express Pass 4 (Minecart & JAWS)",
     pkg: "Studio Pass de 1 dia + Express Pass 4: fura-fila em Mario Kart, Donkey Kong, Harry Potter (ou Flying Dinosaur) e JAWS (ou Jurassic Park) + entrada no Super Nintendo World",
     why: "Sábado antes do Natal é o dia mais cheio do parque. Com o Express Pass vocês pulam a fila dos 4 brinquedos mais disputados — os dois do Super Nintendo World (Mario Kart e Donkey Kong, que costuma passar de 2h de fila) e Harry Potter — e o resto do dia fica tranquilo.",
     fits: "Sábado 19 inteiro. Voltem cedo para descansar — a iluminação do castelo foi para o dia 17.",
+    voucherNote: "O Studio Pass avisa que foto ou print de tela não vale: levem o PDF impresso ou o arquivo original no celular.",
     warn: "Mario Kart e Donkey Kong têm horário marcado (vem no voucher) — montar o resto do dia em volta deles. Nos itens “escolha 1”, a escolha é feita no parque: sugestão Harry Potter e JAWS.",
     priceBRL: 2143, rating: "4.8", reviews: "90 mil avaliações",
     place: "Universal City, baía de Osaka (~30 min do hotel)", lat: 34.6654, lng: 135.4323,

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BedDouble, ExternalLink, MapPin, Navigation, Route as RouteIcon, Train } from "lucide-react";
+import { BedDouble, ExternalLink, FileText, MapPin, Navigation, Route as RouteIcon, Train } from "lucide-react";
 import { KLOOK_ITEMS, KLOOK_PAID_ON, KLOOK_STATUS } from "./klookData.js";
 import { KYOTO_TRIPS, ROUTE_DAYS, ROUTE_KINDS, ROUTE_UPDATED } from "./routeData.js";
 
@@ -22,6 +22,7 @@ const WHO = { pedro: "🧑 Pedro", gio: "👩 Gio", ambos: "👥 Os dois" };
 const mapUrl = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 const klookById = Object.fromEntries(KLOOK_ITEMS.map((i) => [i.id, i]));
 const enc = (q) => encodeURIComponent(q);
+const voucherUrl = (file) => `${import.meta.env.BASE_URL}vouchers/${file}`;
 // Rota com várias paradas (o Google abre todas em ordem; trem com várias paradas ele não monta).
 const dayRouteUrl = (stops) => `https://www.google.com/maps/dir/${stops.map((q) => enc(q).replace(/%20/g, "+")).join("/")}/`;
 // Trecho único em transporte público, da parada anterior até esta.
@@ -139,9 +140,14 @@ function RouteDay({ d }) {
                     )}
                     {item && (
                       <a href={item.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-300 hover:text-emerald-200">
-                        <ExternalLink size={12} /> Klook{item.priceBRL ? ` · ≈ R$ ${item.priceBRL.toLocaleString("pt-BR")} os dois` : ""}
+                        <ExternalLink size={12} /> Klook{item.status !== "pago" && item.priceBRL ? ` · ≈ R$ ${item.priceBRL.toLocaleString("pt-BR")} os dois` : ""}
                       </a>
                     )}
+                    {item?.vouchers?.map((v) => (
+                      <a key={v.file} href={voucherUrl(v.file)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-amber-300 hover:text-amber-200">
+                        <FileText size={12} /> {item.vouchers.length > 1 ? v.label : "Voucher (PDF)"}
+                      </a>
+                    ))}
                   </div>
                 )}
               </div>
@@ -249,8 +255,8 @@ export function TicketsView() {
           {inCart.length > 0 && <> Ainda no carrinho, sem pagar: ≈ <b className="text-white">{brl(cartBRL)}</b>.</>}
         </p>
         <p className="mt-1.5 text-xs text-slate-400">
-          Os vouchers (QR code) ficam no app da Klook, em Reservas — abram por lá no dia; dá para baixar antes e usar sem internet.
-          Eles não ficam no site porque o site é público e o voucher funciona como ingresso.
+          Os vouchers em PDF estão no botão de cada ingresso. Baixem no celular antes de viajar para abrir sem internet —
+          e não compartilhem o link: o PDF funciona como ingresso. Os originais também ficam no app da Klook, em Reservas.
         </p>
       </section>
       <ul className="space-y-2">
@@ -266,6 +272,7 @@ export function TicketsView() {
                 </div>
                 <h3 className="mt-0.5 text-sm font-bold leading-snug text-white">{i.name}</h3>
                 {i.salesNote && <p className="mt-0.5 text-xs text-amber-200">{i.salesNote}</p>}
+                {i.voucherNote && <p className="mt-0.5 text-xs text-sky-200">ℹ️ {i.voucherNote}</p>}
                 <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                   <span className="font-semibold text-slate-200">
                     {i.status === "pago" ? (i.paidUSD ? `Pago ${usd(i.paidUSD)}` : "Grátis · emitido") : i.priceBRL ? `≈ ${brl(i.priceBRL)} os dois` : "Grátis"}
@@ -273,6 +280,11 @@ export function TicketsView() {
                   <a href={i.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-300 hover:text-emerald-200">
                     <ExternalLink size={12} /> Klook
                   </a>
+                  {i.vouchers?.map((v) => (
+                    <a key={v.file} href={voucherUrl(v.file)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-1.5 py-0.5 font-semibold text-amber-200 hover:bg-amber-500/25">
+                      <FileText size={12} /> {v.label}
+                    </a>
+                  ))}
                   {i.lat && (
                     <a href={mapUrl(`${i.lat},${i.lng}`)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-sky-300 hover:text-sky-200">
                       <MapPin size={12} /> Mapa
