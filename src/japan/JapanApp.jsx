@@ -30,7 +30,7 @@ const SECTIONS = [
   { id: "inicio", label: "Início", icon: HomeIcon },
   { id: "roteiro", label: "Roteiro", icon: CalendarDays,
     title: "Roteiro dia a dia",
-    desc: "A rota ideal com os passeios escolhidos e lugares para bater perna em volta, sem correria — cada dia abre direto no Google Maps. Em “Ingressos”, o que já está no carrinho; em “Bate-volta de Kyoto”, as opções para o dia 15.",
+    desc: "A rota ideal com os passeios escolhidos e lugares para bater perna em volta, sem correria — cada dia abre direto no Google Maps. Em “Ingressos”, o que já está pago e o que falta; em “Bate-volta de Kyoto”, as opções para o dia 15.",
     subs: [
       { id: "rota", label: "Rota ideal", icon: CalendarDays },
       { id: "ingressos", label: "Ingressos", icon: ShoppingCart },
