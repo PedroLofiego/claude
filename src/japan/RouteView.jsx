@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BedDouble, ExternalLink, MapPin, Navigation, Route as RouteIcon, Train } from "lucide-react";
-import { KLOOK_ITEMS, KLOOK_STATUS } from "./klookData.js";
+import { KLOOK_ITEMS, KLOOK_PAID_ON, KLOOK_STATUS } from "./klookData.js";
 import { KYOTO_TRIPS, ROUTE_DAYS, ROUTE_KINDS, ROUTE_UPDATED } from "./routeData.js";
 
 const CITY = {
@@ -111,8 +111,10 @@ function RouteDay({ d }) {
       </header>
       <ul className="divide-y divide-white/5 px-4">
         {d.slots.map((sl, j) => {
-          const k = ROUTE_KINDS[sl.kind] ?? ROUTE_KINDS.livre;
           const item = sl.klookId && klookById[sl.klookId];
+          const k = item?.status === "pago" ? { label: "Pago ✓", cls: "bg-emerald-500/25 text-emerald-100" }
+            : item?.status === "carrinho" ? { label: "Falta pagar", cls: "bg-amber-500/25 text-amber-100" }
+            : ROUTE_KINDS[sl.kind] ?? ROUTE_KINDS.livre;
           const from = prev;
           if (sl.map) prev = sl.map;
           return (
@@ -227,19 +229,28 @@ function TripCard({ t }) {
 // ==================== INGRESSOS ESCOLHIDOS ====================
 export function TicketsView() {
   const items = [...KLOOK_ITEMS].sort((a, b) => a.dateISO.localeCompare(b.dateISO) || a.time.localeCompare(b.time));
+  const paid = items.filter((i) => i.status === "pago");
   const inCart = items.filter((i) => i.status === "carrinho");
   const toBuy = items.filter((i) => i.status === "sem-venda");
-  const total = inCart.reduce((s, i) => s + (i.priceBRL || 0), 0);
+  const paidUSD = paid.reduce((s, i) => s + (i.paidUSD || 0), 0);
+  const cartBRL = inCart.reduce((s, i) => s + (i.priceBRL || 0), 0);
   const brl = (v) => `R$ ${v.toLocaleString("pt-BR")}`;
+  const usd = (v) => `US$ ${v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   return (
     <div className="space-y-4">
       <section className="card p-4 text-sm leading-relaxed text-slate-300">
-        <p>
-          Os passeios que vocês escolheram. <b className="text-white">{inCart.length} estão no carrinho da Klook</b> com 2 ingressos cada
-          (≈ <b className="text-white">{brl(total)}</b> para os dois, ainda não pago) e <b className="text-amber-200">{toBuy.length} ainda não abriram venda</b> para dezembro.
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="rounded-xl bg-emerald-500/10 p-2"><div className="text-xl font-extrabold text-emerald-200">{paid.length}</div><div className="text-xs text-emerald-100/80">pagos</div></div>
+          <div className="rounded-xl bg-amber-500/10 p-2"><div className="text-xl font-extrabold text-amber-200">{inCart.length}</div><div className="text-xs text-amber-100/80">falta pagar</div></div>
+          <div className="rounded-xl bg-white/5 p-2"><div className="text-xl font-extrabold text-slate-200">{toBuy.length}</div><div className="text-xs text-slate-400">venda não abriu</div></div>
+        </div>
+        <p className="mt-3">
+          <b className="text-emerald-200">Pago em {KLOOK_PAID_ON}:</b> {usd(paidUSD)} no total, 2 ingressos em cada.
+          {inCart.length > 0 && <> Ainda no carrinho, sem pagar: ≈ <b className="text-white">{brl(cartBRL)}</b>.</>}
         </p>
         <p className="mt-1.5 text-xs text-slate-400">
-          Umeda Sky e Harukas 300 estão os dois no carrinho até vocês decidirem. Preços convertidos para real — podem mudar até a compra.
+          Os vouchers (QR code) ficam no app da Klook, em Reservas — abram por lá no dia; dá para baixar antes e usar sem internet.
+          Eles não ficam no site porque o site é público e o voucher funciona como ingresso.
         </p>
       </section>
       <ul className="space-y-2">
@@ -256,7 +267,9 @@ export function TicketsView() {
                 <h3 className="mt-0.5 text-sm font-bold leading-snug text-white">{i.name}</h3>
                 {i.salesNote && <p className="mt-0.5 text-xs text-amber-200">{i.salesNote}</p>}
                 <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                  <span className="font-semibold text-slate-200">{i.priceBRL ? `≈ ${brl(i.priceBRL)} os dois` : "Grátis"}</span>
+                  <span className="font-semibold text-slate-200">
+                    {i.status === "pago" ? (i.paidUSD ? `Pago ${usd(i.paidUSD)}` : "Grátis · emitido") : i.priceBRL ? `≈ ${brl(i.priceBRL)} os dois` : "Grátis"}
+                  </span>
                   <a href={i.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-semibold text-emerald-300 hover:text-emerald-200">
                     <ExternalLink size={12} /> Klook
                   </a>

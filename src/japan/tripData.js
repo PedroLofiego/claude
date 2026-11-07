@@ -478,7 +478,7 @@ export const EXTRAS = [
 // ===== 9. PENDÊNCIAS =====
 export const OPEN_DECISIONS = [
   { id: "d-batevolta", label: "Bate-volta de Kyoto (15/12)", detail: "O dia está livre na rota. Opções na aba Roteiro → Bate-volta de Kyoto; as mais indicadas são Himeji (castelo, desejo da Gio) e Uji + Nara.", severity: "alta" },
-  { id: "d-mirante", label: "Umeda Sky ou Harukas 300", detail: "Os dois estão no carrinho e na rota (20/12 e 21/12). Quando decidirem, tirar o outro do carrinho.", severity: "media" },
+  { id: "d-mirante", label: "Umeda Sky: vai ou não?", detail: "O Harukas 300 (21/12) já foi pago. O Umeda Sky (20/12) continua no carrinho, sem pagar — decidir se entra também.", severity: "media" },
   { id: "d-tiktok", label: "Restaurantes virais do TikTok (pedido da Gio)", detail: "Não travar agora: pesquisar perto da data, porque esse tipo de lista muda mês a mês.", severity: "baixa" },
   { id: "d-uji", label: "Uji (pedido do Pedro)", detail: "A cerimônia do chá saiu; Uji continua como opção de bate-volta, junto com Nara, no dia 15. A aula de matcha em Osaka (20/12) já cobre o chá.", severity: "baixa" },
 ];
@@ -513,10 +513,10 @@ export const BUDGET_LINES = [
 // ===== 12. CHECKLIST =====
 export const CHECKLIST = [
   { id: "c-ghibli", label: "Museu Ghibli: ingressos de dezembro saem 10/11 às 10h do Japão (22h de 09/11 no Brasil), pela Lawson" },
-  { id: "c-klook", label: "Pagar o carrinho da Klook (teamLab, Universal, iluminações e os outros passeios escolhidos)" },
+  { id: "c-klook-resto", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12), aula de matcha e barco em Dotonbori (20/12) — os outros 10 já estão pagos" },
   { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 (a venda de dezembro abre por volta de 11/11)" },
   { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
-  { id: "c-mirante", label: "Decidir entre Umeda Sky (20/12) e Harukas 300 (21/12) e tirar o outro do carrinho" },
+  { id: "c-mirante", label: "Harukas 300 já está pago — decidir se o Umeda Sky (20/12) também vai ou sai do carrinho" },
   { id: "c-batevolta", label: "Escolher o bate-volta de Kyoto do dia 15/12" },
   { id: "c-esim", label: "Configurar eSIM ou reservar Wi-Fi portátil" },
   { id: "c-seguro", label: "Contratar seguro viagem" },

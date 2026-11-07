@@ -227,7 +227,7 @@ export default function JapanApp() {
     L.push(`  ${B.slack >= 0 ? `Livre: ${formatBRL(B.slack)}` : `ESTOURO: ${formatBRL(-B.slack)}`}`);
     L.push("");
     L.push("🎟️ INGRESSOS");
-    KLOOK_ITEMS.forEach((i) => L.push(`  ${i.status === "carrinho" ? "🛒" : "⏳"} ${i.day} ${i.time.split(" ")[0]} — ${i.name}`));
+    KLOOK_ITEMS.forEach((i) => L.push(`  ${i.status === "pago" ? "✅" : i.status === "carrinho" ? "🛒" : "⏳"} ${i.day} ${i.time.split(" ")[0]} — ${i.name}`));
     if (chosenActs.length) {
       L.push("");
       L.push(`✨ PASSEIOS EXTRAS ESCOLHIDOS (${chosenActs.length})`);
@@ -582,7 +582,7 @@ function Home({ daysLeft, extrasCount, todo, go, chosenActs, chosenPois }) {
 
   const actions = [
     { id: "roteiro", icon: CalendarDays, title: "Ver o roteiro", body: "Dia a dia, do pouso à volta" },
-    { id: "roteiro", sub: "ingressos", icon: ShoppingCart, title: "Ingressos", body: `${KLOOK_ITEMS.filter((i) => i.status === "carrinho").length} no carrinho da Klook` },
+    { id: "roteiro", sub: "ingressos", icon: ShoppingCart, title: "Ingressos", body: `${KLOOK_ITEMS.filter((i) => i.status === "pago").length} pagos · ${KLOOK_ITEMS.filter((i) => i.status !== "pago").length} faltando` },
     { id: "organizar", icon: ListChecks, title: "O que falta resolver", body: `${todo} ${todo === 1 ? "item" : "itens"} no checklist` },
     { id: "plano", icon: PackageCheck, title: "Compartilhar", body: "Resumo no WhatsApp ou PDF" },
   ];
@@ -1255,7 +1255,7 @@ function PlanTab({ chosenActs, chosenPois, tokyoVariant, done, buildJSON, buildT
           {KLOOK_ITEMS.map((e) => (
             <li key={e.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-sm">
               <span className="min-w-0"><span className="font-semibold text-white">{e.name}</span>
-                <span className="text-slate-400"> · {e.day}{e.status === "sem-venda" ? " · comprar quando abrir" : ""}</span></span>
+                <span className="text-slate-400"> · {e.day} · {e.status === "pago" ? "pago ✓" : e.status === "sem-venda" ? "comprar quando abrir" : "falta pagar"}</span></span>
               <span className="flex-none text-slate-300">{e.priceBRL ? formatBRL(e.priceBRL) : "grátis"}</span>
             </li>
           ))}

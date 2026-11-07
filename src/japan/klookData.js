@@ -8,7 +8,7 @@
 
 export const KLOOK_UPDATED = "03/11/2026";
 
-// status: "carrinho" | "alternativa" (no carrinho, mas briga com outro item) | "sem-venda" (venda ainda não abriu)
+// status: "pago" (reserva confirmada) | "carrinho" | "alternativa" (no carrinho, mas briga com outro item) | "sem-venda" (venda ainda não abriu)
 export const KLOOK_ITEMS = [
   // ---------------- TÓQUIO ----------------
   {
@@ -29,7 +29,8 @@ export const KLOOK_ITEMS = [
 
   // ---------------- KYOTO ----------------
   {
-    id: "teamlab-kyoto", city: "kyoto", status: "carrinho",
+    id: "teamlab-kyoto", city: "kyoto", status: "pago",
+    paidUSD: 63.9,
     day: "Qua 16/12", dateISO: "2026-12-16", time: "11:00", duration: "1h30–3h",
     name: "teamLab Biovortex Kyoto",
     pkg: "Entrada com horário marcado",
@@ -52,7 +53,7 @@ export const KLOOK_ITEMS = [
     name: "Umeda Sky Building — observatório suspenso",
     pkg: "Ingresso válido o dia todo",
     why: "Terraço circular a 173 m, entre duas torres. Pôr do sol às 16:50; embaixo tem um mercadinho retrô de comida.",
-    fits: "Tarde do dia 20, no pôr do sol (16:51), com o mercado de Natal alemão embaixo. Vocês ainda estão decidindo entre este e o Harukas — os dois ficam no carrinho até lá.",
+    fits: "Tarde do dia 20, no pôr do sol (16:51), com o mercado de Natal alemão embaixo. O Harukas (21/12) já foi pago; este continua no carrinho, sem pagar — decidam se vai também.",
     priceBRL: 131, rating: "4.7", reviews: "10 mil avaliações",
     place: "Umeda, norte de Osaka", lat: 34.7053, lng: 135.4905,
     otherTimes: "Entra a qualquer hora do dia escolhido (9:30–22:30)",
@@ -148,7 +149,8 @@ export const KLOOK_ITEMS = [
     match: "pedro",
   },
   {
-    id: "tsutenkaku", city: "osaka", status: "carrinho",
+    id: "tsutenkaku", city: "osaka", status: "pago",
+    paidUSD: 32.49,
     day: "Seg 21/12", dateISO: "2026-12-21", time: "11:00", duration: "~1h",
     name: "Torre Tsutenkaku + escorregador gigante",
     pkg: "Mirante + Tower Slider (tobogã de 60 m)",
@@ -165,7 +167,8 @@ export const KLOOK_ITEMS = [
   },
   // ================= 3ª RODADA (03/11) — feita a partir dos votos: barato, sem guia, Natal, compras =================
   {
-    id: "cupom-donki", city: "toquio", status: "carrinho",
+    id: "cupom-donki", city: "toquio", status: "pago",
+    paidUSD: 0,
     day: "Qua 09/12", dateISO: "2026-12-09", time: "Vale a viagem toda", duration: "—",
     name: "Cupom de desconto Don Quijote (grátis)",
     pkg: "Cupom digital para turista",
@@ -180,7 +183,8 @@ export const KLOOK_ITEMS = [
     match: "ambos",
   },
   {
-    id: "cupom-bic", city: "toquio", status: "carrinho",
+    id: "cupom-bic", city: "toquio", status: "pago",
+    paidUSD: 0,
     day: "Qua 09/12", dateISO: "2026-12-09", time: "Vale a viagem toda", duration: "—",
     name: "Cupom de desconto Bic Camera (grátis)",
     pkg: "Cupom digital para turista",
@@ -195,7 +199,8 @@ export const KLOOK_ITEMS = [
     match: "ambos",
   },
   {
-    id: "yomiuriland", city: "toquio", status: "carrinho",
+    id: "yomiuriland", city: "toquio", status: "pago",
+    paidUSD: 38.79,
     day: "Dom 13/12", dateISO: "2026-12-13", time: "17:00 (entrada após 15h)", duration: "~3h",
     name: "Yomiuriland — parque + iluminação de Natal (Jewellumination)",
     pkg: "Passe para entrar depois das 15h (mais barato)",
@@ -211,7 +216,8 @@ export const KLOOK_ITEMS = [
     match: "pedro",
   },
   {
-    id: "kobe-illuminage", city: "osaka", status: "carrinho",
+    id: "kobe-illuminage", city: "osaka", status: "pago",
+    paidUSD: 22.77,
     day: "Sex 18/12", dateISO: "2026-12-18", time: "17:30", duration: "~1h30",
     name: "Kobe Illuminage — iluminação de Natal",
     pkg: "Ingresso adulto",
@@ -227,7 +233,8 @@ export const KLOOK_ITEMS = [
     match: "pedro",
   },
   {
-    id: "osaka-illuminage", city: "osaka", status: "carrinho",
+    id: "osaka-illuminage", city: "osaka", status: "pago",
+    paidUSD: 20.43,
     day: "Qui 17/12", dateISO: "2026-12-17", time: "18:00 (entrada livre à noite)", duration: "~1h",
     name: "Iluminação no Castelo de Osaka (Illuminage)",
     pkg: "Ingresso antecipado",
@@ -243,12 +250,13 @@ export const KLOOK_ITEMS = [
     match: "ambos",
   },
   {
-    id: "harukas", city: "osaka", status: "carrinho",
+    id: "harukas", city: "osaka", status: "pago",
+    paidUSD: 24.75,
     day: "Seg 21/12", dateISO: "2026-12-21", time: "09:30 (entrada livre no dia)", duration: "~1h",
     name: "Mirante Harukas 300 — o mais alto de Osaka",
     pkg: "Ingresso do observatório",
     why: "Mirante com vidro do chão ao teto a 300 m. Mirante foi o que vocês mais aprovaram — e esse é o mais alto do Kansai.",
-    fits: "Manhã do dia 21, antes da Tsutenkaku (11:00). Vocês ainda estão decidindo entre este e o Umeda Sky — os dois ficam no carrinho até lá.",
+    fits: "Manhã do dia 21, antes da Tsutenkaku (11:00). Já pago.",
     priceBRL: 131, rating: "4.8", reviews: "9,9 mil avaliações",
     place: "Abeno Harukas, Tennoji", lat: 34.6459, lng: 135.5135,
     otherTimes: "Entra a qualquer hora do dia escolhido (9:00–22:00)",
@@ -260,7 +268,8 @@ export const KLOOK_ITEMS = [
   },
   // ================= 03/11 — Universal (pedido do Pedro) =================
   {
-    id: "usj", city: "osaka", status: "carrinho",
+    id: "usj", city: "osaka", status: "pago",
+    paidUSD: 414.4,
     day: "Sáb 19/12", dateISO: "2026-12-19", time: "Dia todo (horários no voucher)", duration: "Dia inteiro (~8h30–19h)",
     name: "Universal Studios Japan + Express Pass 4 (Minecart & JAWS)",
     pkg: "Studio Pass de 1 dia + Express Pass 4: fura-fila em Mario Kart, Donkey Kong, Harry Potter (ou Flying Dinosaur) e JAWS (ou Jurassic Park) + entrada no Super Nintendo World",
@@ -278,8 +287,11 @@ export const KLOOK_ITEMS = [
   },
 ];
 
+export const KLOOK_PAID_ON = "07/11/2026";
+
 export const KLOOK_STATUS = {
-  carrinho: { label: "No carrinho", cls: "bg-emerald-500/15 text-emerald-200 border-emerald-400/30" },
+  pago: { label: "Pago ✓", cls: "bg-emerald-500/20 text-emerald-100 border-emerald-400/40" },
+  carrinho: { label: "No carrinho · falta pagar", cls: "bg-amber-500/15 text-amber-200 border-amber-400/30" },
   alternativa: { label: "No carrinho · escolher entre dois", cls: "bg-amber-500/15 text-amber-200 border-amber-400/30" },
   "sem-venda": { label: "Venda ainda não abriu", cls: "bg-slate-500/20 text-slate-200 border-slate-400/30" },
 };

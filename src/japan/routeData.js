@@ -176,7 +176,7 @@ export const ROUTE_DAYS = [
       { time: "10:30", kind: "perna", what: "Nakazakicho: casinhas antigas com cafés e brechós, a 10 min a pé de Umeda.", map: "Nakazakicho" },
       { time: "13:00", kind: "klook", what: "Aula de matcha e doces japoneses (~1h). Endereço no voucher — conferir antes.", klookId: "matcha-osaka" },
       { time: "14:30", kind: "perna", what: "Compras em Umeda: Yodobashi, Grand Front e o depachika da Hankyu.", map: "Yodobashi Umeda" },
-      { time: "16:00", kind: "klook", what: "Umeda Sky Building, pôr do sol às 16:51. Embaixo tem o mercado de Natal alemão (grátis).", klookId: "umeda-sky", map: "Umeda Sky Building", note: "Um dos dois mirantes de Osaka — ainda decidindo" },
+      { time: "16:00", kind: "klook", what: "Umeda Sky Building, pôr do sol às 16:51. Embaixo tem o mercado de Natal alemão (grátis).", klookId: "umeda-sky", map: "Umeda Sky Building", note: "O Harukas (dia 21) já está pago — decidir se o Umeda também vai" },
       { time: "18:00", kind: "perna", what: "Shinsaibashi-suji e Amerikamura: últimas compras.", map: "Shinsaibashi-suji" },
       { time: "19:30", kind: "klook", what: "Barquinho no canal de Dotonbori (20 min).", klookId: "dotonbori-boat", map: "Tazaemonbashi pier" },
       { time: "20:30", kind: "comida", what: "Jantar de despedida e bar em Dotonbori." },
@@ -188,7 +188,7 @@ export const ROUTE_DAYS = [
     sleep: "9h nine hours Narita (cápsula)",
     slots: [
       { time: "09:00", kind: "transp", what: "Check-out e deixar a mala no hotel." },
-      { time: "09:30", kind: "klook", what: "Mirante Harukas 300 (~1h).", klookId: "harukas", map: "Abeno Harukas 300", note: "Um dos dois mirantes de Osaka — ainda decidindo" },
+      { time: "09:30", kind: "klook", what: "Mirante Harukas 300 (~1h).", klookId: "harukas", map: "Abeno Harukas 300" },
       { time: "11:00", kind: "klook", what: "Torre Tsutenkaku + escorregador gigante (15 min a pé do Harukas).", klookId: "tsutenkaku", map: "Tsutenkaku" },
       { time: "12:00", kind: "comida", what: "Almoço de kushikatsu (espetinho empanado) em Shinsekai.", map: "Shinsekai Kushikatsu Daruma" },
       { time: "13:30", kind: "transp", what: "Buscar a mala e metrô até Shin-Osaka (15 min)." },
