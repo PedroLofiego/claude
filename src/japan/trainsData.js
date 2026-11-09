@@ -22,7 +22,7 @@ export const TRAIN_LEGS = [
         train: "Shinkansen Nozomi (o mais rápido)",
         duration: "2h15",
         yen: 12430,
-        when: "Comprar no smartEX ENTRE 14/11 e 23/11 (precisa ser 21 dias antes). Só vale em alguns trens, com lugares limitados — o smartEX mostra quais. Um que saia até ~11:00 encaixa no roteiro.",
+        when: "Venda abre 13/11 às 22:00 (horário de Brasília) e fecha 23/11 às 11:30 (Brasília). Só vale em alguns trens, com lugares limitados — o smartEX mostra quais. Um que saia até ~11:00 encaixa no roteiro. Depois de comprado não dá para trocar de trem (só cancelar com taxa de ¥320).",
         why: "Rápido e ¥1.500 mais barato que o normal por pessoa. Lugar marcado: escolham a fileira E (lado direito) para ver o Monte Fuji.",
         links: [
           { label: "Comprar no smartEX", url: "https://smart-ex.jp/en/" },
@@ -36,7 +36,7 @@ export const TRAIN_LEGS = [
         train: "Shinkansen Nozomi",
         duration: "2h15",
         yen: 13970,
-        when: "Abre 1 mês antes (por volta de 14/11). Qualquer horário.",
+        when: "Abre 13/11 às 22:00 (Brasília) e fica à venda até o dia. Qualquer horário.",
         why: "Plano B se o Hayatoku esgotar: mesmo trem, qualquer horário. O ingresso vai para o celular e entra direto com o cartão Suica cadastrado.",
         links: [{ label: "Comprar no smartEX", url: "https://smart-ex.jp/en/" }],
       },
@@ -58,7 +58,7 @@ export const TRAIN_LEGS = [
     date: "Qui 17/12",
     from: "Kyoto",
     to: "Osaka",
-    plan: "O hotel de Kyoto fica do lado da estação Omiya, da linha Hankyu, que vai direto até Osaka-Umeda. De lá, 2 paradas de metrô até Honmachi.",
+    plan: "O hotel de Kyoto fica do lado da estação Omiya, da linha Hankyu, que vai até Osaka-Umeda. Atenção: o Expresso Limitado (o trem mais frequente) NÃO para em Omiya — peguem qualquer trem 1 parada até Karasuma (2 min, mesma passagem) e embarquem lá. De Umeda, 2 paradas de metrô até Honmachi.",
     options: [
       {
         id: "privace",
@@ -67,8 +67,8 @@ export const TRAIN_LEGS = [
         train: "Expresso Limitado Hankyu, vagão PRiVACE (poltronas reservadas, mais bonito e silencioso)",
         duration: "~40 min",
         yen: 910,
-        when: "Reservar no site PRiVACE até 14 dias antes (sem cadastro) ou comprar no próprio trem, se sobrar lugar.",
-        why: "Sai a pé do hotel (estação Omiya) e chega em Osaka-Umeda. Tarifa normal ¥410 + ¥500 do assento. Bom com mala.",
+        when: "Reserva abre 03/12 (14 dias antes), sem cadastro — só e-mail, entrando como convidado (Guest). Reservem a partir de Karasuma, num Expresso Limitado (Limited Express) por volta das 10:00. Também dá para comprar no trem, em dinheiro, se sobrar lugar.",
+        why: "Poltrona marcada no vagão 4, silencioso e com espaço para mala. Tarifa normal ¥410 (passa o Suica) + ¥500 do assento.",
         links: [{ label: "Reservar PRiVACE", url: "https://www.hankyu.co.jp/privace/en/guide/" }],
       },
       {
@@ -123,7 +123,7 @@ export const TRAIN_LEGS = [
         duration: "~4h30",
         yen: 14480,
         yenNote: "¥12.980 o trem-bala (preço oficial do Hayatoku 21, igual todos os dias) + ~¥1.500 o ônibus",
-        when: "Comprar no smartEX até 30/11 (21 dias antes), junto com a ida. Saindo de Shin-Osaka ~14:00, chegam em Narita ~18:30.",
+        when: "Venda abre 20/11 às 22:00 e fecha 30/11 às 11:30 (horário de Brasília). Saindo de Shin-Osaka ~14:00, chegam em Narita ~18:30. O ônibus não precisa de reserva: compra no guichê da saída Yaesu.",
         why: "Previsível, sem taxa de mala e sem ir cedo ao aeroporto. Do trem-bala vocês descem na Estação de Tóquio e pegam o ônibus para Narita na saída Yaesu.",
         links: [
           { label: "Comprar no smartEX", url: "https://smart-ex.jp/en/" },

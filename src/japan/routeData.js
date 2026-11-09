@@ -135,7 +135,7 @@ export const ROUTE_DAYS = [
     from: "HOTEL MYSTAYS Kyoto Shijo", end: "Travelodge Honmachi Osaka",
     sleep: "Travelodge Honmachi",
     slots: [
-      { time: "10:00", kind: "transp", what: "Linha Hankyu direto do hotel (Omiya → Osaka-Umeda, ~40 min; vagão PRiVACE com lugar marcado) e metrô até Honmachi. Deixar a mala.", trains: "ky-os" },
+      { time: "10:00", kind: "transp", what: "Linha Hankyu: de Omiya 1 parada até Karasuma, e lá o Expresso Limitado até Osaka-Umeda (~40 min; vagão 4 = PRiVACE, lugar marcado) e metrô até Honmachi. Deixar a mala.", trains: "ky-os" },
       { time: "12:00", kind: "comida", what: "Almoço no Mercado Kuromon: vieira, espetinho de wagyu, ouriço.", map: "Kuromon Market" },
       { time: "13:30", kind: "perna", what: "Den Den Town (games e anime) e Namba.", map: "Den Den Town" },
       { time: "15:30", kind: "livre", what: "Check-in e descanso." },
