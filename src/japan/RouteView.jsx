@@ -150,6 +150,11 @@ function RouteDay({ d, isToday }) {
                 <span className={item ? "font-semibold text-white" : "text-slate-100"}>{sl.what}</span>
                 {sl.split && <span className="ml-1.5 inline-block rounded-md bg-indigo-500/25 px-1.5 py-0.5 text-[11px] font-semibold text-indigo-100">cada um faz um programa</span>}
                 {sl.note && <div className="mt-1 text-xs text-amber-200">⚖️ {sl.note}</div>}
+                {sl.trains && (
+                  <a href={`#/japao/organizar/transporte`} className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-sky-300 hover:text-sky-200 no-print">
+                    <Train size={12} /> Ver opções de trem, preços e links
+                  </a>
+                )}
                 {sl.map && !item && (
                   <div className="mt-1 flex flex-wrap gap-3 text-xs no-print">
                     {sl.map && (

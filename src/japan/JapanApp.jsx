@@ -6,6 +6,7 @@ import {
   ShoppingCart, SlidersHorizontal, Train, Users, Wallet, X,
 } from "lucide-react";
 import { KyotoTrips, RouteView, TicketsView } from "./RouteView.jsx";
+import TrainsView from "./TrainsView.jsx";
 import { KLOOK_ITEMS } from "./klookData.js";
 import { ROUTE_DAYS } from "./routeData.js";
 import { JAPAN_POIS, POI_CATEGORIES } from "./japanData.js";
@@ -1137,6 +1138,7 @@ function Lodging() {
 function Transport() {
   return (
     <div className="space-y-4">
+      <TrainsView />
       <Box title="Trechos entre cidades" icon={Train} sub="Preço por pessoa em iene e o total em reais para os dois, só ida.">
         <ul className="divide-y divide-white/5">
           {LOGISTICS.map((l) => (
