@@ -168,3 +168,25 @@ export const TRAIN_TAGS = {
   rapido: { label: "Mais rápido", cls: "bg-amber-500/15 text-amber-100 border-amber-400/30" },
   bonito: { label: "Trem temático", cls: "bg-fuchsia-500/15 text-fuchsia-100 border-fuchsia-400/30" },
 };
+
+// Trens que entram no calendário do celular (horário do Japão).
+export const TRAIN_EVENTS = [
+  {
+    id: "tq-ky", start: "2026-12-14T10:12", end: "2026-12-14T12:23",
+    title: "🚄 NOZOMI 23 Tóquio 10:12 → Kyoto 12:23",
+    where: "Tokyo Station",
+    desc: "Trem-bala Nozomi 23 (N700S). Assentos fileira E (lado do Fuji). Comprar no smartEX com EX Hayatoku 21 (¥12.430 por pessoa): venda de 13/11 22:00 a 23/11 11:30 (Brasília). Embarque com o QR Ticket do smartEX. Chegar à plataforma 15 min antes.",
+  },
+  {
+    id: "ky-os", start: "2026-12-17T10:00", end: "2026-12-17T10:45",
+    title: "🚃 Hankyu Kyoto → Osaka-Umeda (PRiVACE)",
+    where: "Hankyu Karasuma Station, Kyoto",
+    desc: "De Omiya, 1 parada até Karasuma; lá o Expresso Limitado até Osaka-Umeda (~40 min). Vagão 4 = PRiVACE, assento reservado (¥500, reservar a partir de 03/12 como Guest). Passagem ¥410 com Suica. De Umeda, metrô Midosuji 2 paradas até Honmachi.",
+  },
+  {
+    id: "os-nrt", start: "2026-12-21T14:00", end: "2026-12-21T18:30",
+    title: "🚄 Shin-Osaka → Tóquio + ônibus até Narita",
+    where: "Shin-Osaka Station",
+    desc: "Trem-bala Nozomi Shin-Osaka → Tóquio (~2h30), comprar no smartEX com EX Hayatoku 21 (¥12.980 por pessoa): venda de 20/11 22:00 a 30/11 11:30 (Brasília). Na Estação de Tóquio, saída Yaesu: ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500, compra no guichê). Check-in na cápsula até meia-noite.",
+  },
+];

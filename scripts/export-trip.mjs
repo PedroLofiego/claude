@@ -7,6 +7,8 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { ROUTE_DAYS } from "../src/japan/routeData.js";
 import { KLOOK_ITEMS } from "../src/japan/klookData.js";
+import { FLIGHTS, STAYS } from "../src/japan/tripData.js";
+import { TRAIN_EVENTS } from "../src/japan/trainsData.js";
 
 const SITE = "https://pedrolofiego.github.io/claude";
 const OUT = new URL("../public/export/", import.meta.url);
@@ -116,6 +118,69 @@ for (const d of ROUTE_DAYS) {
     ].filter(Boolean));
   }
 }
+// ---------- Voos ----------
+const utc = (iso) => iso.replace(/[-:]/g, "").replace(/Z$/, "00Z");
+for (const f of FLIGHTS) {
+  ev([
+    `UID:voaja-japao-voo-${f.n}@pedrolofiego.github.io`,
+    `DTSTART:${utc(f.utc[0])}`, `DTEND:${utc(f.utc[1])}`,
+    `SUMMARY:${esc(`✈️ ${f.n} ${f.from} → ${f.to}`)}`,
+    `LOCATION:${esc(f.from)}`,
+    `DESCRIPTION:${esc([`${f.local} (horário local)`, f.note, "KLM · Pedro e Giovanna · código da reserva no app KLM / e-mail \"Booking confirmed Salvador < > Tokyo\"", "Check-in online abre 30h antes no app KLM."].join("\n"))}`,
+    "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${esc(`Voo ${f.n}`)}`, "TRIGGER:-PT3H", "END:VALARM",
+  ]);
+}
+
+// ---------- Hotéis: check-in e check-out ----------
+const local = (iso) => iso.replace(/[-:]/g, "") + "00";
+const plus = (iso, min) => {
+  const d = new Date(iso + ":00Z");
+  d.setUTCMinutes(d.getUTCMinutes() + min);
+  return d.toISOString().slice(0, 16);
+};
+for (const h of STAYS) {
+  if (!h.checkInISO) continue;
+  const info = [
+    h.booking && `Reserva: ${h.booking}`,
+    h.checkinCode,
+    `Endereço: ${h.address}`,
+    `Telefone: ${h.phone}`,
+    `${h.nights} noite(s) · ${h.room}`,
+    h.extra,
+    h.cancel && `Cancelamento: ${h.cancel}`,
+    `Mapa: ${mapsSearch(h.name + ", " + h.address)}`,
+  ].filter(Boolean).join("\n");
+  ev([
+    `UID:voaja-japao-hotel-in-${h.id}@pedrolofiego.github.io`,
+    `DTSTART;TZID=Asia/Tokyo:${local(h.checkInISO)}`, `DTEND;TZID=Asia/Tokyo:${local(plus(h.checkInISO, 30))}`,
+    `SUMMARY:${esc(`🏨 Check-in · ${h.name}`)}`,
+    `LOCATION:${esc(`${h.name}, ${h.address}`)}`,
+    `GEO:${h.lat};${h.lng}`,
+    `DESCRIPTION:${esc(info)}`,
+    "TRANSP:TRANSPARENT",
+  ]);
+  ev([
+    `UID:voaja-japao-hotel-out-${h.id}@pedrolofiego.github.io`,
+    `DTSTART;TZID=Asia/Tokyo:${local(plus(h.checkOutISO, -30))}`, `DTEND;TZID=Asia/Tokyo:${local(h.checkOutISO)}`,
+    `SUMMARY:${esc(`🧳 Check-out até ${h.checkOutISO.slice(11)} · ${h.name}`)}`,
+    `LOCATION:${esc(`${h.name}, ${h.address}`)}`,
+    `DESCRIPTION:${esc(info)}`,
+    "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${esc("Check-out")}`, "TRIGGER:-PT60M", "END:VALARM",
+  ]);
+}
+
+// ---------- Trens entre cidades ----------
+for (const t of TRAIN_EVENTS) {
+  ev([
+    `UID:voaja-japao-trem-${t.id}@pedrolofiego.github.io`,
+    `DTSTART;TZID=Asia/Tokyo:${local(t.start)}`, `DTEND;TZID=Asia/Tokyo:${local(t.end)}`,
+    `SUMMARY:${esc(t.title)}`,
+    `LOCATION:${esc(t.where)}`,
+    `DESCRIPTION:${esc(`${t.desc}\n\nOpções, preços e links: ${SITE}/#/japao/organizar/transporte`)}`,
+    "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${esc(t.title)}`, "TRIGGER:-PT60M", "END:VALARM",
+  ]);
+}
+
 L.push("END:VCALENDAR");
 writeFileSync(new URL("japao-pedro-gio.ics", OUT), L.map(fold).join("\r\n") + "\r\n");
 
@@ -139,8 +204,8 @@ for (const d of ROUTE_DAYS) {
   }
 }
 // Hotéis
-for (const [name, dia] of [["Comfort Hotel Tokyo Higashi Nihombashi", "Hotel · 09–14/12"], ["HOTEL MYSTAYS Kyoto Shijo", "Hotel · 14–17/12"], ["Travelodge Honmachi Osaka", "Hotel · 17–21/12"], ["9h nine hours Narita Airport", "Hotel · 21–22/12"]]) {
-  rows.push([name, `${name}, Japan`, dia, "", "Hotel", ""]);
+for (const h of STAYS) {
+  rows.push([h.name, h.address || `${h.name}, Japan`, `Hotel · ${h.checkIn}–${h.checkOut}`, "", "Hotel", [h.booking, h.phone && `Tel. ${h.phone}`].filter(Boolean).join(" | ")]);
 }
 writeFileSync(new URL("japao-lugares.csv", OUT), "\uFEFF" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n") + "\r\n");
 

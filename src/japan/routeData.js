@@ -98,7 +98,7 @@ export const ROUTE_DAYS = [
     from: "Kyoto Station", end: "HOTEL MYSTAYS Kyoto Shijo",
     sleep: "MYSTAYS Kyoto Shijo",
     slots: [
-      { time: "10:00", kind: "transp", what: "Trem-bala Tóquio → Kyoto (2h15). Sentem no lado direito (assento E) para ver o Monte Fuji.", trains: "tq-ky" },
+      { time: "10:12", kind: "transp", what: "Trem-bala NOZOMI 23 Tóquio 10:12 → Kyoto 12:23 (modelo novo N700S, tomada em todo assento). Sentem na fileira E (lado direito) para ver o Monte Fuji. Comprar com EX Hayatoku 21 a partir de 13/11 22:00 (Brasília).", trains: "tq-ky" },
       { time: "12:30", kind: "transp", what: "Deixar mochilas no hotel (Shijo-Omiya) e almoçar por perto." },
       { time: "14:00", kind: "perna", what: "Kinkaku-ji, o Pavilhão Dourado (ônibus 205, ~30 min; a visita leva ~45 min).", map: "Kinkaku-ji" },
       { time: "16:00", kind: "perna", what: "Mercado Nishiki e galerias Teramachi/Shinkyogoku, provando o que der vontade.", map: "Nishiki Market" },

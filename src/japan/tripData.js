@@ -28,6 +28,16 @@ export const TRIP = {
     "O aeroporto de saída é NARITA, não Haneda. O voo de volta e a cápsula do dia 21 estão os dois em Narita — qualquer rota que termine em Haneda quebra as duas reservas.",
 };
 
+// Voos KLM (horários locais de cada aeroporto; utc = horário em UTC para o calendário).
+export const FLIGHTS = [
+  { n: "KL2331", from: "Salvador (SSA)", to: "Paris (CDG)", local: "Seg 07/12 18:35 → Ter 08/12 08:15", utc: ["2026-12-07T21:35Z", "2026-12-08T07:15Z"], note: "Operado pela Air France · Boeing 787-9" },
+  { n: "KL2008", from: "Paris (CDG)", to: "Amsterdã (AMS)", local: "Ter 08/12 11:40 → 13:10", utc: ["2026-12-08T10:40Z", "2026-12-08T12:10Z"], note: "Operado pela Air France · conexão de 3h25 em Paris" },
+  { n: "KL0861", from: "Amsterdã (AMS)", to: "Tóquio Narita (NRT)", local: "Ter 08/12 14:15 → Qua 09/12 11:45 (Japão)", utc: ["2026-12-08T13:15Z", "2026-12-09T02:45Z"], note: "KLM · Boeing 777-200 · conexão de 1h05 em Amsterdã" },
+  { n: "KL0862", from: "Tóquio Narita (NRT)", to: "Amsterdã (AMS)", local: "Ter 22/12 13:35 (Japão) → 19:40", utc: ["2026-12-22T04:35Z", "2026-12-22T18:40Z"], note: "KLM · Boeing 777-200 · chegar a Narita até 10:35 (cápsula fica no próprio Terminal 2)" },
+  { n: "KL1403", from: "Amsterdã (AMS)", to: "Paris (CDG)", local: "Qua 23/12 07:25 → 08:50", utc: ["2026-12-23T06:25Z", "2026-12-23T07:50Z"], note: "KLM · conexão de 11h45 em Amsterdã" },
+  { n: "KL2374", from: "Paris (CDG)", to: "Salvador (SSA)", local: "Qua 23/12 10:15 → 16:30", utc: ["2026-12-23T09:15Z", "2026-12-23T19:30Z"], note: "Operado pela Air France · Boeing 777-200" },
+];
+
 export const CITY_BLOCKS = [
   { id: "toquio", label: "Tóquio", emoji: "🗼", nights: 5, range: "09 → 14/12", lat: 35.6812, lng: 139.7671 },
   { id: "kyoto", label: "Kyoto", emoji: "🎎", nights: 3, range: "14 → 17/12", lat: 35.0116, lng: 135.7681 },
@@ -39,6 +49,12 @@ export const CITY_BLOCKS = [
 export const STAYS = [
   {
     id: "comfort-tokyo",
+    address: "1-10-11 Nihombashi Bakurocho, Chuo-ku, Tokyo 103-0002",
+    phone: "+81 3-5645-3311",
+    checkInISO: "2026-12-09T15:00", checkOutISO: "2026-12-14T10:00",
+    booking: "Booking.com [removido]",
+    checkinCode: "Número do check-in: [removido] (ou [removido])",
+    extra: "Café da manhã incluído. Quarto Duplo, não fumantes.",
     city: "toquio",
     status: "confirmada",
     name: "Comfort Hotel Tokyo Higashi Nihombashi",
@@ -56,6 +72,12 @@ export const STAYS = [
   },
   {
     id: "mystays-kyoto",
+    address: "52 Kasaboko-cho, Shijo-dori Aburanokoji Higashiiru, Shimogyo-ku, Kyoto 600-8494",
+    phone: "+81 75-283-3939",
+    checkInISO: "2026-12-14T14:00", checkOutISO: "2026-12-17T11:00",
+    booking: "Booking.com [removido]",
+    checkinCode: "Número do check-in: [removido]",
+    extra: "Café da manhã à parte (~US$11 por pessoa). Quarto Duplo Standard.",
     city: "kyoto",
     status: "confirmada",
     name: "HOTEL MYSTAYS Kyoto Shijo",
@@ -76,6 +98,12 @@ export const STAYS = [
   },
   {
     id: "travelodge-osaka",
+    address: "3-2-6 Azuchimachi, Chuo-ku, Osaka",
+    phone: "+81 6-4963-2196",
+    checkInISO: "2026-12-17T15:00", checkOutISO: "2026-12-21T10:00",
+    booking: "Booking.com [removido]",
+    checkinCode: "",
+    extra: "Quarto Duplo Superior. Total ¥33.150, cobrado no cartão pela Booking (cancelamento grátis até 14/12). Taxa de hospedagem por pessoa paga no hotel.",
     city: "osaka",
     status: "confirmada",
     name: "Travelodge Honmachi Osaka",
@@ -96,6 +124,12 @@ export const STAYS = [
   },
   {
     id: "9h-narita",
+    address: "Narita International Airport Terminal 2 (B1), 1-1 Furugome, Narita, Chiba 282-0004",
+    phone: "050-1807-3506",
+    checkInISO: "2026-12-21T14:00", checkOutISO: "2026-12-22T10:00",
+    booking: "Reserva direta no site da nine hours (1 homem / 1 mulher), pré-paga ¥12.728",
+    checkinCode: "",
+    extra: "Check-in das 14:00 à meia-noite (se for chegar depois, avisar por e-mail nrt@ninehours.co.jp). Armário 36×57 cm: mala grande vai para o guarda-volumes do aeroporto.",
     city: "narita",
     status: "confirmada",
     name: "9h nine hours Narita Airport",

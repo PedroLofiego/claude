@@ -200,33 +200,33 @@ function ExportCard() {
   const base = import.meta.env.BASE_URL;
   return (
     <section className="card no-print border-sky-400/30 p-4">
-      <h3 className="flex items-center gap-2 text-base font-bold text-white"><Smartphone size={18} className="text-sky-300" /> Levar para o celular</h3>
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
-        <a href={`${base}export/japao-pedro-gio.ics`}
-          className="flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-3 py-3 text-sm font-bold text-white hover:bg-sky-400">
-          <CalendarPlus size={18} /> Adicionar ao calendário
-        </a>
-        <a href={`${base}export/japao-lugares.csv`} download
-          className="flex items-center justify-center gap-2 rounded-xl bg-white/10 px-3 py-3 text-sm font-bold text-white hover:bg-white/15">
-          <Download size={18} /> Lugares para o Google Maps
-        </a>
-      </div>
+      <h3 className="flex items-center gap-2 text-base font-bold text-white"><Smartphone size={18} className="text-sky-300" /> Levar tudo para o iPhone</h3>
+      <a href={`${base}export/japao-pedro-gio.ics`}
+        className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-3 py-4 text-base font-extrabold text-white hover:bg-sky-400">
+        <CalendarPlus size={20} /> Exportar tudo para o calendário
+      </a>
+      <p className="mt-2 text-xs leading-relaxed text-slate-300">
+        Abra no Safari do iPhone, toque no botão e depois em <b>Adicionar todos</b>. Entram de uma vez:
+        os <b>6 voos</b> da KLM, <b>check-in e check-out dos 4 hotéis</b> (endereço, telefone, número da reserva),
+        os <b>3 trens</b> entre cidades, <b>cada ingresso</b> no horário (com voucher e “na entrada”) e o <b>plano de cada dia</b> com a rota no Google Maps.
+        Cada evento tem endereço e aviso antes.
+      </p>
       <details className="mt-3 text-sm text-slate-300">
         <summary className="cursor-pointer font-semibold text-sky-200">Como colocar no iPhone (passo a passo)</summary>
         <div className="mt-2 space-y-3 leading-relaxed">
           <div>
-            <b className="text-white">📅 Calendário — 1 toque, cada um no seu iPhone</b>
+            <b className="text-white">📅 Calendário — cada um no seu iPhone</b>
             <ol className="mt-1 list-decimal space-y-0.5 pl-5">
-              <li>Abram este site no Safari do iPhone e toquem em <b>Adicionar ao calendário</b>.</li>
-              <li>Aparece a lista de eventos: toquem em <b>Adicionar todos</b>.</li>
-              <li>Cada dia vira um evento com o plano inteiro e a rota do Google Maps; cada ingresso vira um evento no horário, com endereço, reserva, “na entrada” e o link do voucher (e aviso 1h antes).</li>
+              <li>Abram este site no Safari do iPhone e toquem em <b>Exportar tudo para o calendário</b>.</li>
+              <li>Aparece a lista de eventos: toquem em <b>Adicionar todos</b> e escolham o calendário.</li>
+              <li>Os horários já vêm no fuso do Japão: no Brasil aparecem 12h antes, e no Japão o iPhone acerta sozinho.</li>
             </ol>
             <p className="mt-1 text-xs text-slate-400">Se a rota mudar depois, apaguem os eventos antigos antes de importar de novo, para não duplicar.</p>
           </div>
           <div>
-            <b className="text-white">🗺️ Google Maps — uma vez no computador, aparece nos dois iPhones</b>
+            <b className="text-white">🗺️ Extra: mapa com todos os lugares no Google Maps (opcional, no computador)</b>
             <ol className="mt-1 list-decimal space-y-0.5 pl-5">
-              <li>Baixem o arquivo <b>Lugares para o Google Maps</b>.</li>
+              <li>Baixem o arquivo <a className="text-sky-300 underline" href={`${base}export/japao-lugares.csv`} download>Lugares para o Google Maps</a>.</li>
               <li>Abram <a className="text-sky-300 underline" href="https://www.google.com/maps/d/" target="_blank" rel="noreferrer">Google My Maps</a> → <b>Criar novo mapa</b> → <b>Importar</b> → escolham o arquivo.</li>
               <li>Local: coluna <b>Endereço</b>. Título: coluna <b>Nome</b>.</li>
               <li>Em “Estilo”, agrupem por <b>Dia</b> — cada dia ganha uma cor.</li>
