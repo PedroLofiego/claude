@@ -207,8 +207,8 @@ function ExportCard() {
       </a>
       <p className="mt-2 text-xs leading-relaxed text-slate-300">
         Abra no Safari do iPhone, toque no botão e depois em <b>Adicionar todos</b>. Entram de uma vez:
-        os <b>6 voos</b> da KLM, <b>check-in e check-out dos 4 hotéis</b> (endereço, telefone, número da reserva),
-        os <b>3 trens</b> entre cidades, <b>cada ingresso</b> no horário (com voucher e “na entrada”) e o <b>plano de cada dia</b> com a rota no Google Maps.
+        os <b>6 voos</b> da KLM, <b>check-in e check-out dos 4 hotéis</b> (endereço, telefone, horários),
+        os <b>3 trens</b> entre cidades, <b>cada ingresso</b> no horário (com o que mostrar “na entrada”) e o <b>plano de cada dia</b> com a rota no Google Maps.
         Cada evento tem endereço e aviso antes.
       </p>
       <details className="mt-3 text-sm text-slate-300">
@@ -237,7 +237,7 @@ function ExportCard() {
           </div>
           <div>
             <b className="text-white">🎟️ Vouchers sem internet</b>
-            <p className="mt-1">Abram cada voucher (botão amarelo) → <b>Compartilhar</b> → <b>Salvar em Arquivos</b>. Ficam disponíveis mesmo sem sinal.</p>
+            <p className="mt-1">Os PDFs e os códigos de reserva não ficam no site (é público). O Pedro tem o pacote completo no computador: salvem os PDFs no app <b>Arquivos</b>, numa pasta “Japão”. Abrem mesmo sem sinal.</p>
           </div>
           <div>
             <b className="text-white">📱 O site como app</b>
@@ -398,8 +398,8 @@ export function TicketsView() {
           {inCart.length > 0 && <> Ainda no carrinho, sem pagar: ≈ <b className="text-white">{brl(cartBRL)}</b>.</>}
         </p>
         <p className="mt-1.5 text-xs text-slate-400">
-          Os vouchers em PDF estão no botão de cada ingresso. Baixem no celular antes de viajar para abrir sem internet —
-          e não compartilhem o link: o PDF funciona como ingresso. Os originais também ficam no app da Klook, em Reservas.
+          Por segurança, os vouchers e códigos de reserva não ficam neste site público. Estão no app da Klook (Reservas)
+          e na pasta “Japão” do app Arquivos de cada iPhone.
         </p>
       </section>
       <ul className="space-y-2">

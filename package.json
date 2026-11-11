@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node scripts/export-trip.mjs && vite",
     "prebuild": "node scripts/export-trip.mjs",
+    "export:privado": "node scripts/export-trip.mjs --privado",
     "build": "vite build",
     "preview": "vite preview --host"
   },

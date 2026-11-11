@@ -33,7 +33,7 @@ export const ROUTE_DAYS = [
       { time: "17:00", kind: "perna", what: "Caminhada leve: Nihonbashi → Estação de Tóquio. A avenida Naka-dori de Marunouchi fica toda iluminada em dezembro.", map: "Marunouchi Naka-dori Illumination" },
       { time: "19:00", kind: "comida", what: "Jantar na Tokyo Ramen Street (subsolo da Estação de Tóquio). Voltar cedo.", map: "Tokyo Ramen Street" },
     ],
-    tip: "Antes de sair do Brasil: baixem no celular todos os PDFs dos vouchers (botão amarelo em cada ingresso) para abrir sem internet.",
+    tip: "Antes de sair do Brasil: salvem no app Arquivos do iPhone todos os PDFs dos vouchers (pasta Japão) para abrir sem internet.",
   },
   {
     n: 2, date: "Qui 10/12", city: "toquio", title: "Asakusa + Akihabara", pace: "médio",

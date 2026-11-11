@@ -4,20 +4,29 @@
  *   public/export/japao-lugares.csv    → lugares para importar no Google My Maps
  * Roda sozinho antes do build (npm run build → prebuild).
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, copyFileSync, readdirSync } from "node:fs";
 import { ROUTE_DAYS } from "../src/japan/routeData.js";
-import { KLOOK_ITEMS } from "../src/japan/klookData.js";
-import { FLIGHTS, STAYS } from "../src/japan/tripData.js";
+import { KLOOK_ITEMS as KLOOK_PUBLIC } from "../src/japan/klookData.js";
+import { FLIGHTS, STAYS as STAYS_PUBLIC } from "../src/japan/tripData.js";
 import { TRAIN_EVENTS } from "../src/japan/trainsData.js";
 
 const SITE = "https://pedrolofiego.github.io/claude";
-const OUT = new URL("../public/export/", import.meta.url);
+
+// --privado: versão completa (códigos de reserva + PDFs) em private/celular/, que NÃO vai para o Git.
+const PRIVATE = process.argv.includes("--privado");
+const secretsUrl = new URL("../private/secrets.mjs", import.meta.url);
+const S = PRIVATE ? await import(secretsUrl.href) : null;
+if (PRIVATE && !existsSync(secretsUrl)) throw new Error("private/secrets.mjs não encontrado");
+const KLOOK_ITEMS = KLOOK_PUBLIC.map((i) => ({ ...i, ...(S?.KLOOK_PRIVATE[i.id] || {}) }));
+const STAYS = STAYS_PUBLIC.map((h) => ({ ...h, ...(S?.STAYS_PRIVATE[h.id] || {}) }));
+const OUT = new URL(PRIVATE ? "../private/celular/" : "../public/export/", import.meta.url);
 mkdirSync(OUT, { recursive: true });
 
 const byId = Object.fromEntries(KLOOK_ITEMS.map((i) => [i.id, i]));
 const enc = encodeURIComponent;
 const mapsSearch = (q) => `https://www.google.com/maps/search/?api=1&query=${enc(q)}`;
-const voucherUrl = (f) => `${SITE}/vouchers/${f}`;
+// No celular, os PDFs ficam na pasta "Japão" do app Arquivos.
+const voucherUrl = (f) => `arquivo ${f} (app Arquivos → pasta Japão)`;
 
 // "Qua 09/12" → { y, m, d }
 const dayDate = (label) => {
@@ -112,7 +121,7 @@ for (const d of ROUTE_DAYS) {
       `SUMMARY:${esc(`🎟️ ${i.name}`)}`,
       `LOCATION:${esc(s.map || i.place || "")}`,
       i.lat ? `GEO:${i.lat};${i.lng}` : null,
-      `URL:${i.vouchers?.length ? voucherUrl(i.vouchers[0].file) : i.url}`,
+      `URL:${i.url}`,
       `DESCRIPTION:${esc(desc)}`,
       "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${esc(i.name)}`, "TRIGGER:-PT60M", "END:VALARM",
     ].filter(Boolean));
@@ -126,7 +135,7 @@ for (const f of FLIGHTS) {
     `DTSTART:${utc(f.utc[0])}`, `DTEND:${utc(f.utc[1])}`,
     `SUMMARY:${esc(`✈️ ${f.n} ${f.from} → ${f.to}`)}`,
     `LOCATION:${esc(f.from)}`,
-    `DESCRIPTION:${esc([`${f.local} (horário local)`, f.note, "KLM · Pedro e Giovanna · código da reserva no app KLM / e-mail \"Booking confirmed Salvador < > Tokyo\"", "Check-in online abre 30h antes no app KLM."].join("\n"))}`,
+    `DESCRIPTION:${esc([`${f.local} (horário local)`, f.note, `KLM · Pedro e Giovanna · ${S ? `código da reserva ${S.KLM_BOOKING}` : "código da reserva no app KLM"}`, "Check-in online abre 30h antes no app KLM."].join("\n"))}`,
     "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${esc(`Voo ${f.n}`)}`, "TRIGGER:-PT3H", "END:VALARM",
   ]);
 }
@@ -143,6 +152,7 @@ for (const h of STAYS) {
   const info = [
     h.booking && `Reserva: ${h.booking}`,
     h.checkinCode,
+    S && h.id === "9h-narita" && `Nº da reserva nine hours: ${S.NINEHOURS_RESERVATION}`,
     `Endereço: ${h.address}`,
     `Telefone: ${h.phone}`,
     `${h.nights} noite(s) · ${h.room}`,
@@ -182,7 +192,7 @@ for (const t of TRAIN_EVENTS) {
 }
 
 L.push("END:VCALENDAR");
-writeFileSync(new URL("japao-pedro-gio.ics", OUT), L.map(fold).join("\r\n") + "\r\n");
+writeFileSync(new URL(PRIVATE ? "japao-completo.ics" : "japao-pedro-gio.ics", OUT), L.map(fold).join("\r\n") + "\r\n");
 
 // ---------- CSV para o Google My Maps ----------
 const csvCell = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
@@ -207,6 +217,10 @@ for (const d of ROUTE_DAYS) {
 for (const h of STAYS) {
   rows.push([h.name, h.address || `${h.name}, Japan`, `Hotel · ${h.checkIn}–${h.checkOut}`, "", "Hotel", [h.booking, h.phone && `Tel. ${h.phone}`].filter(Boolean).join(" | ")]);
 }
-writeFileSync(new URL("japao-lugares.csv", OUT), "\uFEFF" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n") + "\r\n");
+writeFileSync(new URL(PRIVATE ? "japao-lugares-completo.csv" : "japao-lugares.csv", OUT), "\uFEFF" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n") + "\r\n");
 
-console.log(`export: ${L.filter((l) => l === "BEGIN:VEVENT").length} eventos no calendário, ${rows.length - 1} lugares no CSV`);
+if (PRIVATE) {
+  const src = new URL("../private/vouchers/", import.meta.url);
+  for (const f of readdirSync(src)) copyFileSync(new URL(f, src), new URL(f, OUT));
+}
+console.log(PRIVATE ? "PRIVADO →" : "público →", `export: ${L.filter((l) => l === "BEGIN:VEVENT").length} eventos no calendário, ${rows.length - 1} lugares no CSV`);
