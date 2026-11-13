@@ -9,7 +9,7 @@
  * (hotel), usados no botão "Rota do dia no Google Maps".
  */
 
-export const ROUTE_UPDATED = "03/11/2026";
+export const ROUTE_UPDATED = "13/11/2026";
 
 export const ROUTE_KINDS = {
   klook: { label: "Ingresso", cls: "bg-emerald-500/20 text-emerald-100" },
@@ -47,8 +47,9 @@ export const ROUTE_DAYS = [
       { time: "15:00", kind: "perna", what: "Beira do rio Sumida e ponte Azuma — a melhor vista do Skytree de graça. Café e pausa.", map: "Sumida Park" },
       { time: "16:45", kind: "transp", what: "Metrô Ginza até Suehirocho (10 min)." },
       { time: "17:00", kind: "perna", what: "Akihabara: fliperamas (GiGO, Taito Station), lojas de games retrô (Super Potato), Yodobashi e Bic Camera.", map: "Akihabara Electric Town" },
-      { time: "19:30", kind: "comida", what: "Jantar nos izakayas debaixo dos trilhos de Kanda — a 10 min do hotel.", map: "Kanda Station" },
+      { time: "19:30", kind: "comida", what: "⭐ Lista da Gio: Torikizoku, izakaya de espetinho com tudo a ¥370, em Kanda — a 10 min do hotel. Sem reserva; se tiver fila, os izakayas debaixo dos trilhos ficam ao lado.", map: "Torikizoku Kanda" },
     ],
+    tip: "Lista da Gio: o Yoshino Sushi (Arakawa, ~¥2.500) não aparece nos guias com esse nome. Se a Gio mandar o link do Google Maps, eu encaixo — Arakawa fica a ~15 min de Asakusa, então daria para trocar o almoço deste dia.",
   },
   {
     n: 3, date: "Sex 11/12", city: "toquio", title: "Harajuku + Shibuya", pace: "médio",
@@ -57,12 +58,12 @@ export const ROUTE_DAYS = [
     slots: [
       { time: "10:00", kind: "perna", what: "Santuário Meiji Jingu — floresta no meio da cidade, caminhada tranquila (~45 min).", map: "Meiji Jingu" },
       { time: "11:00", kind: "perna", what: "Takeshita Street (Harajuku): lojinhas e crepe.", map: "Takeshita Street" },
-      { time: "12:30", kind: "comida", what: "Almoço em Omotesando." },
+      { time: "12:30", kind: "comida", what: "⭐ Lista da Gio: A Happy Pancake Omotesando — panqueca japonesa fofinha (~¥1.680). Feita na hora, demora ~20 min; dá para reservar pelo site.", map: "A Happy Pancake Omotesando" },
       { time: "13:30", kind: "perna", what: "Omotesando e Cat Street a pé até Shibuya — lojas de rua, sem pressa.", map: "Cat Street Shibuya" },
       { time: "15:00", kind: "perna", what: "Cruzamento de Shibuya e estátua do Hachiko.", map: "Shibuya Scramble Crossing" },
       { time: "15:40", kind: "comprar", what: "Shibuya Sky — mirante a céu aberto, pôr do sol às 16:28.", klookId: "shibuya-sky", map: "Shibuya Sky" },
       { time: "17:30", kind: "perna", what: "Shibuya Parco (Nintendo Tokyo e Pokémon Center) e Don Quijote de Shibuya (cupom).", map: "Shibuya Parco" },
-      { time: "19:30", kind: "comida", what: "Jantar em Shibuya. Quem tiver pique: Omoide Yokocho em Shinjuku (2 paradas)." },
+      { time: "19:30", kind: "comida", what: "⭐ Lista da Gio: Ichiran Shibuya — lámen na cabine individual (~¥1.080). Aberto 24h, fila anda rápido. Quem tiver pique depois: Omoide Yokocho em Shinjuku (2 paradas).", map: "Ichiran Shibuya" },
     ],
   },
   {
@@ -76,7 +77,7 @@ export const ROUTE_DAYS = [
       { time: "15:30", kind: "perna", what: "Templo Zojo-ji, ao pé da Tokyo Tower.", map: "Zojo-ji" },
       { time: "16:00", kind: "klook", what: "Tokyo Tower — mirante de 150 m, pôr do sol às 16:29.", klookId: "tokyo-tower", map: "Tokyo Tower" },
       { time: "17:30", kind: "perna", what: "Azabudai Hills e Roppongi Hills: mercado de Natal e a avenida Keyakizaka iluminada.", map: "Roppongi Hills Keyakizaka" },
-      { time: "19:30", kind: "comida", what: "Jantar em Roppongi e volta ao hotel." },
+      { time: "19:00", kind: "comida", what: "⭐ Lista da Gio: Sushi Azabu — omakase no 3º andar do Azabudai Hills Tower Plaza, a 5 min da Tokyo Tower. RESERVAR no TableCheck. A Gio viu ¥4.800, mas o TableCheck mostra cursos de ¥6.000 a ¥12.500: conferir o preço do jantar na reserva.", map: "Sushi Azabu Azabudai Hills" },
     ],
   },
   {
@@ -85,8 +86,9 @@ export const ROUTE_DAYS = [
     sleep: "Comfort Hotel Higashi Nihombashi",
     slots: [
       { time: "Manhã", kind: "livre", what: "Manhã devagar (a Gio rende mais à tarde). Deixar a mala grande pronta para o takkyubin." },
-      { time: "11:00", kind: "perna", what: "Shimokitazawa: brechós, lojas vintage e cafés. Almoço lá (o curry do bairro é famoso).", map: "Shimokitazawa" },
-      { time: "14:00", kind: "perna", what: "Shinjuku: depachika da Isetan, Don Quijote e a cabeça do Godzilla em Kabukicho.", map: "Shinjuku Isetan" },
+      { time: "11:00", kind: "perna", what: "Shimokitazawa: brechós, lojas vintage e cafés (só um lanche, o almoço é o udon).", map: "Shimokitazawa" },
+      { time: "13:00", kind: "comida", what: "⭐ Lista da Gio: Udon Shin — o udon carbonara com tempurá de bacon (~¥2.290), em Yoyogi, 10 min a pé de Shinjuku. Funciona com senha: um pega a senha ao chegar e vocês esperam passeando por perto. Só dinheiro.", map: "Udon Shin Yoyogi" },
+      { time: "14:45", kind: "perna", what: "Shinjuku: depachika da Isetan, Don Quijote e a cabeça do Godzilla em Kabukicho.", map: "Shinjuku Isetan" },
       { time: "15:45", kind: "transp", what: "Linha Keio, de Shinjuku até Keio-Yomiuri-Land (~40 min), e o teleférico do parque." },
       { time: "17:00", kind: "klook", what: "Yomiuriland + Jewellumination: brinquedos e o show de luzes de Natal (~3h). Jantar no parque.", klookId: "yomiuriland", map: "Yomiuriland" },
       { time: "20:30", kind: "transp", what: "Volta ao hotel (~1h)." },
@@ -102,7 +104,8 @@ export const ROUTE_DAYS = [
       { time: "12:30", kind: "transp", what: "Deixar mochilas no hotel (Shijo-Omiya) e almoçar por perto." },
       { time: "14:00", kind: "perna", what: "Kinkaku-ji, o Pavilhão Dourado (ônibus 205, ~30 min; a visita leva ~45 min).", map: "Kinkaku-ji" },
       { time: "16:00", kind: "perna", what: "Mercado Nishiki e galerias Teramachi/Shinkyogoku, provando o que der vontade.", map: "Nishiki Market" },
-      { time: "18:30", kind: "comida", what: "Jantar em Pontocho, o beco à beira do rio.", map: "Pontocho" },
+      { time: "17:30", kind: "comida", what: "⭐ Lista da Gio: Maccha House Kawaramachi — o tiramisu de matcha famoso (~¥850), na saída do Nishiki, 2 min da estação Kawaramachi.", map: "Maccha House Kyoto Kawaramachi" },
+      { time: "18:45", kind: "comida", what: "Jantar em Pontocho, o beco à beira do rio.", map: "Pontocho" },
       { time: "20:00", kind: "perna", what: "Gion à noite: Hanamikoji e o canal Shirakawa com lanternas.", map: "Gion Shirakawa" },
     ],
   },
@@ -111,7 +114,7 @@ export const ROUTE_DAYS = [
     sleep: "MYSTAYS Kyoto Shijo",
     slots: [
       { time: "Dia todo", kind: "livre", what: "Bate-volta escolhido na aba “Bate-volta de Kyoto”. Sugestão: Himeji (castelo, desejo da Gio) ou Uji + Nara (chá do Pedro + templos da Gio, na mesma linha de trem)." },
-      { time: "19:00", kind: "comida", what: "Volta a Kyoto e jantar perto do hotel (Shijo/Karasuma)." },
+      { time: "19:00", kind: "comida", what: "⭐ Lista da Gio: Volta a Kyoto e jantar no Sushiro, a esteira de sushi de ¥300 — o Google Maps mostra a unidade mais perto do hotel. Peçam pela tela, em inglês.", map: "Sushiro Kyoto" },
     ],
   },
   {
@@ -127,7 +130,7 @@ export const ROUTE_DAYS = [
       { time: "14:30", kind: "transp", what: "Ônibus ou táxi até Kiyomizu (~15 min)." },
       { time: "15:00", kind: "perna", what: "Kiyomizu-dera e as ladeiras Sannenzaka/Ninenzaka (lojinhas, matcha).", map: "Kiyomizu-dera" },
       { time: "16:45", kind: "perna", what: "Santuário Yasaka e parque Maruyama no fim da tarde.", map: "Yasaka Shrine" },
-      { time: "18:00", kind: "comida", what: "Jantar em Gion. Mala grande para Osaka por takkyubin." },
+      { time: "18:00", kind: "comida", what: "⭐ Lista da Gio: Okonomiyaki Yuu, em Gion (~¥990). Não achei esse nome nos guias: conferir o endereço com a Gio. Plano B a 5 min: Oagari ou Issen Yoshoku. Mala grande para Osaka por takkyubin.", map: "Okonomiyaki Yuu Gion Kyoto" },
     ],
   },
   {
@@ -140,7 +143,7 @@ export const ROUTE_DAYS = [
       { time: "13:30", kind: "perna", what: "Den Den Town (games e anime) e Namba.", map: "Den Den Town" },
       { time: "15:30", kind: "livre", what: "Check-in e descanso." },
       { time: "18:00", kind: "klook", what: "Iluminação no Castelo de Osaka (~1h).", klookId: "osaka-illuminage", map: "Osaka Castle Nishinomaru Garden" },
-      { time: "19:30", kind: "comida", what: "Noite de bar em Dotonbori — desejo dos dois.", map: "Dotonbori" },
+      { time: "19:30", kind: "comida", what: "⭐ Lista da Gio: Dotonbori: gyoza no Osaka Ohsho (~¥650) e takoyaki de rua (~¥650, Kukuru ou Wanaka). Depois, noite de bar — desejo dos dois.", map: "Osaka Ohsho Dotonbori" },
     ],
   },
   {
@@ -175,13 +178,14 @@ export const ROUTE_DAYS = [
     from: "Travelodge Honmachi Osaka", end: "Travelodge Honmachi Osaka",
     sleep: "Travelodge Honmachi",
     slots: [
-      { time: "10:30", kind: "perna", what: "Nakazakicho: casinhas antigas com cafés e brechós, a 10 min a pé de Umeda.", map: "Nakazakicho" },
+      { time: "10:00", kind: "comida", what: "⭐ Lista da Gio: Onigiri Gorichan, café da manhã — a loja principal fica em Nakazakicho, 1 min do metrô (não no Kuromon). Abre cedo e costuma ter fila.", map: "Onigiri Gorichan Nakazaki" },
+      { time: "10:45", kind: "perna", what: "Nakazakicho: casinhas antigas com cafés e brechós, a 10 min a pé de Umeda.", map: "Nakazakicho" },
       { time: "12:30", kind: "comida", what: "Almoço em Umeda (andares de restaurante das lojas de departamento)." },
       { time: "13:30", kind: "perna", what: "Compras em Umeda: Yodobashi, Grand Front e o depachika da Hankyu. Na base do Umeda Sky tem o mercado de Natal alemão (grátis, sem subir no mirante).", map: "Yodobashi Umeda" },
       { time: "16:00", kind: "perna", what: "Metrô Midosuji para o sul: Shinsaibashi-suji e Amerikamura, últimas compras. Conferir no voucher o endereço da aula de matcha.", map: "Shinsaibashi-suji" },
       { time: "18:00", kind: "klook", what: "Aula de matcha e doces japoneses (~1h).", klookId: "matcha-osaka" },
       { time: "19:30", kind: "klook", what: "Barquinho no canal de Dotonbori (20 min).", klookId: "dotonbori-boat", map: "Tazaemonbashi pier" },
-      { time: "20:00", kind: "comida", what: "Jantar de despedida e bar em Dotonbori." },
+      { time: "20:00", kind: "comida", what: "⭐ Lista da Gio: Jantar de despedida: Yakiniku Like, churrasco individual na chapa (~¥580) — o Google Maps mostra a unidade mais perto de Namba. Depois, bar em Dotonbori.", map: "Yakiniku Like Namba" },
     ],
   },
   {
@@ -192,7 +196,7 @@ export const ROUTE_DAYS = [
       { time: "09:00", kind: "transp", what: "Check-out e deixar a mala no hotel." },
       { time: "09:30", kind: "klook", what: "Mirante Harukas 300 (~1h).", klookId: "harukas", map: "Abeno Harukas 300" },
       { time: "11:00", kind: "klook", what: "Torre Tsutenkaku + escorregador gigante (15 min a pé do Harukas).", klookId: "tsutenkaku", map: "Tsutenkaku" },
-      { time: "12:00", kind: "comida", what: "Almoço de kushikatsu (espetinho empanado) em Shinsekai.", map: "Shinsekai Kushikatsu Daruma" },
+      { time: "12:00", kind: "comida", what: "⭐ Lista da Gio: Kushikatsu Daruma (~¥600) — aqui em Shinsekai fica a loja original, a mesma rede da de Dotonbori. Regra da casa: não molhar duas vezes no molho!", map: "Kushikatsu Daruma Shinsekai Main Store" },
       { time: "13:30", kind: "transp", what: "Buscar a mala, metrô até Shin-Osaka (15 min) e trem-bala ~14:00 até Tóquio (2h30); ônibus da Estação de Tóquio até Narita (~1h10). Alternativa: voo barato Kansai → Narita.", trains: "os-nrt" },
       { time: "Noite", kind: "transp", what: "Check-in na cápsula 9h, no Terminal 2 de Narita." },
     ],
