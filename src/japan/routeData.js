@@ -204,7 +204,7 @@ export const ROUTE_DAYS = [
   {
     n: 14, date: "Ter 22/12", city: "narita", title: "Volta para casa", pace: "leve",
     slots: [
-      { time: "Manhã", kind: "transp", what: "Check-out da cápsula até 10:00, no Terminal 2." },
+      { time: "10:00", kind: "transp", what: "Check-out da cápsula (Terminal 2) e ônibus grátis até o Terminal 1: o voo da KLM sai do Terminal 1." },
       { time: "13:35", kind: "transp", what: "Voo de volta saindo de Narita." },
     ],
   },

@@ -190,3 +190,125 @@ export const TRAIN_EVENTS = [
     desc: "Trem-bala Nozomi Shin-Osaka → Tóquio (~2h30), comprar no smartEX com EX Hayatoku 21 (¥12.980 por pessoa): venda de 20/11 22:00 a 30/11 11:30 (Brasília). Na Estação de Tóquio, saída Yaesu: ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500, compra no guichê). Check-in na cápsula até meia-noite.",
   },
 ];
+
+// TODOS OS TRENS DA VIAGEM, dia a dia (preço por pessoa).
+// pay: "suica" (só passar o cartão) | "comprar" (bilhete com prazo) | "reservar" (assento opcional) | "voucher"
+export const TRAIN_PAY = {
+  suica: { label: "Passa o Suica", cls: "bg-sky-500/15 text-sky-100 border-sky-400/30" },
+  comprar: { label: "Comprar antes", cls: "bg-rose-500/20 text-rose-100 border-rose-400/40" },
+  reservar: { label: "Reservar assento", cls: "bg-amber-500/20 text-amber-100 border-amber-400/40" },
+  voucher: { label: "No voucher", cls: "bg-emerald-500/20 text-emerald-100 border-emerald-400/40" },
+  gratis: { label: "Grátis", cls: "bg-white/10 text-slate-200 border-white/20" },
+};
+
+export const TRAIN_PLAN = [
+  {
+    day: 1, date: "Qua 09/12",
+    rides: [
+      { time: "~12:50", from: "Aeroporto de Narita, Terminal 1", to: "Higashi-Nihombashi (hotel)", line: "Keisei Access Express (direto, sem baldeação)", duration: "~60 min", yen: 1370, pay: "suica",
+        note: "O KLM pousa no Terminal 1: a estação fica no subsolo. Antes da catraca, comprem o Welcome Suica na máquina (ou usem o Suica do iPhone). Se a recarga pelo cartão falhar, dá para pôr dinheiro em qualquer máquina de estação." },
+    ],
+  },
+  {
+    day: 2, date: "Qui 10/12",
+    rides: [
+      { time: "09:10", from: "Higashi-Nihombashi", to: "Asakusa", line: "Metrô Toei Asakusa (direto)", duration: "8 min", yen: 180, pay: "suica" },
+      { time: "16:45", from: "Asakusa", to: "Suehirocho (Akihabara)", line: "Metrô Ginza", duration: "6 min", yen: 180, pay: "suica" },
+    ],
+  },
+  {
+    day: 3, date: "Sex 11/12",
+    rides: [
+      { time: "09:20", from: "Bakurocho (ao lado do hotel)", to: "Harajuku", line: "JR Sobu até Akihabara + JR Yamanote", duration: "~35 min", yen: 270, pay: "suica" },
+      { time: "20:30", from: "Shibuya", to: "Hotel", line: "Metrô Hanzomon até Mitsukoshimae + 10 min a pé (ou o caminho que o Google mostrar)", duration: "~30 min", yen: 210, pay: "suica" },
+    ],
+  },
+  {
+    day: 4, date: "Sáb 12/12",
+    rides: [
+      { time: "08:00", from: "Higashi-Nihombashi", to: "Tsukiji", line: "Metrô Toei Asakusa até Higashi-Ginza", duration: "~15 min", yen: 180, pay: "suica" },
+      { time: "20:30", from: "Kamiyacho (Azabudai Hills)", to: "Hotel", line: "Metrô Hibiya até Kodenmacho + 5 min a pé", duration: "~25 min", yen: 210, pay: "suica" },
+    ],
+  },
+  {
+    day: 5, date: "Dom 13/12",
+    rides: [
+      { time: "10:30", from: "Hotel", to: "Shimokitazawa", line: "Metrô até Shinjuku + linha Odakyu", duration: "~40 min", yen: 400, pay: "suica" },
+      { time: "15:45", from: "Shinjuku", to: "Keio-Yomiuri-Land", line: "Linha Keio + gôndola do parque até a entrada", duration: "~40 min", yen: 310, pay: "suica" },
+      { time: "20:30", from: "Keio-Yomiuri-Land", to: "Hotel", line: "Linha Keio até Shinjuku + metrô Toei Shinjuku até Bakuro-Yokoyama", duration: "~1h", yen: 600, pay: "suica" },
+    ],
+  },
+  {
+    day: 6, date: "Seg 14/12",
+    rides: [
+      { time: "09:40", from: "Bakurocho", to: "Estação de Tóquio", line: "JR Sobu Rapid (2 paradas)", duration: "5 min", yen: 160, pay: "suica", note: "Estejam às 9:55 na plataforma do Tokaido Shinkansen." },
+      { time: "10:12", from: "Tóquio", to: "Kyoto", line: "🚄 Shinkansen NOZOMI 23 (N700S) · fileira E", duration: "2h11", yen: 12430, pay: "comprar",
+        note: "AINDA NÃO COMPRADO. smartEX → EX Hayatoku 21 → 2 adultos. Prazo: 23/11 às 11:30 (Brasília). Embarque com QR Ticket.", link: "https://smart-ex.jp/en/" },
+      { time: "12:30", from: "Estação de Kyoto", to: "Hotel (Shijo-Omiya)", line: "Ônibus 206 ou 26, ou táxi (~¥1.500)", duration: "~20 min", yen: 230, pay: "suica" },
+      { time: "13:30", from: "Shijo-Omiya", to: "Kinkaku-ji", line: "Ônibus 205 (ou 12)", duration: "~30 min", yen: 230, pay: "suica" },
+    ],
+  },
+  {
+    day: 7, date: "Ter 15/12",
+    rides: [
+      { time: "Dia", from: "Kyoto", to: "Uji + Nara (ou Himeji)", line: "JR Nara (Uji e Nara) — ou JR Special Rapid até Himeji", duration: "~20–90 min por trecho", yen: 1500, pay: "suica",
+        note: "Para ir a Nara no trem bonito Aoniyoshi (Kintetsu, saindo de Kyoto): reserva no site da Kintetsu, já aberta (1 mês antes). Himeji sai ~¥4.600 ida e volta.", link: "https://www.kintetsu.co.jp/foreign/english/aoniyoshi/" },
+    ],
+  },
+  {
+    day: 8, date: "Qua 16/12",
+    rides: [
+      { time: "06:30", from: "Omiya", to: "Fushimi Inari", line: "Hankyu até Kawaramachi + Keihan de Gion-Shijo até Fushimi-Inari", duration: "~30 min", yen: 450, pay: "suica" },
+      { time: "10:30", from: "Inari", to: "Estação de Kyoto", line: "JR Nara (2 paradas)", duration: "5 min", yen: 150, pay: "suica" },
+      { time: "14:30", from: "Estação de Kyoto", to: "Kiyomizu", line: "Ônibus 206 ou táxi", duration: "~15 min", yen: 230, pay: "suica" },
+    ],
+  },
+  {
+    day: 9, date: "Qui 17/12",
+    rides: [
+      { time: "10:00", from: "Omiya → Karasuma", to: "Osaka-Umeda", line: "🚃 Hankyu Expresso Limitado · vagão 4 PRiVACE", duration: "~40 min", yen: 910, pay: "reservar",
+        note: "¥410 no Suica + ¥500 do assento PRiVACE. Reserva abre 03/12, como Guest. Sem reserva também dá (vagão comum, ¥410).", link: "https://www.hankyu.co.jp/privace/en/guide/" },
+      { time: "10:50", from: "Umeda", to: "Honmachi (hotel)", line: "Metrô Midosuji (2 paradas)", duration: "5 min", yen: 240, pay: "suica" },
+      { time: "17:30", from: "Honmachi", to: "Castelo de Osaka", line: "Metrô Chuo até Morinomiya", duration: "~10 min", yen: 240, pay: "suica" },
+    ],
+  },
+  {
+    day: 10, date: "Sex 18/12",
+    rides: [
+      { time: "09:30", from: "Osaka (Umeda)", to: "Sannomiya (Kobe)", line: "JR Special Rapid", duration: "~22 min", yen: 420, pay: "suica" },
+      { time: "10:00", from: "Sannomiya", to: "Shin-Kobe", line: "Metrô Seishin-Yamate (1 parada)", duration: "2 min", yen: 210, pay: "suica" },
+      { time: "16:15", from: "Sannomiya", to: "Kobe Illuminage", line: "Ônibus do evento (horário no voucher)", duration: "~45 min", yen: 0, pay: "voucher" },
+      { time: "19:30", from: "Kobe", to: "Osaka", line: "Ônibus de volta + JR Special Rapid", duration: "~1h15", yen: 420, pay: "suica" },
+    ],
+  },
+  {
+    day: 11, date: "Sáb 19/12",
+    rides: [
+      { time: "07:45", from: "Honmachi", to: "Universal City", line: "Metrô Chuo até Bentencho + JR até Nishikujo + JR Yumesaki", duration: "~30 min", yen: 420, pay: "suica" },
+    ],
+  },
+  {
+    day: 12, date: "Dom 20/12",
+    rides: [
+      { time: "09:45", from: "Honmachi", to: "Nakazakicho", line: "Metrô Midosuji até Umeda + Tanimachi (1 parada)", duration: "~12 min", yen: 240, pay: "suica" },
+      { time: "16:00", from: "Umeda", to: "Shinsaibashi", line: "Metrô Midosuji", duration: "6 min", yen: 240, pay: "suica" },
+    ],
+  },
+  {
+    day: 13, date: "Seg 21/12",
+    rides: [
+      { time: "09:15", from: "Honmachi", to: "Tennoji", line: "Metrô Midosuji", duration: "10 min", yen: 240, pay: "suica" },
+      { time: "13:40", from: "Honmachi (buscar a mala)", to: "Shin-Osaka", line: "Metrô Midosuji (direto)", duration: "12 min", yen: 240, pay: "suica" },
+      { time: "~14:00", from: "Shin-Osaka", to: "Tóquio", line: "🚄 Shinkansen Nozomi (escolher o horário no smartEX)", duration: "2h30", yen: 12980, pay: "comprar",
+        note: "AINDA NÃO COMPRADO. EX Hayatoku 21: venda de 20/11 às 22:00 até 30/11 às 11:30 (Brasília).", link: "https://smart-ex.jp/en/" },
+      { time: "~16:45", from: "Estação de Tóquio (saída Yaesu)", to: "Narita Terminal 2", line: "Ônibus TYO-NRT", duration: "~1h10", yen: 1500, pay: "suica", note: "Sem reserva: paga no guichê ou no ônibus. Desçam no Terminal 2 (a cápsula fica no subsolo)." },
+    ],
+  },
+  {
+    day: 14, date: "Ter 22/12",
+    rides: [
+      { time: "~10:00", from: "Narita Terminal 2 (cápsula)", to: "Narita Terminal 1 (KLM)", line: "Ônibus grátis entre terminais (a cada ~7 min)", duration: "~10 min", yen: 0, pay: "gratis",
+        note: "O voo KL0862 sai do Terminal 1, não do 2. Check-out da cápsula até 10:00 e já peguem o ônibus." },
+    ],
+  },
+];

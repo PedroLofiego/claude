@@ -33,7 +33,7 @@ export const FLIGHTS = [
   { n: "KL2331", from: "Salvador (SSA)", to: "Paris (CDG)", local: "Seg 07/12 18:35 → Ter 08/12 08:15", utc: ["2026-12-07T21:35Z", "2026-12-08T07:15Z"], note: "Operado pela Air France · Boeing 787-9" },
   { n: "KL2008", from: "Paris (CDG)", to: "Amsterdã (AMS)", local: "Ter 08/12 11:40 → 13:10", utc: ["2026-12-08T10:40Z", "2026-12-08T12:10Z"], note: "Operado pela Air France · conexão de 3h25 em Paris" },
   { n: "KL0861", from: "Amsterdã (AMS)", to: "Tóquio Narita (NRT)", local: "Ter 08/12 14:15 → Qua 09/12 11:45 (Japão)", utc: ["2026-12-08T13:15Z", "2026-12-09T02:45Z"], note: "KLM · Boeing 777-200 · conexão de 1h05 em Amsterdã" },
-  { n: "KL0862", from: "Tóquio Narita (NRT)", to: "Amsterdã (AMS)", local: "Ter 22/12 13:35 (Japão) → 19:40", utc: ["2026-12-22T04:35Z", "2026-12-22T18:40Z"], note: "KLM · Boeing 777-200 · chegar a Narita até 10:35 (cápsula fica no próprio Terminal 2)" },
+  { n: "KL0862", from: "Tóquio Narita (NRT)", to: "Amsterdã (AMS)", local: "Ter 22/12 13:35 (Japão) → 19:40", utc: ["2026-12-22T04:35Z", "2026-12-22T18:40Z"], note: "KLM · Boeing 777-200 · sai do TERMINAL 1 (a cápsula fica no Terminal 2: ônibus grátis entre terminais, ~10 min)" },
   { n: "KL1403", from: "Amsterdã (AMS)", to: "Paris (CDG)", local: "Qua 23/12 07:25 → 08:50", utc: ["2026-12-23T06:25Z", "2026-12-23T07:50Z"], note: "KLM · conexão de 11h45 em Amsterdã" },
   { n: "KL2374", from: "Paris (CDG)", to: "Salvador (SSA)", local: "Qua 23/12 10:15 → 16:30", utc: ["2026-12-23T09:15Z", "2026-12-23T19:30Z"], note: "Operado pela Air France · Boeing 777-200" },
 ];

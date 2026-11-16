@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { DayRides } from "./TrainsView.jsx";
+import { TRAIN_PLAN } from "./trainsData.js";
 import { BedDouble, CalendarCheck, CalendarPlus, Clock, Download, ExternalLink, FileText, MapPin, Navigation, Route as RouteIcon, Smartphone, Ticket, Train } from "lucide-react";
 import { KLOOK_ITEMS, KLOOK_PAID_ON, KLOOK_STATUS } from "./klookData.js";
 import { KYOTO_TRIPS, ROUTE_DAYS, ROUTE_KINDS, ROUTE_UPDATED } from "./routeData.js";
@@ -184,6 +186,18 @@ function RouteDay({ d, isToday }) {
           </a>
         </div>
       )}
+      {TRAIN_PLAN.find((t) => t.day === d.n) && (() => {
+        const rides = TRAIN_PLAN.find((t) => t.day === d.n).rides;
+        const buy = rides.some((r) => r.pay === "comprar");
+        return (
+          <details className="mx-4 mt-2 rounded-xl bg-white/[0.03] px-3 py-2" open={buy}>
+            <summary className="cursor-pointer text-sm font-semibold text-sky-200">
+              🚆 Trens do dia ({rides.length}){buy && <span className="ml-1.5 rounded-md bg-rose-500/25 px-1.5 py-0.5 text-[11px] text-rose-100">tem bilhete para comprar</span>}
+            </summary>
+            <div className="mt-2"><DayRides rides={rides} /></div>
+          </details>
+        );
+      })()}
       {(d.tip || d.sleep) && (
         <footer className="space-y-1 border-t border-white/5 px-4 py-2.5 text-xs text-slate-400">
           {d.tip && <p className="text-slate-300">💡 {d.tip}</p>}
