@@ -15,7 +15,7 @@ TZNAME:JST
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-1@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261209
 DTEND;VALUE=DATE:20261210
@@ -37,7 +37,7 @@ DESCRIPTION:11:45 — Pouso em Narita. Trem Access Express direto até Hig
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-2@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261210
 DTEND;VALUE=DATE:20261211
@@ -65,7 +65,7 @@ DESCRIPTION:09:30 — Templo Senso-ji e a rua Nakamise cedo\, antes da mul
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-samurai-tokyo@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261210T133000
 DTEND;TZID=Asia/Tokyo:20261210T143000
@@ -86,7 +86,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-3@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261211
 DTEND;VALUE=DATE:20261212
@@ -112,7 +112,7 @@ DESCRIPTION:10:00 — Santuário Meiji Jingu — floresta no meio da cidad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-shibuya-sky@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261211T154000
 DTEND;TZID=Asia/Tokyo:20261211T164000
@@ -132,7 +132,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-4@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261212
 DTEND;VALUE=DATE:20261213
@@ -158,7 +158,7 @@ DESCRIPTION:08:30 — Café da manhã no Mercado de Tsukiji por conta pró
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-tokyo-tower@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261212T160000
 DTEND;TZID=Asia/Tokyo:20261212T170000
@@ -179,7 +179,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-5@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261213
 DTEND;VALUE=DATE:20261214
@@ -205,7 +205,7 @@ DESCRIPTION:Manhã — Manhã devagar (a Gio rende mais à tarde). Deixar
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-yomiuriland@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261213T170000
 DTEND;TZID=Asia/Tokyo:20261213T200000
@@ -228,30 +228,30 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-6@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261214
 DTEND;VALUE=DATE:20261215
 SUMMARY:🇯🇵 Dia 6 · Chegada em Kyoto: Kinkaku-ji + Nishiki + Gion
-DESCRIPTION:10:12 — Trem-bala NOZOMI 23 Tóquio 10:12 → Kyoto 12:23 (m
- odelo novo N700S\, tomada em todo assento). Sentem na fileira E (lado dir
- eito) para ver o Monte Fuji. Comprar com EX Hayatoku 21 a partir de 13/11
-  22:00 (Brasília).\n12:30 — Deixar mochilas no hotel (Shijo-Omiya) e a
- lmoçar por perto.\n14:00 — Kinkaku-ji\, o Pavilhão Dourado (ônibus 2
- 05\, ~30 min\; a visita leva ~45 min).\n16:00 — Mercado Nishiki e galer
- ias Teramachi/Shinkyogoku\, provando o que der vontade.\n17:30 — ⭐ Li
- sta da Gio: Maccha House Kawaramachi — o tiramisu de matcha famoso (~¥
- 850)\, na saída do Nishiki\, 2 min da estação Kawaramachi.\n18:45 — 
- Jantar em Pontocho\, o beco à beira do rio.\n20:00 — Gion à noite: Ha
- namikoji e o canal Shirakawa com lanternas.\n\nRota do dia no Google Maps
- : https://www.google.com/maps/dir/Kyoto%20Station/Kinkaku-ji/Nishiki%20Ma
- rket/Maccha%20House%20Kyoto%20Kawaramachi/Pontocho/Gion%20Shirakawa/HOTEL
- %20MYSTAYS%20Kyoto%20Shijo/\n\nDorme em: MYSTAYS Kyoto Shijo\n\nRoteiro c
- ompleto: https://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+DESCRIPTION:10:12 — ✅ Trem-bala NOZOMI 23 Tóquio 10:12 → Kyoto 12:2
+ 3 — PAGO. Carro 14\, assentos 10D e 10E (o E é janela\, lado do Fuji).
+  Embarque com o QR Ticket do smartEX (My Trips) ou cadastrando o Suica de
+  cada um.\n12:30 — Deixar mochilas no hotel (Shijo-Omiya) e almoçar po
+ r perto.\n14:00 — Kinkaku-ji\, o Pavilhão Dourado (ônibus 205\, ~30 m
+ in\; a visita leva ~45 min).\n16:00 — Mercado Nishiki e galerias Terama
+ chi/Shinkyogoku\, provando o que der vontade.\n17:30 — ⭐ Lista da Gio
+ : Maccha House Kawaramachi — o tiramisu de matcha famoso (~¥850)\, na 
+ saída do Nishiki\, 2 min da estação Kawaramachi.\n18:45 — Jantar em 
+ Pontocho\, o beco à beira do rio.\n20:00 — Gion à noite: Hanamikoji e
+  o canal Shirakawa com lanternas.\n\nRota do dia no Google Maps: https://
+ www.google.com/maps/dir/Kyoto%20Station/Kinkaku-ji/Nishiki%20Market/Macch
+ a%20House%20Kyoto%20Kawaramachi/Pontocho/Gion%20Shirakawa/HOTEL%20MYSTAYS
+ %20Kyoto%20Shijo/\n\nDorme em: MYSTAYS Kyoto Shijo\n\nRoteiro completo: h
+ ttps://pedrolofiego.github.io/claude/#/japao/roteiro/rota
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-7@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261215
 DTEND;VALUE=DATE:20261216
@@ -266,7 +266,7 @@ DESCRIPTION:Dia todo — Bate-volta escolhido na aba “Bate-volta de Kyot
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-8@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261216
 DTEND;VALUE=DATE:20261217
@@ -291,7 +291,7 @@ DESCRIPTION:07:00 — Fushimi Inari vazio. Pedro sobe a montanha inteira (
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-teamlab-kyoto@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261216T110000
 DTEND;TZID=Asia/Tokyo:20261216T123000
@@ -311,7 +311,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-9@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261217
 DTEND;VALUE=DATE:20261218
@@ -332,7 +332,7 @@ DESCRIPTION:10:00 — Linha Hankyu: de Omiya 1 parada até Karasuma\, e l
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-osaka-illuminage@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261217T180000
 DTEND;TZID=Asia/Tokyo:20261217T190000
@@ -352,7 +352,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-10@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261218
 DTEND;VALUE=DATE:20261219
@@ -375,7 +375,7 @@ DESCRIPTION:09:30 — JR de Osaka até Sannomiya (~25 min) e metrô até S
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-kobe-ropeway@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261218T103000
 DTEND;TZID=Asia/Tokyo:20261218T123000
@@ -396,7 +396,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-kobe-illuminage@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261218T173000
 DTEND;TZID=Asia/Tokyo:20261218T190000
@@ -416,7 +416,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-11@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261219
 DTEND;VALUE=DATE:20261220
@@ -437,7 +437,7 @@ DESCRIPTION:07:45 — Metrô Chuo até Bentencho e linha JR Yumesaki até
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-usj@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261219T083000
 DTEND;TZID=Asia/Tokyo:20261219T183000
@@ -462,7 +462,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-12@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261220
 DTEND;VALUE=DATE:20261221
@@ -488,7 +488,7 @@ DESCRIPTION:10:00 — ⭐ Lista da Gio: Onigiri Gorichan\, café da manhã
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-matcha-osaka@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261220T180000
 DTEND;TZID=Asia/Tokyo:20261220T190000
@@ -509,7 +509,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dotonbori-boat@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261220T193000
 DTEND;TZID=Asia/Tokyo:20261220T195000
@@ -530,7 +530,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-13@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261221
 DTEND;VALUE=DATE:20261222
@@ -540,18 +540,20 @@ DESCRIPTION:09:00 — Check-out e deixar a mala no hotel.\n09:30 — Miran
  (15 min a pé do Harukas).\n12:00 — ⭐ Lista da Gio: Kushikatsu Daruma
   (~¥600) — aqui em Shinsekai fica a loja original\, a mesma rede da de
   Dotonbori. Regra da casa: não molhar duas vezes no molho!\n13:30 — Bu
- scar a mala\, metrô até Shin-Osaka (15 min) e trem-bala ~14:00 até Tó
- quio (2h30)\; ônibus da Estação de Tóquio até Narita (~1h10). Altern
- ativa: voo barato Kansai → Narita.\nNoite — Check-in na cápsula 9h\,
-  no Terminal 2 de Narita.\n\nRota do dia no Google Maps: https://www.goog
- le.com/maps/dir/Travelodge%20Honmachi%20Osaka/Abeno%20Harukas%20300/Tsute
- nkaku/Kushikatsu%20Daruma%20Shinsekai%20Main%20Store/9h%20nine%20hours%20
- Narita%20Airport/\n\nDorme em: 9h nine hours Narita (cápsula)\n\nRoteiro
-  completo: https://pedrolofiego.github.io/claude/#/japao/roteiro/rota
+ scar a mala e metrô Midosuji até Shin-Osaka (12 min). ✅ Trem-bala NOZ
+ OMI 256 Shin-Osaka 14:15 → Tóquio 16:45 — PAGO (assentos chegam por 
+ e-mail em 21/11). Na Estação de Tóquio\, saída Yaesu\, ônibus TYO-NR
+ T até Narita Terminal 2 (~1h10\, ¥1.500).\nNoite — Check-in na cápsu
+ la 9h\, no Terminal 2 de Narita.\n\nRota do dia no Google Maps: https://w
+ ww.google.com/maps/dir/Travelodge%20Honmachi%20Osaka/Abeno%20Harukas%2030
+ 0/Tsutenkaku/Kushikatsu%20Daruma%20Shinsekai%20Main%20Store/9h%20nine%20h
+ ours%20Narita%20Airport/\n\nDorme em: 9h nine hours Narita (cápsula)\n\n
+ Roteiro completo: https://pedrolofiego.github.io/claude/#/japao/roteiro/r
+ ota
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-harukas@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261221T093000
 DTEND;TZID=Asia/Tokyo:20261221T103000
@@ -572,7 +574,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-tsutenkaku@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261221T110000
 DTEND;TZID=Asia/Tokyo:20261221T120000
@@ -593,7 +595,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-dia-14@pedrolofiego.github.io
 DTSTART;VALUE=DATE:20261222
 DTEND;VALUE=DATE:20261223
@@ -605,7 +607,7 @@ DESCRIPTION:10:00 — Check-out da cápsula (Terminal 2) e ônibus grátis
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-voo-KL2331@pedrolofiego.github.io
 DTSTART:20261207T213500Z
 DTEND:20261208T071500Z
@@ -621,7 +623,7 @@ TRIGGER:-PT3H
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-voo-KL2008@pedrolofiego.github.io
 DTSTART:20261208T104000Z
 DTEND:20261208T121000Z
@@ -637,7 +639,7 @@ TRIGGER:-PT3H
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-voo-KL0861@pedrolofiego.github.io
 DTSTART:20261208T131500Z
 DTEND:20261209T024500Z
@@ -654,7 +656,7 @@ TRIGGER:-PT3H
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-voo-KL0862@pedrolofiego.github.io
 DTSTART:20261222T043500Z
 DTEND:20261222T184000Z
@@ -671,7 +673,7 @@ TRIGGER:-PT3H
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-voo-KL1403@pedrolofiego.github.io
 DTSTART:20261223T062500Z
 DTEND:20261223T075000Z
@@ -687,7 +689,7 @@ TRIGGER:-PT3H
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-voo-KL2374@pedrolofiego.github.io
 DTSTART:20261223T091500Z
 DTEND:20261223T193000Z
@@ -703,7 +705,7 @@ TRIGGER:-PT3H
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-in-comfort-tokyo@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261209T150000
 DTEND;TZID=Asia/Tokyo:20261209T153000
@@ -720,7 +722,7 @@ DESCRIPTION:Endereço: 1-10-11 Nihombashi Bakurocho\, Chuo-ku\, Tokyo 103-
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-out-comfort-tokyo@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261214T093000
 DTEND;TZID=Asia/Tokyo:20261214T100000
@@ -741,7 +743,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-in-mystays-kyoto@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261214T140000
 DTEND;TZID=Asia/Tokyo:20261214T143000
@@ -759,7 +761,7 @@ DESCRIPTION:Endereço: 52 Kasaboko-cho\, Shijo-dori Aburanokoji Higashiiru
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-out-mystays-kyoto@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261217T103000
 DTEND;TZID=Asia/Tokyo:20261217T110000
@@ -780,7 +782,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-in-travelodge-osaka@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261217T150000
 DTEND;TZID=Asia/Tokyo:20261217T153000
@@ -796,7 +798,7 @@ DESCRIPTION:Endereço: 3-2-6 Azuchimachi\, Chuo-ku\, Osaka\nTelefone: +81
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-out-travelodge-osaka@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261221T093000
 DTEND;TZID=Asia/Tokyo:20261221T100000
@@ -815,7 +817,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-in-9h-narita@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261221T140000
 DTEND;TZID=Asia/Tokyo:20261221T143000
@@ -836,7 +838,7 @@ DESCRIPTION:Endereço: Narita International Airport Terminal 2 (B1)\, 1-1
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-hotel-out-9h-narita@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261222T093000
 DTEND;TZID=Asia/Tokyo:20261222T100000
@@ -860,17 +862,17 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-trem-tq-ky@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261214T101200
 DTEND;TZID=Asia/Tokyo:20261214T122300
 SUMMARY:🚄 NOZOMI 23 Tóquio 10:12 → Kyoto 12:23
 LOCATION:Tokyo Station
-DESCRIPTION:Trem-bala Nozomi 23 (N700S). Assentos fileira E (lado do Fuji)
- . Comprar no smartEX com EX Hayatoku 21 (¥12.430 por pessoa): venda de 1
- 3/11 22:00 a 23/11 11:30 (Brasília). Embarque com o QR Ticket do smartEX
- . Chegar à plataforma 15 min antes.\n\nOpções\, preços e links: https
- ://pedrolofiego.github.io/claude/#/japao/organizar/transporte
+DESCRIPTION:PAGO (smartEX\, ¥27.540 os dois). Carro 14\, assentos 10D e 1
+ 0E — o E é janela\, lado do Fuji. Embarque com o QR Ticket do smartEX 
+ ou o Suica cadastrado. Estar na plataforma 15 min antes.\n\nOpções\, pr
+ eços e links: https://pedrolofiego.github.io/claude/#/japao/organizar/tr
+ ansporte
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:🚄 NOZOMI 23 Tóquio 10:12 → Kyoto 12:23
@@ -878,7 +880,7 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-trem-ky-os@pedrolofiego.github.io
 DTSTART;TZID=Asia/Tokyo:20261217T100000
 DTEND;TZID=Asia/Tokyo:20261217T104500
@@ -896,21 +898,22 @@ TRIGGER:-PT60M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20261116T165447Z
+DTSTAMP:20261116T220451Z
 UID:voaja-japao-trem-os-nrt@pedrolofiego.github.io
-DTSTART;TZID=Asia/Tokyo:20261221T140000
-DTEND;TZID=Asia/Tokyo:20261221T183000
-SUMMARY:🚄 Shin-Osaka → Tóquio + ônibus até Narita
+DTSTART;TZID=Asia/Tokyo:20261221T141500
+DTEND;TZID=Asia/Tokyo:20261221T181500
+SUMMARY:🚄 NOZOMI 256 Shin-Osaka 14:15 → Tóquio 16:45 + ônibus até 
+ Narita
 LOCATION:Shin-Osaka Station
-DESCRIPTION:Trem-bala Nozomi Shin-Osaka → Tóquio (~2h30)\, comprar no s
- martEX com EX Hayatoku 21 (¥12.980 por pessoa): venda de 20/11 22:00 a 3
- 0/11 11:30 (Brasília). Na Estação de Tóquio\, saída Yaesu: ônibus T
- YO-NRT até Narita Terminal 2 (~1h10\, ¥1.500\, compra no guichê). Chec
- k-in na cápsula até meia-noite.\n\nOpções\, preços e links: https://
- pedrolofiego.github.io/claude/#/japao/organizar/transporte
+DESCRIPTION:PAGO (smartEX\, ¥28.640 os dois). Assentos confirmados por e-
+ mail em 21/11. Na Estação de Tóquio\, saída Yaesu: ônibus TYO-NRT at
+ é Narita Terminal 2 (~1h10\, ¥1.500\, compra no guichê). Check-in na c
+ ápsula até meia-noite.\n\nOpções\, preços e links: https://pedrolofi
+ ego.github.io/claude/#/japao/organizar/transporte
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:🚄 Shin-Osaka → Tóquio + ônibus até Narita
+DESCRIPTION:🚄 NOZOMI 256 Shin-Osaka 14:15 → Tóquio 16:45 + ônibus a
+ té Narita
 TRIGGER:-PT60M
 END:VALARM
 END:VEVENT

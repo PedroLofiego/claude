@@ -541,7 +541,8 @@ export const BUDGET_LINES = [
   { id: "b-narita", label: "Cápsula 9h Narita (1 noite, 2 pessoas)", brl: 427, sub: "¥13.110", group: "hospedagem", status: "pago" },
   { id: "b-ingressos-pagos", label: "Ingressos pagos na Klook (11 reservas, 2 pessoas)", brl: TICKETS_PAID_BRL, sub: `US$ ${usd(TICKETS_PAID_USD)} · cotação ~R$ ${KLOOK_USD_BRL.toLocaleString("pt-BR")} + IOF 3,5% — o valor exato vem na fatura do cartão`, group: "passeios", status: "pago" },
   { id: "b-ingressos-faltam", label: `Ingressos que faltam (${TICKETS_OPEN.length}: ${TICKETS_OPEN.map((i) => i.name.split(" — ")[0]).join(", ")})`, brl: TICKETS_OPEN_BRL, sub: "Estimado pelo preço da Klook — uns no carrinho, outros esperando a venda abrir", group: "passeios", status: "aberto" },
-  { id: "b-trens", label: "Trens entre as cidades (Tóquio → Kyoto → Osaka → Narita)", brl: 905, sub: "Hayatoku 21 ida ¥12.430 + Hankyu PRiVACE ¥910 + Hayatoku 21 volta ¥12.980 + ônibus ¥1.500 ≈ ¥27.800 por pessoa", perPerson: true, group: "transporte", status: "estimado" },
+  { id: "b-trens", label: "Trens-bala Tóquio → Kyoto e Shin-Osaka → Tóquio (smartEX)", brl: 1894, sub: "Pago em 16/11: ¥27.540 + ¥28.640 = ¥56.180 os dois (com IOF de 3,5%)", group: "transporte", status: "pago" },
+  { id: "b-trens-resto", label: "Hankyu Kyoto → Osaka (PRiVACE) + ônibus Tóquio → Narita", brl: 79, sub: "¥910 + ¥1.500 ≈ ¥2.410 por pessoa", perPerson: true, group: "transporte", status: "estimado" },
   { id: "b-diario", label: "Alimentação e gastos diários", brl: 3900, sub: "R$ 300 por pessoa por dia × 13 dias", perPerson: true, group: "diario", status: "estimado" },
 ];
 
@@ -551,8 +552,7 @@ export const CHECKLIST = [
   { id: "c-klook-resto2", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12) e aula de matcha (20/12, agora às 18:00)" },
   { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 (a venda de dezembro abre por volta de 11/11)" },
   { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
-  { id: "c-trem-ida", label: "Comprar trem-bala Tóquio → Kyoto (14/12) no smartEX com desconto Hayatoku 21: abre 13/11 às 22:00 e fecha 23/11 às 11:30 (horário de Brasília). Antes: criar conta no smartEX com cartão de crédito" },
-  { id: "c-trem-volta", label: "Comprar trem-bala Shin-Osaka → Tóquio (21/12) com Hayatoku 21: abre 20/11 às 22:00 e fecha 30/11 às 11:30 (Brasília) — ou decidir pelo voo Kansai → Narita" },
+  { id: "c-trem-volta", label: "21/11: conferir no e-mail do smartEX os assentos do Nozomi 256 (volta de 21/12) e, se quiser, trocar para lugares lado a lado" },
   { id: "c-privace", label: "Reservar o assento PRiVACE da Hankyu Kyoto → Osaka (17/12) — abre 14 dias antes, em 03/12" },
   { id: "c-batevolta", label: "Escolher o bate-volta de Kyoto do dia 15/12" },
   { id: "c-esim", label: "Configurar eSIM ou reservar Wi-Fi portátil" },

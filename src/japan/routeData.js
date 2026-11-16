@@ -100,7 +100,7 @@ export const ROUTE_DAYS = [
     from: "Kyoto Station", end: "HOTEL MYSTAYS Kyoto Shijo",
     sleep: "MYSTAYS Kyoto Shijo",
     slots: [
-      { time: "10:12", kind: "transp", what: "Trem-bala NOZOMI 23 Tóquio 10:12 → Kyoto 12:23 (modelo novo N700S, tomada em todo assento). Sentem na fileira E (lado direito) para ver o Monte Fuji. Comprar com EX Hayatoku 21 a partir de 13/11 22:00 (Brasília).", trains: "tq-ky" },
+      { time: "10:12", kind: "transp", what: "✅ Trem-bala NOZOMI 23 Tóquio 10:12 → Kyoto 12:23 — PAGO. Carro 14, assentos 10D e 10E (o E é janela, lado do Fuji). Embarque com o QR Ticket do smartEX (My Trips) ou cadastrando o Suica de cada um.", trains: "tq-ky" },
       { time: "12:30", kind: "transp", what: "Deixar mochilas no hotel (Shijo-Omiya) e almoçar por perto." },
       { time: "14:00", kind: "perna", what: "Kinkaku-ji, o Pavilhão Dourado (ônibus 205, ~30 min; a visita leva ~45 min).", map: "Kinkaku-ji" },
       { time: "16:00", kind: "perna", what: "Mercado Nishiki e galerias Teramachi/Shinkyogoku, provando o que der vontade.", map: "Nishiki Market" },
@@ -197,7 +197,7 @@ export const ROUTE_DAYS = [
       { time: "09:30", kind: "klook", what: "Mirante Harukas 300 (~1h).", klookId: "harukas", map: "Abeno Harukas 300" },
       { time: "11:00", kind: "klook", what: "Torre Tsutenkaku + escorregador gigante (15 min a pé do Harukas).", klookId: "tsutenkaku", map: "Tsutenkaku" },
       { time: "12:00", kind: "comida", what: "⭐ Lista da Gio: Kushikatsu Daruma (~¥600) — aqui em Shinsekai fica a loja original, a mesma rede da de Dotonbori. Regra da casa: não molhar duas vezes no molho!", map: "Kushikatsu Daruma Shinsekai Main Store" },
-      { time: "13:30", kind: "transp", what: "Buscar a mala, metrô até Shin-Osaka (15 min) e trem-bala ~14:00 até Tóquio (2h30); ônibus da Estação de Tóquio até Narita (~1h10). Alternativa: voo barato Kansai → Narita.", trains: "os-nrt" },
+      { time: "13:30", kind: "transp", what: "Buscar a mala e metrô Midosuji até Shin-Osaka (12 min). ✅ Trem-bala NOZOMI 256 Shin-Osaka 14:15 → Tóquio 16:45 — PAGO (assentos chegam por e-mail em 21/11). Na Estação de Tóquio, saída Yaesu, ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500).", trains: "os-nrt" },
       { time: "Noite", kind: "transp", what: "Check-in na cápsula 9h, no Terminal 2 de Narita." },
     ],
   },

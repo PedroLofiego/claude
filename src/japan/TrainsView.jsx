@@ -41,8 +41,8 @@ function AllRides() {
     <section className="card p-4">
       <h2 className="flex items-center gap-2 text-base font-bold text-white"><Train size={18} className="text-sky-300" /> Todos os trens da viagem, dia a dia</h2>
       <p className="mt-1 text-sm text-slate-300">
-        Quase tudo é só passar o <b className="text-white">Suica</b> na catraca. Só {toBuy.length} trechos precisam de bilhete comprado antes
-        (os trens-bala, em vermelho) e 1 tem assento opcional para reservar (Hankyu PRiVACE).
+        Quase tudo é só passar o <b className="text-white">Suica</b> na catraca. Os 2 trens-bala já estão <b className="text-emerald-200">pagos ✓</b>
+        {toBuy.length > 0 && <> · faltam {toBuy.length} bilhetes</>} e 1 trecho tem assento opcional para reservar (Hankyu PRiVACE, a partir de 03/12).
       </p>
       <div className="mt-3 space-y-4">
         {TRAIN_PLAN.map((d) => (

@@ -175,7 +175,7 @@ export const TRAIN_EVENTS = [
     id: "tq-ky", start: "2026-12-14T10:12", end: "2026-12-14T12:23",
     title: "🚄 NOZOMI 23 Tóquio 10:12 → Kyoto 12:23",
     where: "Tokyo Station",
-    desc: "Trem-bala Nozomi 23 (N700S). Assentos fileira E (lado do Fuji). Comprar no smartEX com EX Hayatoku 21 (¥12.430 por pessoa): venda de 13/11 22:00 a 23/11 11:30 (Brasília). Embarque com o QR Ticket do smartEX. Chegar à plataforma 15 min antes.",
+    desc: "PAGO (smartEX, ¥27.540 os dois). Carro 14, assentos 10D e 10E — o E é janela, lado do Fuji. Embarque com o QR Ticket do smartEX ou o Suica cadastrado. Estar na plataforma 15 min antes.",
   },
   {
     id: "ky-os", start: "2026-12-17T10:00", end: "2026-12-17T10:45",
@@ -184,10 +184,10 @@ export const TRAIN_EVENTS = [
     desc: "De Omiya, 1 parada até Karasuma; lá o Expresso Limitado até Osaka-Umeda (~40 min). Vagão 4 = PRiVACE, assento reservado (¥500, reservar a partir de 03/12 como Guest). Passagem ¥410 com Suica. De Umeda, metrô Midosuji 2 paradas até Honmachi.",
   },
   {
-    id: "os-nrt", start: "2026-12-21T14:00", end: "2026-12-21T18:30",
-    title: "🚄 Shin-Osaka → Tóquio + ônibus até Narita",
+    id: "os-nrt", start: "2026-12-21T14:15", end: "2026-12-21T18:15",
+    title: "🚄 NOZOMI 256 Shin-Osaka 14:15 → Tóquio 16:45 + ônibus até Narita",
     where: "Shin-Osaka Station",
-    desc: "Trem-bala Nozomi Shin-Osaka → Tóquio (~2h30), comprar no smartEX com EX Hayatoku 21 (¥12.980 por pessoa): venda de 20/11 22:00 a 30/11 11:30 (Brasília). Na Estação de Tóquio, saída Yaesu: ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500, compra no guichê). Check-in na cápsula até meia-noite.",
+    desc: "PAGO (smartEX, ¥28.640 os dois). Assentos confirmados por e-mail em 21/11. Na Estação de Tóquio, saída Yaesu: ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500, compra no guichê). Check-in na cápsula até meia-noite.",
   },
 ];
 
@@ -197,6 +197,7 @@ export const TRAIN_PAY = {
   suica: { label: "Passa o Suica", cls: "bg-sky-500/15 text-sky-100 border-sky-400/30" },
   comprar: { label: "Comprar antes", cls: "bg-rose-500/20 text-rose-100 border-rose-400/40" },
   reservar: { label: "Reservar assento", cls: "bg-amber-500/20 text-amber-100 border-amber-400/40" },
+  pago: { label: "Pago ✓", cls: "bg-emerald-500/25 text-emerald-100 border-emerald-400/50" },
   voucher: { label: "No voucher", cls: "bg-emerald-500/20 text-emerald-100 border-emerald-400/40" },
   gratis: { label: "Grátis", cls: "bg-white/10 text-slate-200 border-white/20" },
 };
@@ -242,8 +243,8 @@ export const TRAIN_PLAN = [
     day: 6, date: "Seg 14/12",
     rides: [
       { time: "09:40", from: "Bakurocho", to: "Estação de Tóquio", line: "JR Sobu Rapid (2 paradas)", duration: "5 min", yen: 160, pay: "suica", note: "Estejam às 9:55 na plataforma do Tokaido Shinkansen." },
-      { time: "10:12", from: "Tóquio", to: "Kyoto", line: "🚄 Shinkansen NOZOMI 23 (N700S) · fileira E", duration: "2h11", yen: 12430, pay: "comprar",
-        note: "AINDA NÃO COMPRADO. smartEX → EX Hayatoku 21 → 2 adultos. Prazo: 23/11 às 11:30 (Brasília). Embarque com QR Ticket.", link: "https://smart-ex.jp/en/" },
+      { time: "10:12", from: "Tóquio", to: "Kyoto", line: "🚄 Shinkansen NOZOMI 23 (N700S) · carro 14, assentos 10D e 10E", duration: "2h11", yen: 13770, pay: "pago",
+        note: "Comprado em 16/11 no smartEX: ¥27.540 os dois (tarifa normal; o desconto tinha esgotado). Pode trocar de horário de graça até a partida. Embarque: QR Ticket no app/site smartEX (My Trips) ou Suica cadastrado." },
       { time: "12:30", from: "Estação de Kyoto", to: "Hotel (Shijo-Omiya)", line: "Ônibus 206 ou 26, ou táxi (~¥1.500)", duration: "~20 min", yen: 230, pay: "suica" },
       { time: "13:30", from: "Shijo-Omiya", to: "Kinkaku-ji", line: "Ônibus 205 (ou 12)", duration: "~30 min", yen: 230, pay: "suica" },
     ],
@@ -298,10 +299,10 @@ export const TRAIN_PLAN = [
     day: 13, date: "Seg 21/12",
     rides: [
       { time: "09:15", from: "Honmachi", to: "Tennoji", line: "Metrô Midosuji", duration: "10 min", yen: 240, pay: "suica" },
-      { time: "13:40", from: "Honmachi (buscar a mala)", to: "Shin-Osaka", line: "Metrô Midosuji (direto)", duration: "12 min", yen: 240, pay: "suica" },
-      { time: "~14:00", from: "Shin-Osaka", to: "Tóquio", line: "🚄 Shinkansen Nozomi (escolher o horário no smartEX)", duration: "2h30", yen: 12980, pay: "comprar",
-        note: "AINDA NÃO COMPRADO. EX Hayatoku 21: venda de 20/11 às 22:00 até 30/11 às 11:30 (Brasília).", link: "https://smart-ex.jp/en/" },
-      { time: "~16:45", from: "Estação de Tóquio (saída Yaesu)", to: "Narita Terminal 2", line: "Ônibus TYO-NRT", duration: "~1h10", yen: 1500, pay: "suica", note: "Sem reserva: paga no guichê ou no ônibus. Desçam no Terminal 2 (a cápsula fica no subsolo)." },
+      { time: "13:35", from: "Honmachi (buscar a mala)", to: "Shin-Osaka", line: "Metrô Midosuji (direto)", duration: "12 min", yen: 240, pay: "suica" },
+      { time: "14:15", from: "Shin-Osaka", to: "Tóquio", line: "🚄 Shinkansen NOZOMI 256 (começa em Shin-Osaka)", duration: "2h30", yen: 14320, pay: "pago",
+        note: "Comprado em 16/11 no smartEX: ¥28.640 os dois. O smartEX confirma trem e assentos por e-mail em 21/11 (dá para trocar os lugares depois). Pode trocar de horário de graça." },
+      { time: "~17:00", from: "Estação de Tóquio (saída Yaesu)", to: "Narita Terminal 2", line: "Ônibus TYO-NRT", duration: "~1h10", yen: 1500, pay: "suica", note: "Sem reserva: paga no guichê ou no ônibus. Desçam no Terminal 2 (a cápsula fica no subsolo)." },
     ],
   },
   {

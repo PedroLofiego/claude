@@ -181,12 +181,13 @@ for (const h of STAYS) {
 
 // ---------- Trens entre cidades ----------
 for (const t of TRAIN_EVENTS) {
+  const ref = S?.SMARTEX?.[{ "tq-ky": "ida", "os-nrt": "volta" }[t.id]];
   ev([
     `UID:voaja-japao-trem-${t.id}@pedrolofiego.github.io`,
     `DTSTART;TZID=Asia/Tokyo:${local(t.start)}`, `DTEND;TZID=Asia/Tokyo:${local(t.end)}`,
     `SUMMARY:${esc(t.title)}`,
     `LOCATION:${esc(t.where)}`,
-    `DESCRIPTION:${esc(`${t.desc}\n\nOpções, preços e links: ${SITE}/#/japao/organizar/transporte`)}`,
+    `DESCRIPTION:${esc(`${t.desc}${ref ? `\nsmartEX: ${ref}` : ""}\n\nOpções, preços e links: ${SITE}/#/japao/organizar/transporte`)}`,
     "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${esc(t.title)}`, "TRIGGER:-PT60M", "END:VALARM",
   ]);
 }
