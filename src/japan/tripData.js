@@ -552,6 +552,7 @@ export const CHECKLIST = [
   { id: "c-klook-resto2", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12) e aula de matcha (20/12, agora às 18:00)" },
   { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 (a venda de dezembro abre por volta de 11/11)" },
   { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
+  { id: "c-qr", label: "Antes de cada trem-bala: entrar no smartEX pelo celular (My Trips) e deixar os 2 QR Tickets abertos. Leve o celular carregado — o QR é o bilhete" },
   { id: "c-trem-volta", label: "21/11: conferir no e-mail do smartEX os assentos do Nozomi 256 (volta de 21/12) e, se quiser, trocar para lugares lado a lado" },
   { id: "c-privace", label: "Reservar o assento PRiVACE da Hankyu Kyoto → Osaka (17/12) — abre 14 dias antes, em 03/12" },
   { id: "c-batevolta", label: "Escolher o bate-volta de Kyoto do dia 15/12" },

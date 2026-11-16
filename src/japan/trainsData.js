@@ -175,7 +175,7 @@ export const TRAIN_EVENTS = [
     id: "tq-ky", start: "2026-12-14T10:12", end: "2026-12-14T12:23",
     title: "🚄 NOZOMI 23 Tóquio 10:12 → Kyoto 12:23",
     where: "Tokyo Station",
-    desc: "PAGO (smartEX, ¥27.540 os dois). Carro 14, assentos 10D e 10E — o E é janela, lado do Fuji. Embarque com o QR Ticket do smartEX ou o Suica cadastrado. Estar na plataforma 15 min antes.",
+    desc: "PAGO (smartEX, ¥27.540 os dois). Carro 14, assentos 10D e 10E — o E é janela, lado do Fuji. Embarque com QR Ticket (smartEX → My Trips, um QR por pessoa). Estar na plataforma 15 min antes.",
   },
   {
     id: "ky-os", start: "2026-12-17T10:00", end: "2026-12-17T10:45",
@@ -244,7 +244,7 @@ export const TRAIN_PLAN = [
     rides: [
       { time: "09:40", from: "Bakurocho", to: "Estação de Tóquio", line: "JR Sobu Rapid (2 paradas)", duration: "5 min", yen: 160, pay: "suica", note: "Estejam às 9:55 na plataforma do Tokaido Shinkansen." },
       { time: "10:12", from: "Tóquio", to: "Kyoto", line: "🚄 Shinkansen NOZOMI 23 (N700S) · carro 14, assentos 10D e 10E", duration: "2h11", yen: 13770, pay: "pago",
-        note: "Comprado em 16/11 no smartEX: ¥27.540 os dois (tarifa normal; o desconto tinha esgotado). Pode trocar de horário de graça até a partida. Embarque: QR Ticket no app/site smartEX (My Trips) ou Suica cadastrado." },
+        note: "Comprado em 16/11 no smartEX: ¥27.540 os dois (tarifa normal; o desconto tinha esgotado). Pode trocar de horário de graça até a partida. Embarque com QR Ticket: smartEX → My Trips → um QR por pessoa na catraca." },
       { time: "12:30", from: "Estação de Kyoto", to: "Hotel (Shijo-Omiya)", line: "Ônibus 206 ou 26, ou táxi (~¥1.500)", duration: "~20 min", yen: 230, pay: "suica" },
       { time: "13:30", from: "Shijo-Omiya", to: "Kinkaku-ji", line: "Ônibus 205 (ou 12)", duration: "~30 min", yen: 230, pay: "suica" },
     ],
