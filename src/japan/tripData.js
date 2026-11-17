@@ -1,4 +1,5 @@
 import { KLOOK_ITEMS, KLOOK_IOF, KLOOK_USD_BRL, klookPaidUSD } from "./klookData.js";
+import { TRAIN_PLAN } from "./trainsData.js";
 
 /*
  * ============================================================
@@ -89,7 +90,7 @@ export const STAYS = [
     cancel: "Tarifa de empresa parceira",
     notes: [
       "R$ 218 a diária para os dois. É a hospedagem mais barata das três por uma margem enorme.",
-      "Fica na Hankyu, não na Karasuma do metrô: para Fushimi Inari e Arashiyama o trajeto é direto; para a Estação de Kyoto (shinkansen do dia 17) precisa de uma baldeação.",
+      "Fica na Hankyu, não na Karasuma do metrô: para Fushimi Inari e Arashiyama o trajeto é direto; da Estação de Kyoto (chegada do trem-bala no dia 14) até o hotel são ~20 min de ônibus ou táxi; para Osaka no dia 17, a Hankyu sai do lado.",
     ],
   },
   {
@@ -244,15 +245,13 @@ export const SETTLED = [
 
 // ===== 5. LOGÍSTICA ENTRE CIDADES =====
 export const LOGISTICS = [
-  { from: "Narita", to: "Tóquio (Ueno)", mode: "Skyliner", time: "41 min", yen: "¥2.580", yenMid: 2580 },
-  { from: "Narita", to: "Tóquio (Asakusa/Nihonbashi/Shimbashi)", mode: "Access Express (sem baldeação)", time: "~55 min", yen: "¥1.380", yenMid: 1380 },
-  { from: "Tóquio", to: "Kyoto", mode: "Shinkansen Tokaido", time: "~2h15", yen: "~¥14.000", yenMid: 14000 },
-  { from: "Kyoto", to: "Osaka", mode: "Trem local/rápido", time: "~30 min", yen: "¥580", yenMid: 580 },
-  { from: "Osaka", to: "Himeji", mode: "Shinkansen", time: "30–50 min", yen: "¥1.520–2.310", yenMid: 1900 },
-  { from: "Osaka", to: "Kobe", mode: "JR Special Rapid", time: "~22 min", yen: "¥420–1.110", yenMid: 760 },
-  { from: "Osaka", to: "Arima Onsen", mode: "Ônibus direto ou Shinkansen+ônibus", time: "~50–70 min", yen: "~¥1.100–1.400 (confirmar)", yenMid: 1250 },
-  { from: "Osaka/Kyoto", to: "Tóquio (volta)", mode: "Shinkansen", time: "2h15–2h30", yen: "~¥14.000", yenMid: 14000 },
-  { from: "Tóquio", to: "Narita", mode: "N'EX / Access Express", time: "55min–1h", yen: "¥1.380–3.070", yenMid: 2200 },
+  { from: "Narita (Terminal 1)", to: "Higashi-Nihombashi (hotel)", mode: "Keisei Access Express, sem baldeação — no Suica", time: "~60 min", yen: "¥1.370", yenMid: 1370 },
+  { from: "Tóquio", to: "Kyoto", mode: "✅ PAGO · NOZOMI 23 · seg 14/12, 10:12 → 12:23 · carro 14, 10D/10E", time: "2h11", yen: "¥13.770", yenMid: 13770 },
+  { from: "Kyoto (Omiya → Karasuma)", to: "Osaka-Umeda", mode: "Hankyu Expresso Limitado · qui 17/12 ~10:00 · Suica + PRiVACE opcional (reserva abre 03/12)", time: "~40 min", yen: "¥410 + ¥500", yenMid: 910 },
+  { from: "Osaka", to: "Kobe", mode: "JR Special Rapid · sex 18/12 — no Suica", time: "~22 min", yen: "¥420", yenMid: 420 },
+  { from: "Shin-Osaka", to: "Tóquio", mode: "✅ PAGO · NOZOMI 256 · seg 21/12, 14:15 → 16:45 · assentos por e-mail em 21/11", time: "2h30", yen: "¥14.320", yenMid: 14320 },
+  { from: "Estação de Tóquio (Yaesu)", to: "Narita Terminal 2 (cápsula)", mode: "Ônibus TYO-NRT · seg 21/12 ~17:00 — paga no guichê", time: "~1h10", yen: "¥1.500", yenMid: 1500 },
+  { from: "Narita Terminal 2", to: "Terminal 1 (voo KLM)", mode: "Ônibus grátis entre terminais · ter 22/12 ~10:00", time: "~10 min", yen: "grátis", yenMid: 0 },
 ];
 
 export const LOGISTICS_NOTES = [
@@ -532,25 +531,29 @@ const TICKETS_PAID_BRL = Math.round(TICKETS_PAID_USD * KLOOK_USD_BRL * (1 + KLOO
 const TICKETS_OPEN = KLOOK_ITEMS.filter((i) => i.status !== "pago");
 const TICKETS_OPEN_BRL = TICKETS_OPEN.reduce((s, i) => s + (i.priceBRL || 0), 0);
 const usd = (v) => v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// Trens/metrô/ônibus pagos com Suica (do plano dia a dia), sem o ônibus de Narita, que tem linha própria. +20% de folga.
+const LOCAL_YEN = TRAIN_PLAN.flatMap((d) => d.rides).filter((r) => r.pay === "suica" && !/TYO-NRT/.test(r.line)).reduce((s, r) => s + r.yen, 0);
+const LOCAL_BRL = Math.round((LOCAL_YEN * 1.2) / JPY_PER_BRL);
 
 export const BUDGET_LINES = [
   { id: "b-voos", label: "Passagens aéreas (2 pessoas, ida e volta)", brl: 19358, group: "aereo", status: "pago" },
   { id: "b-tokyo", label: "Comfort Hotel Tóquio (5 noites, 2 pessoas)", brl: 2579, group: "hospedagem", status: "pago" },
   { id: "b-kyoto", label: "MYSTAYS Kyoto Shijo (3 noites, 2 pessoas)", brl: 653, group: "hospedagem", status: "pago" },
-  { id: "b-osaka", label: "Travelodge Honmachi Osaka (4 noites, 2 pessoas)", brl: 1098, group: "hospedagem", status: "pago" },
-  { id: "b-narita", label: "Cápsula 9h Narita (1 noite, 2 pessoas)", brl: 427, sub: "¥13.110", group: "hospedagem", status: "pago" },
+  { id: "b-osaka", label: "Travelodge Honmachi Osaka (4 noites, 2 pessoas)", brl: 1118, sub: "¥33.150 — reservado; a Booking cobra no cartão automaticamente antes da estadia (cancelamento grátis até 14/12). + taxa de hospedagem paga no hotel", group: "hospedagem", status: "estimado" },
+  { id: "b-narita", label: "Cápsula 9h Narita (1 noite, 2 pessoas)", brl: 427, sub: "¥12.728, pré-pago", group: "hospedagem", status: "pago" },
   { id: "b-ingressos-pagos", label: "Ingressos pagos na Klook (11 reservas, 2 pessoas)", brl: TICKETS_PAID_BRL, sub: `US$ ${usd(TICKETS_PAID_USD)} · cotação ~R$ ${KLOOK_USD_BRL.toLocaleString("pt-BR")} + IOF 3,5% — o valor exato vem na fatura do cartão`, group: "passeios", status: "pago" },
   { id: "b-ingressos-faltam", label: `Ingressos que faltam (${TICKETS_OPEN.length}: ${TICKETS_OPEN.map((i) => i.name.split(" — ")[0]).join(", ")})`, brl: TICKETS_OPEN_BRL, sub: "Estimado pelo preço da Klook — uns no carrinho, outros esperando a venda abrir", group: "passeios", status: "aberto" },
   { id: "b-trens", label: "Trens-bala Tóquio → Kyoto e Shin-Osaka → Tóquio (smartEX)", brl: 1894, sub: "Pago em 16/11: ¥27.540 + ¥28.640 = ¥56.180 os dois (com IOF de 3,5%)", group: "transporte", status: "pago" },
   { id: "b-trens-resto", label: "Hankyu Kyoto → Osaka (PRiVACE) + ônibus Tóquio → Narita", brl: 79, sub: "¥910 + ¥1.500 ≈ ¥2.410 por pessoa", perPerson: true, group: "transporte", status: "estimado" },
+  { id: "b-local", label: "Metrô, trens locais e ônibus no Suica (14 dias)", brl: LOCAL_BRL, sub: `≈ ¥${LOCAL_YEN.toLocaleString("pt-BR")} por pessoa pelo plano de trens, dia a dia, + 20% de folga (inclui Narita → hotel, Kobe, Universal e o bate-volta)`, perPerson: true, group: "transporte", status: "estimado" },
+  { id: "b-malas", label: "Envio das malas grandes entre hotéis (takkyubin)", brl: 330, sub: "~¥2.500 por mala × 2 malas × 2 envios (Tóquio → Kyoto e Kyoto → Osaka)", group: "transporte", status: "estimado" },
   { id: "b-diario", label: "Alimentação e gastos diários", brl: 3900, sub: "R$ 300 por pessoa por dia × 13 dias", perPerson: true, group: "diario", status: "estimado" },
 ];
 
 // ===== 12. CHECKLIST =====
 export const CHECKLIST = [
-  { id: "c-ghibli", label: "Museu Ghibli: ingressos de dezembro saem 10/11 às 10h do Japão (22h de 09/11 no Brasil), pela Lawson" },
   { id: "c-klook-resto2", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12) e aula de matcha (20/12, agora às 18:00)" },
-  { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 (a venda de dezembro abre por volta de 11/11)" },
+  { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 — a venda de dezembro já deve estar aberta" },
   { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
   { id: "c-qr", label: "Antes de cada trem-bala: entrar no smartEX pelo celular (My Trips) e deixar os 2 QR Tickets abertos. Leve o celular carregado — o QR é o bilhete" },
   { id: "c-trem-volta", label: "21/11: conferir no e-mail do smartEX os assentos do Nozomi 256 (volta de 21/12) e, se quiser, trocar para lugares lado a lado" },
@@ -558,7 +561,7 @@ export const CHECKLIST = [
   { id: "c-batevolta", label: "Escolher o bate-volta de Kyoto do dia 15/12" },
   { id: "c-esim", label: "Configurar eSIM ou reservar Wi-Fi portátil" },
   { id: "c-seguro", label: "Contratar seguro viagem" },
-  { id: "c-suica", label: "Configurar Suica/ICOCA no celular (ou comprar cartão físico na chegada)" },
+  { id: "c-suica", label: "Suica: o Pedro já tem; a Gio precisa do dela (no iPhone, na Carteira, ou Welcome Suica no aeroporto). Deixar ~¥3.000 de saldo em cada" },
   { id: "c-banco", label: "Avisar o banco/cartão sobre a viagem, para evitar bloqueio" },
   { id: "c-restaurante", label: "Reservar restaurantes mais concorridos, se houver algum específico em mente" },
   { id: "c-cancelar", label: "Cancelar reservas alternativas de hotel não usadas (Villa Fontaine, APA, etc.)" },
