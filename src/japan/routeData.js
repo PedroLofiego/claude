@@ -49,7 +49,6 @@ export const ROUTE_DAYS = [
       { time: "17:00", kind: "perna", what: "Akihabara: fliperamas (GiGO, Taito Station), lojas de games retrô (Super Potato), Yodobashi e Bic Camera.", map: "Akihabara Electric Town" },
       { time: "19:30", kind: "comida", what: "⭐ Lista da Gio: Torikizoku, izakaya de espetinho com tudo a ¥370, em Kanda — a 10 min do hotel. Sem reserva; se tiver fila, os izakayas debaixo dos trilhos ficam ao lado.", map: "Torikizoku Kanda" },
     ],
-    tip: "Lista da Gio: o Yoshino Sushi (Arakawa, ~¥2.500) não aparece nos guias com esse nome. Se a Gio mandar o link do Google Maps, eu encaixo — Arakawa fica a ~15 min de Asakusa, então daria para trocar o almoço deste dia.",
   },
   {
     n: 3, date: "Sex 11/12", city: "toquio", title: "Harajuku + Shibuya", pace: "médio",
@@ -73,7 +72,8 @@ export const ROUTE_DAYS = [
     slots: [
       { time: "08:30", kind: "comida", what: "Café da manhã no Mercado de Tsukiji por conta própria: omelete tamagoyaki, sushi, ostras.", map: "Tsukiji Outer Market" },
       { time: "10:30", kind: "perna", what: "Jardim Hama-rikyu (15 min a pé), com casa de chá no lago. Opcional.", map: "Hamarikyu Gardens" },
-      { time: "12:00", kind: "perna", what: "Ginza: no sábado a avenida Chuo-dori fecha para carros à tarde. Itoya (papelaria), Uniqlo e o depachika (andar de comida) do Mitsukoshi.", map: "Ginza Chuo-dori" },
+      { time: "11:30", kind: "comida", what: "⭐ Lista da Gio: Yoshino Sushi Honten — sushi tradicional desde 1879, em Nihonbashi (perto do hotel). Almoço: curso de nigiri ~¥3.850 (a Gio viu ¥2.500, preço antigo). RESERVAR (TableEX, 2–4 semanas antes). Só dinheiro no almoço. Do Hama-rikyu: metrô Toei Asakusa até Nihombashi (~15 min).", map: "Yoshino Sushi Honten Nihonbashi" },
+      { time: "13:00", kind: "perna", what: "Ginza: no sábado a avenida Chuo-dori fecha para carros à tarde. Itoya (papelaria), Uniqlo e o depachika (andar de comida) do Mitsukoshi.", map: "Ginza Chuo-dori" },
       { time: "15:30", kind: "perna", what: "Templo Zojo-ji, ao pé da Tokyo Tower.", map: "Zojo-ji" },
       { time: "16:00", kind: "klook", what: "Tokyo Tower — mirante de 150 m, pôr do sol às 16:29.", klookId: "tokyo-tower", map: "Tokyo Tower" },
       { time: "17:30", kind: "perna", what: "Azabudai Hills e Roppongi Hills: mercado de Natal e a avenida Keyakizaka iluminada.", map: "Roppongi Hills Keyakizaka" },
@@ -130,7 +130,7 @@ export const ROUTE_DAYS = [
       { time: "14:30", kind: "transp", what: "Ônibus ou táxi até Kiyomizu (~15 min)." },
       { time: "15:00", kind: "perna", what: "Kiyomizu-dera e as ladeiras Sannenzaka/Ninenzaka (lojinhas, matcha).", map: "Kiyomizu-dera" },
       { time: "16:45", kind: "perna", what: "Santuário Yasaka e parque Maruyama no fim da tarde.", map: "Yasaka Shrine" },
-      { time: "18:00", kind: "comida", what: "⭐ Lista da Gio: Okonomiyaki Yuu, em Gion (~¥990). Não achei esse nome nos guias: conferir o endereço com a Gio. Plano B a 5 min: Oagari ou Issen Yoshoku. Mala grande para Osaka por takkyubin.", map: "Okonomiyaki Yuu Gion Kyoto" },
+      { time: "18:00", kind: "comida", what: "⭐ Lista da Gio: Yuu — okonomiyaki e teppanyaki em Gion, na rua Hanamikoji (~¥2.000–3.000 por pessoa). Abre às 18:00, só jantar; aceita reserva por telefone (+81 75-533-0788). Plano B famoso do TikTok, a 5 min: Gion Tanto (sem reserva, fila). Mala grande para Osaka por takkyubin.", map: "Yuu Gion Tominagacho Kyoto teppanyaki" },
     ],
   },
   {

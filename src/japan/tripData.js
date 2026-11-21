@@ -563,6 +563,7 @@ export const CHECKLIST = [
   { id: "c-seguro", label: "Contratar seguro viagem" },
   { id: "c-suica", label: "Suica: o Pedro já tem; a Gio precisa do dela (no iPhone, na Carteira, ou Welcome Suica no aeroporto). Deixar ~¥3.000 de saldo em cada" },
   { id: "c-banco", label: "Avisar o banco/cartão sobre a viagem, para evitar bloqueio" },
+  { id: "c-yoshino", label: "Reservar almoço no Yoshino Sushi Honten (sáb 12/12, 11:30, 2 pessoas) pelo TableEX — pede reserva com 2–4 semanas" },
   { id: "c-restaurante", label: "Reservar restaurantes mais concorridos, se houver algum específico em mente" },
   { id: "c-cancelar", label: "Cancelar reservas alternativas de hotel não usadas (Villa Fontaine, APA, etc.)" },
 ];
