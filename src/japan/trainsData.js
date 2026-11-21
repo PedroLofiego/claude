@@ -187,7 +187,7 @@ export const TRAIN_EVENTS = [
     id: "os-nrt", start: "2026-12-21T14:15", end: "2026-12-21T18:15",
     title: "🚄 NOZOMI 256 Shin-Osaka 14:15 → Tóquio 16:45 + ônibus até Narita",
     where: "Shin-Osaka Station",
-    desc: "PAGO (smartEX, ¥28.640 os dois). Assentos confirmados por e-mail em 21/11. Na Estação de Tóquio, saída Yaesu: ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500, compra no guichê). Check-in na cápsula até meia-noite.",
+    desc: "PAGO (smartEX, ¥28.640 os dois). Carro 4, assentos 18A e 18B. Na Estação de Tóquio, saída Yaesu: ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500, compra no guichê). Check-in na cápsula até meia-noite.",
   },
 ];
 
@@ -300,8 +300,8 @@ export const TRAIN_PLAN = [
     rides: [
       { time: "09:15", from: "Honmachi", to: "Tennoji", line: "Metrô Midosuji", duration: "10 min", yen: 240, pay: "suica" },
       { time: "13:35", from: "Honmachi (buscar a mala)", to: "Shin-Osaka", line: "Metrô Midosuji (direto)", duration: "12 min", yen: 240, pay: "suica" },
-      { time: "14:15", from: "Shin-Osaka", to: "Tóquio", line: "🚄 Shinkansen NOZOMI 256 (começa em Shin-Osaka)", duration: "2h30", yen: 14320, pay: "pago",
-        note: "Comprado em 16/11 no smartEX: ¥28.640 os dois. O smartEX confirma trem e assentos por e-mail em 21/11 (dá para trocar os lugares depois). Pode trocar de horário de graça." },
+      { time: "14:15", from: "Shin-Osaka", to: "Tóquio", line: "🚄 Shinkansen NOZOMI 256 · carro 4, assentos 18A e 18B", duration: "2h30", yen: 14320, pay: "pago",
+        note: "Comprado em 16/11 no smartEX: ¥28.640 os dois. Assentos confirmados em 21/11: carro 4, 18A e 18B. Pode trocar de horário de graça. Embarque com QR Ticket (smartEX → My Trips)." },
       { time: "~17:00", from: "Estação de Tóquio (saída Yaesu)", to: "Narita Terminal 2", line: "Ônibus TYO-NRT", duration: "~1h10", yen: 1500, pay: "suica", note: "Sem reserva: paga no guichê ou no ônibus. Desçam no Terminal 2 (a cápsula fica no subsolo)." },
     ],
   },

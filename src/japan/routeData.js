@@ -197,7 +197,7 @@ export const ROUTE_DAYS = [
       { time: "09:30", kind: "klook", what: "Mirante Harukas 300 (~1h).", klookId: "harukas", map: "Abeno Harukas 300" },
       { time: "11:00", kind: "klook", what: "Torre Tsutenkaku + escorregador gigante (15 min a pé do Harukas).", klookId: "tsutenkaku", map: "Tsutenkaku" },
       { time: "12:00", kind: "comida", what: "⭐ Lista da Gio: Kushikatsu Daruma (~¥600) — aqui em Shinsekai fica a loja original, a mesma rede da de Dotonbori. Regra da casa: não molhar duas vezes no molho!", map: "Kushikatsu Daruma Shinsekai Main Store" },
-      { time: "13:30", kind: "transp", what: "Buscar a mala e metrô Midosuji até Shin-Osaka (12 min). ✅ Trem-bala NOZOMI 256 Shin-Osaka 14:15 → Tóquio 16:45 — PAGO (assentos chegam por e-mail em 21/11). Na Estação de Tóquio, saída Yaesu, ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500).", trains: "os-nrt" },
+      { time: "13:30", kind: "transp", what: "Buscar a mala e metrô Midosuji até Shin-Osaka (12 min). ✅ Trem-bala NOZOMI 256 Shin-Osaka 14:15 → Tóquio 16:45 — PAGO. Carro 4, assentos 18A e 18B. Na Estação de Tóquio, saída Yaesu, ônibus TYO-NRT até Narita Terminal 2 (~1h10, ¥1.500).", trains: "os-nrt" },
       { time: "Noite", kind: "transp", what: "Check-in na cápsula 9h, no Terminal 2 de Narita." },
     ],
   },
