@@ -249,7 +249,7 @@ export const LOGISTICS = [
   { from: "Tóquio", to: "Kyoto", mode: "✅ PAGO · NOZOMI 23 · seg 14/12, 10:12 → 12:23 · carro 14, 10D/10E", time: "2h11", yen: "¥13.770", yenMid: 13770 },
   { from: "Kyoto (Omiya → Karasuma)", to: "Osaka-Umeda", mode: "Hankyu Expresso Limitado · qui 17/12 ~10:00 · Suica + PRiVACE opcional (reserva abre 03/12)", time: "~40 min", yen: "¥410 + ¥500", yenMid: 910 },
   { from: "Osaka", to: "Kobe", mode: "JR Special Rapid · sex 18/12 — no Suica", time: "~22 min", yen: "¥420", yenMid: 420 },
-  { from: "Shin-Osaka", to: "Tóquio", mode: "✅ PAGO · NOZOMI 256 · seg 21/12, 14:15 → 16:45 · carro 4, 18A/18B", time: "2h30", yen: "¥14.320", yenMid: 14320 },
+  { from: "Shin-Osaka", to: "Tóquio", mode: "✅ PAGO · NOZOMI 256 · seg 21/12, 14:15 → 16:45 · carro 13, 8D/8E", time: "2h30", yen: "¥14.320", yenMid: 14320 },
   { from: "Estação de Tóquio (Yaesu)", to: "Narita Terminal 2 (cápsula)", mode: "Ônibus TYO-NRT · seg 21/12 ~17:00 — paga no guichê", time: "~1h10", yen: "¥1.500", yenMid: 1500 },
   { from: "Narita Terminal 2", to: "Terminal 1 (voo KLM)", mode: "Ônibus grátis entre terminais · ter 22/12 ~10:00", time: "~10 min", yen: "grátis", yenMid: 0 },
 ];
