@@ -553,7 +553,7 @@ export const BUDGET_LINES = [
 // ===== 12. CHECKLIST =====
 export const CHECKLIST = [
   { id: "c-klook-resto2", label: "Pagar o que ficou no carrinho da Klook: Museu Samurai (10/12), Tokyo Tower (12/12) e aula de matcha (20/12, agora às 18:00)" },
-  { id: "c-shibuya-sky", label: "Comprar Shibuya Sky para 11/12 às 15:40 — a venda de dezembro já deve estar aberta" },
+  { id: "c-shibuya-sky", label: "Qui 26/11, a partir do meio-dia no Brasil (27/11 no Japão): comprar Shibuya Sky para sex 11/12, entrada 15:40, 2 adultos (¥3.400 cada depois das 15h). Só vende 2 semanas antes e o pôr do sol esgota rápido. Exige passaporte na compra e na entrada" },
   { id: "c-kobe-ropeway", label: "Comprar teleférico de Kobe para 18/12 (a venda de dezembro abre no fim de novembro)" },
   { id: "c-qr", label: "Antes de cada trem-bala: entrar no smartEX pelo celular (My Trips) e deixar os 2 QR Tickets abertos. Leve o celular carregado — o QR é o bilhete" },
   { id: "c-privace", label: "Reservar o assento PRiVACE da Hankyu Kyoto → Osaka (17/12) — abre 14 dias antes, em 03/12" },
