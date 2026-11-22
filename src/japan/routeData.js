@@ -184,7 +184,7 @@ export const ROUTE_DAYS = [
       { time: "13:30", kind: "perna", what: "Compras em Umeda: Yodobashi, Grand Front e o depachika da Hankyu. Na base do Umeda Sky tem o mercado de Natal alemão (grátis, sem subir no mirante).", map: "Yodobashi Umeda" },
       { time: "16:00", kind: "perna", what: "Metrô Midosuji para o sul: Shinsaibashi-suji e Amerikamura, últimas compras. Conferir no voucher o endereço da aula de matcha.", map: "Shinsaibashi-suji" },
       { time: "18:00", kind: "klook", what: "Aula de matcha e doces japoneses (~1h).", klookId: "matcha-osaka" },
-      { time: "19:30", kind: "klook", what: "Barquinho no canal de Dotonbori (20 min).", klookId: "dotonbori-boat", map: "Tazaemonbashi pier" },
+      { time: "19:30", kind: "klook", what: "Barquinho no canal de Dotonbori (20 min).", klookId: "dotonbori-boat", map: "Minatomachi pier Dotonbori Daikokubashi" },
       { time: "20:00", kind: "comida", what: "⭐ Lista da Gio: Jantar de despedida: Yakiniku Like, churrasco individual na chapa (~¥580) — o Google Maps mostra a unidade mais perto de Namba. Depois, bar em Dotonbori.", map: "Yakiniku Like Namba" },
     ],
   },

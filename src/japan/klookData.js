@@ -51,7 +51,7 @@ export const KLOOK_ITEMS = [
   // ---------------- OSAKA ----------------
   {
     id: "dotonbori-boat", city: "osaka", status: "pago",
-    howTo: "Voucher digital: mostrem o QR no píer Tazaemonbashi (ao lado da roda-gigante do Don Quijote). Cheguem 10 min antes das 19:30.",
+    howTo: "Voucher digital: mostrem o QR no píer Minatomachi (canto nordeste da ponte Daikokubashi, 3 min a pé da JR Namba — não é o Tazaemonbashi). Cheguem 10 min antes das 19:30.",
     paidUSD: 26.5,
     day: "Dom 20/12", dateISO: "2026-12-20", time: "19:30", duration: "20 min",
     name: "Barquinho no canal de Dotonbori",
@@ -59,7 +59,7 @@ export const KLOOK_ITEMS = [
     why: "Ver os letreiros gigantes (o Glico, o caranguejo) por baixo, de dentro do canal. Rápido e barato.",
     fits: "Última noite (20/12), depois das compras em Shinsaibashi e antes do jantar de despedida em Dotonbori.",
     priceBRL: 135, rating: "4.1", reviews: "909 avaliações",
-    place: "Píer Tazaemonbashi, Dotonbori", lat: 34.6692, lng: 135.4983,
+    place: "Píer Minatomachi (ponte Daikokubashi), Dotonbori", lat: 34.6692, lng: 135.4983,
     otherTimes: "De 30 em 30 min, das 15:30 às 21:00",
     cancel: "Cancelamento condicional",
     img: "https://res.klook.com/image/upload/activities/vyt4efz0g6z9kal5ns23.jpg",
