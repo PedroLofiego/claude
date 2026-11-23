@@ -563,6 +563,7 @@ export const CHECKLIST = [
   { id: "c-suica", label: "Suica: o Pedro já tem; a Gio precisa do dela (no iPhone, na Carteira, ou Welcome Suica no aeroporto). Deixar ~¥3.000 de saldo em cada" },
   { id: "c-banco", label: "Avisar o banco/cartão sobre a viagem, para evitar bloqueio" },
   { id: "c-yoshino", label: "24/11: reservar almoço no Yoshino Sushi Honten (sáb 12/12, 11:30, 2 pessoas) pelo TableEX — os pedidos ficam pausados de 20 a 23/11" },
+  { id: "c-taxfree", label: "Compras: tax-free agora é por reembolso (desde 01/11/2026). Pagar o preço cheio com o passaporte na loja e pegar os 10% de volta na alfândega de Narita em 22/12, antes de despachar a mala. Cota do Brasil na volta: US$ 1.000 por pessoa" },
   { id: "c-restaurante", label: "Reservar restaurantes mais concorridos, se houver algum específico em mente" },
   { id: "c-cancelar", label: "Cancelar reservas alternativas de hotel não usadas (Villa Fontaine, APA, etc.)" },
 ];
