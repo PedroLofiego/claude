@@ -220,10 +220,11 @@ export default function JapanApp() {
     const B = budgetTotals(chosenActs, chosenPois);
     L.push("💰 ORÇAMENTO (tudo para as 2 pessoas)");
     L.push(`  ✈️ Passagens: ${formatBRL(B.flights)}`);
-    L.push(`  🏨 Hospedagens (${TRIP.nights} noites): ${formatBRL(B.lodging)}`);
+    L.push(`  🏨 Hospedagens pagas (Tóquio, Kyoto, Narita): ${formatBRL(B.lodging)}`);
+    L.push(`  🚄 Trens-bala (smartEX): ${formatBRL(B.trains)}`);
     L.push(`  🎟️ Ingressos pagos (Klook): ${formatBRL(B.tickets)}`);
     L.push(`  = Já pago: ${formatBRL(B.paid)}`);
-    L.push(`  🍜 Comida, gastos do dia e trens (estimado): ${formatBRL(B.fixed)}`);
+    L.push(`  🍜 Hotel de Osaka, comida, gastos do dia e transporte local (estimado): ${formatBRL(B.fixed)}`);
     L.push(`  Sobra para ingressos que faltam, compras e extras: ${formatBRL(B.forPasseios)} (teto ${formatBRL(B.cap)})`);
     L.push(`  🎟️ Ingressos que faltam: ${formatBRL(B.chosen)}`);
     L.push(`  ${B.slack >= 0 ? `Livre: ${formatBRL(B.slack)}` : `ESTOURO: ${formatBRL(-B.slack)}`}`);
@@ -488,7 +489,8 @@ function budgetTotals(chosenActs = [], chosenPois = []) {
     cap: BUDGET_CAP,
     people: P,
     flights: f((b) => b.group === "aereo"),
-    lodging: f((b) => b.group === "hospedagem"),
+    lodging: f((b) => b.group === "hospedagem" && b.status === "pago"),
+    trains: f((b) => b.group === "transporte" && b.status === "pago"),
     tickets: f((b) => b.group === "passeios" && b.status === "pago"),
     paid,
     fixed,
@@ -524,7 +526,7 @@ function BudgetBar({ B }) {
       </div>
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-emerald-400/80" />já pago</span>
-        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-amber-400/60" />comida e trens</span>
+        <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-amber-400/60" />hotel de Osaka e gastos do dia</span>
         <span><span className={`mr-1.5 inline-block h-2.5 w-2.5 rounded-full ${over ? "bg-rose-400/80" : "bg-sky-400/70"}`} />ingressos que faltam</span>
         <span><span className="mr-1.5 inline-block h-2.5 w-2.5 rounded-full bg-white/20" />livre</span>
       </div>
@@ -543,8 +545,12 @@ function BudgetSummary({ B }) {
           <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.flights)}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className="text-slate-300">🏨 Hospedagens ({TRIP.nights} noites)</dt>
+          <dt className="text-slate-300">🏨 Hospedagens pagas (Tóquio, Kyoto, Narita)</dt>
           <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.lodging)}</dd>
+        </div>
+        <div className="flex justify-between gap-3">
+          <dt className="text-slate-300">🚄 Trens-bala (smartEX)</dt>
+          <dd className="font-bold text-emerald-300 tabular-nums">{formatBRL(B.trains)}</dd>
         </div>
         <div className="flex justify-between gap-3">
           <dt className="text-slate-300">🎟️ Ingressos pagos (Klook)</dt>
@@ -555,7 +561,7 @@ function BudgetSummary({ B }) {
           <dd className="text-lg font-extrabold text-white tabular-nums">{formatBRL(B.paid)}</dd>
         </div>
         <div className="flex justify-between gap-3">
-          <dt className="text-slate-300">🍜 Comida, gastos do dia e trens entre cidades (estimado)</dt>
+          <dt className="text-slate-300">🍜 Hotel de Osaka, comida, gastos do dia e transporte local (estimado)</dt>
           <dd className="font-bold text-amber-200 tabular-nums">{formatBRL(B.fixed)}</dd>
         </div>
         <div className="flex justify-between gap-3 border-t border-white/10 pt-2">

@@ -191,6 +191,36 @@ export const TRAIN_EVENTS = [
   },
 ];
 
+// PASSAGENS DE TREM ENTRE CIDADES — aparecem em Roteiro → Ingressos.
+// status: "pago" | "reservar" (opcional, com data de abertura) | "suica" (não precisa comprar nada)
+export const TRAIN_TICKETS = [
+  {
+    id: "tq-ky", day: "Seg 14/12", time: "10:12 → 12:23", status: "pago",
+    name: "🚄 Trem-bala NOZOMI 23 · Tóquio → Kyoto",
+    detail: "Carro 14, assentos 10D e 10E (lado do Monte Fuji, por volta das 10:55). ¥27.540 os dois, pago no smartEX.",
+    how: "Embarque com o QR Ticket: app smartEX → My Trips → Details. Um QR por pessoa, no celular do Pedro. Passem juntos na catraca do Shinkansen.",
+    map: "Tokyo Station Tokaido Shinkansen",
+  },
+  {
+    id: "ky-os", day: "Qui 17/12", time: "~10:00 → 10:45", status: "suica",
+    name: "🚃 Hankyu Kyoto → Osaka-Umeda (trem comum, não é trem-bala)",
+    detail: "Não tem bilhete para comprar: a passagem (¥410) é paga passando o Suica na catraca. Mais rápido que o trem-bala para o hotel de vocês e sai a 1 parada do hotel de Kyoto.",
+    how: "Opcional: assento reservado PRiVACE (vagão 4, ¥500 por pessoa) — a reserva só abre em 03/12, no site da Hankyu como Guest. Sem PRiVACE, é só sentar em qualquer vagão.",
+    map: "Hankyu Karasuma Station",
+  },
+  {
+    id: "os-tq", day: "Seg 21/12", time: "14:15 → 16:45", status: "pago",
+    name: "🚄 Trem-bala NOZOMI 256 · Shin-Osaka → Tóquio",
+    detail: "Carro 13, assentos 8D e 8E (lado do Monte Fuji, por volta das 15:55). ¥28.640 os dois, pago no smartEX.",
+    how: "Embarque com o QR Ticket: app smartEX → My Trips → Details. Em Tóquio, ônibus TYO-NRT até Narita (¥1.500, paga no guichê).",
+    map: "Shin-Osaka Station Shinkansen",
+  },
+];
+export const TRAIN_TICKET_STATUS = {
+  pago: { label: "Pago ✓", cls: "bg-emerald-500/25 text-emerald-100 border-emerald-400/50" },
+  suica: { label: "Só passar o Suica", cls: "bg-sky-500/15 text-sky-100 border-sky-400/30" },
+};
+
 // TODOS OS TRENS DA VIAGEM, dia a dia (preço por pessoa).
 // pay: "suica" (só passar o cartão) | "comprar" (bilhete com prazo) | "reservar" (assento opcional) | "voucher"
 export const TRAIN_PAY = {

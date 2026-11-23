@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DayRides } from "./TrainsView.jsx";
-import { TRAIN_PLAN } from "./trainsData.js";
+import { TRAIN_PLAN, TRAIN_TICKETS, TRAIN_TICKET_STATUS } from "./trainsData.js";
 import { BedDouble, CalendarCheck, CalendarPlus, Clock, Download, ExternalLink, FileText, MapPin, Navigation, Route as RouteIcon, Smartphone, Ticket, Train } from "lucide-react";
 import { KLOOK_ITEMS, KLOOK_PAID_ON, KLOOK_STATUS } from "./klookData.js";
 import { KYOTO_TRIPS, ROUTE_DAYS, ROUTE_KINDS, ROUTE_UPDATED } from "./routeData.js";
@@ -416,6 +416,29 @@ export function TicketsView() {
           e na pasta “Japão” do app Arquivos de cada iPhone.
         </p>
       </section>
+      <section className="space-y-2">
+        <h2 className="flex items-center gap-2 px-1 text-sm font-bold text-white"><Train size={16} /> Trens entre as cidades</h2>
+        <ul className="space-y-2">
+          {TRAIN_TICKETS.map((t) => {
+            const st = TRAIN_TICKET_STATUS[t.status];
+            return (
+              <li key={t.id} className="card p-3">
+                <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                  <span className="font-semibold text-slate-300">{t.day} · {t.time}</span>
+                  <span className={`rounded-md border px-1.5 py-0.5 font-semibold ${st.cls}`}>{st.label}</span>
+                </div>
+                <h3 className="mt-0.5 text-sm font-bold leading-snug text-white">{t.name}</h3>
+                <p className="mt-0.5 text-xs text-slate-300">{t.detail}</p>
+                <p className="mt-0.5 text-xs text-sky-200">ℹ️ {t.how}</p>
+                <a href={mapUrl(t.map)} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-sky-300 hover:text-sky-200">
+                  <MapPin size={12} /> Mapa
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <h2 className="flex items-center gap-2 px-1 text-sm font-bold text-white"><Ticket size={16} /> Passeios (Klook)</h2>
       <ul className="space-y-2">
         {items.map((i) => {
           const st = KLOOK_STATUS[i.status];
